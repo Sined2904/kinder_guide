@@ -1,13 +1,12 @@
 from django.db import models
 
-
 class Language(models.Model):
     """Модель языков (для модели Education)."""
     name = models.CharField(max_length=256, verbose_name='Название языка')
     slug = models.SlugField(max_length=50, unique=True, verbose_name='Адрес')
 
     class Meta:
-        ordering = ('name')
+        ordering = ('name', )
         verbose_name = 'Язык'
         verbose_name_plural = 'Языки'
 
@@ -22,7 +21,7 @@ class Profile(models.Model):
     #возможно нужно будет добавить разные предметы из которых состоит профиль
 
     class Meta:
-        ordering = ('name')
+        ordering = ('name', )
         verbose_name = 'Профиль'
         verbose_name_plural = 'Профили'
 
@@ -82,13 +81,11 @@ class Education(models.Model):
     age = models.PositiveSmallIntegerField(verbose_name='Возраст')
     languages = models.ManyToManyField(
         Language, 
-        through="EducationLanguages", 
         related_name='education', 
         verbose_name='Языки'
     )
     profile = models.ManyToManyField(
         Profile, 
-        through="EducationProfile", 
         related_name='education', 
         verbose_name='Профиль'
     )
@@ -187,13 +184,11 @@ class Specialist(models.Model):
     experience = models.PositiveSmallIntegerField(verbose_name='Стаж работы(лет)')
     lessons = models.ManyToManyField(
         Lesson,
-        through="SpecialistLessons", 
         related_name='specialist', 
         verbose_name='Уроки'
     )
     educational_form = models.ManyToManyField(
         Educational_form,
-        through="SpecialistEducational_form",
         related_name='specialist', 
         verbose_name='Форма обучения'
     )

@@ -6,52 +6,26 @@ from .models import (Achievement, Education, Educational_form,
                      Language, Lesson, Profile, Specialist)
 
 
-class EducationLanguagesInLime(admin.TabularInline):
-    model = 'EducationLanguages'
-    extra = 0
-    formset = MinOneForm
-
-
-class EducationProfileInLime(admin.TabularInline):
-    model = 'EducationProfile'
-    extra = 0
-    formset = MinOneForm
-
-
-class EducationProfileInLime(admin.TabularInline):
-    model = 'SpecialistLessons'
-    extra = 0
-    formset = MinOneForm
-
-
-class EducationProfileInLime(admin.TabularInline):
-    model = 'SpecialistEducational_form'
-    extra = 0
-    formset = MinOneForm
-
-
 class LanguageAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug')
     empty_value_display = '-пусто-'
     search_fields = ('name', )
-    ordering = ['name']
+    ordering = ['name',]
 
 
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug')
     empty_value_display = '-пусто-'
     search_fields = ('name', )
-    ordering = ['name']
+    ordering = ['name',]
 
 
 class EducationAdmin(admin.ModelAdmin):
     list_display = ('name', 'album', 'role', 'description',
-                    'telephone', 'address', 'price', 'age',
-                    'languages', 'profile', )
+                    'telephone', 'address', 'price', 'age')
     search_fields = ('name',)
     empty_value_display = '-пусто-'
-    ordering = ['name']
-    inlines = (EducationLanguagesInLime, EducationProfileInLime)
+    ordering = ['name',]
 
 
 class Favourites_educationAdmin(admin.ModelAdmin):
@@ -59,39 +33,38 @@ class Favourites_educationAdmin(admin.ModelAdmin):
     search_fields = ('user',)
     list_filter = ('user',)
     empty_value_display = '-пусто-'
-    ordering = ['user']
+    ordering = ['user',]
 
 
 class LessonAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug')
     search_fields = ('name',)
     empty_value_display = '-пусто-'
-    ordering = ['name']
+    ordering = ['name',]
 
 
 class Educational_formAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug')
     search_fields = ('name',)
     empty_value_display = '-пусто-'
-    ordering = ['name']
+    ordering = ['name',]
 
 
 class AchievementAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug')
     search_fields = ('name',)
     empty_value_display = '-пусто-'
-    ordering = ['name']
+    ordering = ['name',]
 
 
 class SpecialistAdmin(admin.ModelAdmin):
     list_display = ('role', 'image', 'first_name', 'last_name', 
-                    'patronymic', 'experience', 'lessons', 
-                    'educational_form', 'price_min', 'price_max', 
+                    'patronymic', 'experience', 'price_min', 'price_max', 
                     'achievement')
     search_fields = ('first_name', 'last_name',)
     list_filter = ('first_name', 'last_name',)
     empty_value_display = '-пусто-'
-    ordering = ['last_name']
+    ordering = ['last_name',]
 
 
 class Favourites_specialistAdmin(admin.ModelAdmin):
@@ -99,7 +72,7 @@ class Favourites_specialistAdmin(admin.ModelAdmin):
     search_fields = ('user',)
     list_filter = ('user',)
     empty_value_display = '-пусто-'
-    ordering = ['user']
+    ordering = ['user',]
 
 
 
