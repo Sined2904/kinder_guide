@@ -28,10 +28,16 @@ class MyUser(AbstractUser):
     last_name = models.TextField('Фамилия', max_length=150,)
     phone = models.CharField(
         'Номер телефона',
-        max_length=30,
-        null=True,
-        blank=True,
+        max_length=17,
+        unique=True,
+        validators=[
+            RegexValidator(
+                regex=r'^\+?1?\d{9,15}$',
+                message='Номер должен быть набран в формате "+999999999.'
+            )
+        ]
     )
+    child = models.TextField('Имя', max_length=150, blank=True,)
 
     class Meta:
         ordering = ['-date_joined', ]
