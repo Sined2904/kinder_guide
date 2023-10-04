@@ -15,8 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from news.feeds import LatestNewsFeed
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include('djoser.urls')),
+    path('feed/', LatestNewsFeed(), name = 'news_feed'),
 ]

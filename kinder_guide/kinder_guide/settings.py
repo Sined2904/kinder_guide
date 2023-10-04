@@ -41,9 +41,11 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'djoser',
     'user.apps.UserConfig',
+    'education',
     'kinder_guide',
     'comments',
     'about_us',
+    'news',
 ]
 
 MIDDLEWARE = [

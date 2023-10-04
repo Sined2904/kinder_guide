@@ -1,11 +1,11 @@
-from django.db import models
 from django.contrib.auth import get_user_model
+from django.db import models
 
 
 # Page is a temporary placeholder for the edu model's name
 class Comment(models.Model):
     comment_post = models.ForeignKey(
-        'Page',
+        'education.Education',
         on_delete=models.CASCADE,
         related_name='comments'
     )
