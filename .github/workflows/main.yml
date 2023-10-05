@@ -68,6 +68,7 @@ jobs:
           context: ./gateway/
           push: true
           tags: sined2904/kinder_giude_gateway:latest
+  
   deploy:
       runs-on: ubuntu-latest
       needs: 
