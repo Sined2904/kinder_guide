@@ -1,4 +1,5 @@
 from django.db import models
+from user.models import MyUser
 
 class Language(models.Model):
     """Модель языков (для модели Education)."""
@@ -103,7 +104,7 @@ class Education(models.Model):
 class Favourites_education(models.Model):
     """Модель Избранного для учебного учреждения"""
     user = models.ForeignKey(
-        User,
+        MyUser,
         on_delete=models.CASCADE,
         verbose_name='Пользователь',
         related_name='favourites_education'
@@ -217,7 +218,7 @@ class Specialist(models.Model):
 class Favourites_specialist(models.Model):
     """Модель Избранного для спациалиста"""
     user = models.ForeignKey(
-        User,
+        MyUser,
         on_delete=models.CASCADE,
         verbose_name='Пользователь',
         related_name='favourites_specialist'

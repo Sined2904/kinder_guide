@@ -1,8 +1,8 @@
 from django.contrib import admin
+from .models import Comment
 
 
-@admin.register
-class Comment(admin.ModelAdmin):
+class CommentAdmin(admin.ModelAdmin):
     list_display = (
         'comment_post',
         'author',
@@ -19,3 +19,6 @@ class Comment(admin.ModelAdmin):
         'content',
         'date_posted'
     )
+
+
+admin.site.register(Comment, CommentAdmin)
