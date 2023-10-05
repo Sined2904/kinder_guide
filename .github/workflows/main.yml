@@ -48,7 +48,7 @@ jobs:
           with:
             context: ./kinder_guide/
             push: true
-            tags: sined2904/kinder_giude_backend:latest 
+            tags: sined2904/kinder_guide_backend:latest 
 
   build_gateway_and_push_to_docker_hub:
     name: Push gateway Docker image to DockerHub
@@ -68,7 +68,7 @@ jobs:
         with:
           context: ./gateway/
           push: true
-          tags: sined2904/kinder_giude_gateway:latest
+          tags: sined2904/kinder_guide_gateway:latest
   
   deploy:
       runs-on: ubuntu-latest
