@@ -9,6 +9,6 @@ class NewsAdmin(admin.ModelAdmin):
         'content',
         'date_posted'
     )
-    list_filter = (
-        'date_posted'
-    )
+    list_filter = [
+        'date_posted',
+    ]
