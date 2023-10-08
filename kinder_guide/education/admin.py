@@ -19,6 +19,12 @@ class ImageAdmin(admin.ModelAdmin):
     search_fields = ('name', )
     ordering = ['name',]
 
+class ImageAlbumAdmin(admin.ModelAdmin):
+    list_display = ('name')
+    empty_value_display = '-пусто-'
+    search_fields = ('name', )
+    ordering = ['name',]
+
 
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug')
@@ -81,7 +87,7 @@ class Favourites_specialistAdmin(admin.ModelAdmin):
     empty_value_display = '-пусто-'
     ordering = ['user',]
 
-
+ImageAlbumAdmin
 admin.site.register(Language, LanguageAdmin)
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Education, EducationAdmin)
@@ -92,3 +98,4 @@ admin.site.register(Achievement, AchievementAdmin)
 admin.site.register(Specialist, SpecialistAdmin)
 admin.site.register(Favourites_specialist, Favourites_specialistAdmin)
 admin.site.register(Image, ImageAdmin)
+admin.site.register(ImageAlbum, ImageAlbumAdmin)
