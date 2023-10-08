@@ -4,7 +4,7 @@ from user.models import MyUser
 class Language(models.Model):
     """Модель языков (для модели Education)."""
     name = models.CharField(max_length=256, verbose_name='Название языка')
-    slug = models.SlugField(max_length=50, unique=True, verbose_name='Адрес')
+    slug = models.SlugField(max_length=50, unique=True, verbose_name='Slug')
 
     class Meta:
         ordering = ('name', )
@@ -18,7 +18,7 @@ class Language(models.Model):
 class Profile(models.Model):
     """Модель профилей (для модели Education)."""
     name = models.CharField(max_length=256, verbose_name='Название языка')
-    slug = models.SlugField(max_length=50, unique=True, verbose_name='Адрес')
+    slug = models.SlugField(max_length=50, unique=True, verbose_name='Slug')
     #возможно нужно будет добавить разные предметы из которых состоит профиль
 
     class Meta:
@@ -127,7 +127,7 @@ class Favourites_education(models.Model):
 class Lesson(models.Model):
     """Модель уроков (для модели Specialist)."""
     name = models.CharField(max_length=256, verbose_name='Название урока')
-    slug = models.SlugField(max_length=50, unique=True, verbose_name='Адрес')
+    slug = models.SlugField(max_length=50, unique=True, verbose_name='Slug')
 
     class Meta:
         ordering = ('name',)
@@ -140,7 +140,7 @@ class Lesson(models.Model):
 class Educational_form(models.Model):
     """Модель форм обучения (для модели Specialist)."""
     name = models.CharField(max_length=256, verbose_name='Форма обучения')
-    slug = models.SlugField(max_length=50, unique=True, verbose_name='Адрес')
+    slug = models.SlugField(max_length=50, unique=True, verbose_name='Slug')
 
     class Meta:
         ordering = ('name',)
@@ -154,7 +154,7 @@ class Educational_form(models.Model):
 class Achievement(models.Model):
     """Модель достижений (для модели Specialist)."""
     name = models.CharField(max_length=256, verbose_name='Достижения')
-    slug = models.SlugField(max_length=50, unique=True, verbose_name='Адрес')
+    slug = models.SlugField(max_length=50, unique=True, verbose_name='Slug')
 
     class Meta:
         ordering = ('name',)
