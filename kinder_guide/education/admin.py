@@ -2,25 +2,12 @@ from django.contrib import admin
 
 from .forms import MinOneForm
 from .models import (Achievement, Education, Educational_form,
-                     Favourites_education, Favourites_specialist, Image,
-                     ImageAlbum, Language, Lesson, Profile, Specialist)
+                     Favourites_education, Favourites_specialist,
+                     Language, Lesson, Profile, Specialist)
 
 
 class LanguageAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug')
-    empty_value_display = '-пусто-'
-    search_fields = ('name', )
-    ordering = ['name',]
-
-    
-class ImageAdmin(admin.ModelAdmin):
-    list_display = ('name', 'image', 'default', 'album')
-    empty_value_display = '-пусто-'
-    search_fields = ('name', )
-    ordering = ['name',]
-
-class ImageAlbumAdmin(admin.ModelAdmin):
-    list_display = ('name')
     empty_value_display = '-пусто-'
     search_fields = ('name', )
     ordering = ['name',]
@@ -87,7 +74,7 @@ class Favourites_specialistAdmin(admin.ModelAdmin):
     empty_value_display = '-пусто-'
     ordering = ['user',]
 
-ImageAlbumAdmin
+
 admin.site.register(Language, LanguageAdmin)
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Education, EducationAdmin)

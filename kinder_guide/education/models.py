@@ -30,41 +30,6 @@ class Profile(models.Model):
         return self.name
 
 
-class ImageAlbum(models.Model):
-    """Буферная модель для множественного отображения фото (для модели Education)."""
-    name = models.CharField(max_length=255, verbose_name='Название альбома')
-    def default(self):
-        return self.images.filter(default=True).first()
-    def thumbnails(self):
-        return self.images.filter(width__lt=100, length_lt=100)
-
-    class Meta:
-        ordering = ('name', )
-        verbose_name = 'Альбом'
-        verbose_name_plural = 'Альбомы'
-
-    def __str__(self):
-        return self.name
-
-
-class Image(models.Model):
-    """Модель фото для альбома (для модели Education)."""
-    name = models.CharField(max_length=255)
-    image = models.ImageField(upload_to='education/')
-    default = models.BooleanField(default=False)
-    width = models.FloatField(default=100)
-    length = models.FloatField(default=100)
-    album = models.ForeignKey(ImageAlbum, related_name='images', on_delete=models.CASCADE)
-
-    class Meta:
-        ordering = ('name', )
-        verbose_name = 'Фото'
-        verbose_name_plural = 'Фото'
-
-    def __str__(self):
-        return self.name
-
-
 class Education(models.Model):
     """Модель образовательного учрждения."""
     ROLE_CHOICES = (
@@ -77,10 +42,9 @@ class Education(models.Model):
         null=False,
         verbose_name='Название образовательного учрждения'
     )
-    album = models.OneToOneField(
-        ImageAlbum,
-        related_name='education',
-        on_delete=models.CASCADE
+    album = models.ImageField(
+        upload_to="education/",
+        verbose_name="Изображение",
     )
     role = models.CharField(
         max_length=25,
