@@ -9,10 +9,8 @@ description: |
     # Описание
     Проект **Kinder Giude** предоставляет возможность записать ребенка в частную школу или детский сад.
     # Алгоритм регистрации пользователей
-    1. Пользователь отправляет POST-запрос на добавление нового пользователя с параметрами `name`, `surname`, `phone_number`, `email`, `password` и `password2` на эндпоинт `/api/v1/auth/signup/`.
-    2. **Kinder_guide** отправляет письмо с кодом подтверждения (`confirmation_code`) на адрес  `email`.
-    3. Пользователь отправляет POST-запрос с параметрами `name` и `confirmation_code` на эндпоинт `/api/v1/auth/token/`, в ответе на запрос ему приходит `token` (JWT-токен).
-    4. При желании пользователь отправляет PATCH-запрос на эндпоинт `/api/v1/users/me/` и заполняет поля в своём профайле.
+    1. Пользователь отправляет POST-запрос на добавление нового пользователя с параметрами `name`, `surname`, `phone_number`, `email`, `password` и `password2` на эндпоинт `/api/v1/auth/signup/`, в ответе на запрос ему приходит `token` (JWT-токен).
+    2. Пользователь отправляет POST-запрос с параметрами `email` и `password` на эндпоинт `/api/v1/auth/sugnin/`, в ответе на запрос ему приходит `token` (JWT-токен).
     # Пользовательские роли
     - **Аноним** — может просматривать страницы образовательных учреждений, читать отзывы и комментарии.
     - **Аутентифицированный пользователь** (`user`) — может, как и **Аноним**, читать всё, может добавлять организации в избранное; может добавлять и удалять **свои** комментарии. Эта роль присваивается по умолчанию каждому новому пользователю.
@@ -41,11 +39,10 @@ paths:
         - AUTH
       operationId: Регистрация нового пользователя
       description: |
-        Получить код подтверждения на переданный `email`.
-        Права доступа: **Доступно без токена**
         Поля `email` и `phone_number` должны быть уникальными.
         Пароль должен быть не менее 8 символов, содержать заглавные и строчные латинские буквы и цифры.
         Поля `password` и `password2` должны совпадать.
+        Права доступа: **Доступно без токена**
       requestBody:
         content:
           application/json:
@@ -56,7 +53,11 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: JWT-токен для авторизации
           description: 'Удачное выполнение запроса'
         400:
           content:
@@ -64,36 +65,29 @@ paths:
               schema:
                 $ref: '#/components/schemas/ValidationError'
           description: 'Отсутствует обязательное поле или оно некорректно'
-  /auth/token/:
+  /auth/signin/:
     post:
       tags:
         - AUTH
-      operationId: Получение JWT-токена
+      operationId: Авторизация пользователя
       description: |
-        Получение JWT-токена в обмен на email и confirmation code.
-        Права доступа: **Доступно без токена**
+        Получение JWT-токена в обмен на email и password.
+        Права доступа: **Доступно зарегистрированному пользователю**
       requestBody:
         content:
           application/json:
             schema:
-              required:
-                - email
-                - confirmation_code
-              properties:
-                email:
-                  type: string
-                  format: email
-                  maxLength: 254
-                  example: "ivanov@yandex.ru"
-                confirmation_code:
-                  type: string
-                  writeOnly: true
+              $ref: '#/components/schemas/SignIn'
       responses:
         200:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Token'
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: JWT-токен для авторизации
           description: 'Удачное выполнение запроса'
         400:
           content:
@@ -103,7 +97,75 @@ paths:
           description: 'Отсутствует обязательное поле или оно некорректно'
         404:
           description: Пользователь не найден
-  /users/me/:
+      security:
+      - jwt-token:
+        - write:admin, user
+  /auth/reset/:
+    post:
+      tags:
+        - AUTH
+      operationId: Запрос на восстановление пароля
+      description: |
+        Получение ссылки на восстановление пароля в обмен на email.
+        Права доступа: **Доступно без токена**
+      requestBody:
+        required: email
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  maxLength: 254
+                  example: "ivanov@yandex.ru"
+      responses:
+        200:
+          description: Успешный запрос. Ссылка на восстановление пароля отправлена на указанную почту.
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+          description: 'Отсутствует обязательное поле или оно некорректно'
+  /auth/reset/confirm/:
+    post:
+      tags:
+        - AUTH
+      operationId: Восстановление пароля
+      description: |
+        Восстановление пароля. Поля `password` и `password2` должны совпадать.
+        Права доступа: **Доступно без токена**
+      requestBody:
+        required:
+          - password
+          - password2
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                  minLength: 8
+                  pattern: (?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])
+                  example: "123QWErty"
+                password2:
+                  type: string
+                  minLength: 8
+                  pattern: (?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])
+                  example: "123QWErty"
+      responses:
+        200:
+          description: Успешный запрос. Пароль изменен.
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+          description: 'Отсутствует обязательное поле или оно некорректно'
+  /me/:
     get:
       tags:
         - USERS
@@ -125,6 +187,32 @@ paths:
       security:
       - jwt-token:
         - read:admin, user
+    post:
+      tags:
+        - USERS
+      operationId: Внесение данных своей учетной записи
+      description: |
+        Внести данные в учетную запись.
+        Права доступа: **Любой авторизованный пользователь**
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserWrite'
+      responses:
+        200:
+          description: Удачное выполнение запроса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        401:
+          description: Необходим JWT-токен
+        403:
+          description: Нет прав доступа
+      security:
+      - jwt-token:
+        - write:admin, user
     patch:
       tags:
         - USERS
@@ -136,7 +224,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Me'
+              $ref: '#/components/schemas/UserWrite'
       responses:
         200:
           description: Удачное выполнение запроса
@@ -169,157 +257,7 @@ paths:
           description: Нет прав доступа
       security:
       - jwt-token:
-        - write:admin
-  /users/:
-    get:
-      tags:
-        - USERS
-      operationId: Получение списка всех пользователей
-      description: |
-        Получить список всех пользователей.
-        Права доступа: **Администратор**
-      responses:
-        200:
-          description: Удачное выполнение запроса
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  count:
-                    type: integer
-                  next:
-                    type: string
-                  previous:
-                    type: string
-                  results:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/User'
-        401:
-          description: Необходим JWT-токен
-        403:
-          description: Нет прав доступа
-      security:
-      - jwt-token:
-        - read:admin
-    post:
-      tags:
-        - USERS
-      operationId: Добавление пользователя
-      description: |
-        Добавить нового пользователя.
-        Права доступа: **Администратор**
-        Поля `email` и `phone_number` должны быть уникальными.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserWrite'
-      responses:
-        201:
-          description: Удачное выполнение запроса
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-        400:
-          description: 'Отсутствует обязательное поле или оно некорректно'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ValidationError'
-        401:
-          description: Необходим JWT-токен
-        403:
-          description: Нет прав доступа
-      security:
-      - jwt-token:
-        - write:admin
-  /users/{user_id}/:
-    parameters:
-      - name: user_id
-        in: path
-        required: true
-        description: Id пользователя
-        schema:
-          type: integer
-    get:
-      tags:
-        - USERS
-      operationId: Получение пользователя по id
-      description: |
-        Получить пользователя по id.
-        Права доступа: **Администратор**
-      responses:
-        200:
-          description: Удачное выполнение запроса
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-        401:
-          description: Необходим JWT-токен
-        403:
-          description: Нет прав доступа
-        404:
-          description: Пользователь не найден
-      security:
-      - jwt-token:
-        - read:admin
-    patch:
-      tags:
-        - USERS
-      operationId: Изменение данных пользователя по id
-      description: |
-        Изменить данные пользователя по id.
-        Права доступа: **Администратор**
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/User'
-      responses:
-        200:
-          description: Удачное выполнение запроса
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-        400:
-          description: 'Отсутствует обязательное поле или оно некорректно'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ValidationError'
-        401:
-          description: Необходим JWT-токен
-        403:
-          description: Нет прав доступа
-        404:
-          description: Пользователь не найден
-      security:
-      - jwt-token:
-        - write:admin
-    delete:
-      tags:
-        - USERS
-      operationId: Удаление пользователя по id
-      description: |
-        Удалить пользователя по username.
-        Права доступа: **Администратор**
-      responses:
-        204:
-          description: Удачное выполнение запроса
-        401:
-          description: Необходим JWT-токен
-        403:
-          description: Нет прав доступа
-        404:
-          description: Пользователь не найден
-      security:
-      - jwt-token:
-        - write:admin
+        - write:admin  
   /organizations/:
     get:
       tags:
@@ -345,7 +283,7 @@ paths:
                   results:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Organization'
+                      $ref: '#/components/schemas/Organizations'
     post:
       tags:
         - ORGANIZATIONS
@@ -411,7 +349,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Organization'
+              $ref: '#/components/schemas/OrganizationWrite'
       responses:
         200:
           description: Удачное выполнение запроса
@@ -471,10 +409,6 @@ paths:
       responses:
         200:
           description: Удачное выполнение запроса
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
         401:
           description: Необходим JWT-токен
         403:
@@ -837,29 +771,48 @@ components:
           minLength: 8
           pattern: (?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])
           example: "123QWErty"
-    Token:
-      title: Токен
+    SignIn:
+      title: Авторизация
       type: object
+      description: Информация о пользователе при авторизации
+      required:
+        - email
+        - password
       properties:
-        token:
+        email:
           type: string
-          title: access токен
+          format: email
+          maxLength: 254
+          example: "ivanov@yandex.ru"
+        password:
+          type: string
+          minLength: 8
+          pattern: (?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])
+          example: "123QWErty"
     User:
       title: Пользователь
       type: object
       description: Информация о пользователе
       properties:
-        id:
-          type: integer
-          title: id пользователя
-          readOnly: true
-        name:
+        parent_name:
           type: string
           title: имя пользователя
           pattern: ^[\p{L}\w.@+-]+\z
           maxLength: 150
           example: "Ivan"
-        surname:
+        parent_surname:
+          type: string
+          title: фамилия пользователя
+          pattern: ^[\p{L}\w.@+-]+\z
+          maxLength: 150
+          example: "Ivanov"
+        child_name:
+          type: string
+          title: имя пользователя
+          pattern: ^[\p{L}\w.@+-]+\z
+          maxLength: 150
+          example: "Ivan"
+        child_surname:
           type: string
           title: фамилия пользователя
           pattern: ^[\p{L}\w.@+-]+\z
@@ -899,45 +852,31 @@ components:
         - email
         - password
       properties:
-        name:
-          type: string
-          pattern: ^[\p{L}\w.@+-]+\z
-          maxLength: 150
-          example: "Ivan"
-        surname:
-          type: string
-          pattern: ^[\p{L}\w.@+-]+\z
-          maxLength: 150
-          example: "Ivanov"
-        phone_number:
-          type: string
-          pattern: ^\+\d{1,3}[\d()-]{6,14}\d$
-          maxLength: 15
-          example: "+7(910)000-00-00"
-        email:
-          type: string
-          format: email
-          maxLength: 254
-          example: "ivanov@yandex.ru"
-        password:
-          type: string
-          minLength: 8
-          pattern: (?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])
-          example: "123QWErty"
-    Me:
-      title: Текущий пользователь
-      type: object
-      description: Информация о текущем пользователе
-      properties:
-        name:
+        id:
+          type: integer
+          title: id пользователя
+          readOnly: true
+        parent_name:
           type: string
           title: имя пользователя
           pattern: ^[\p{L}\w.@+-]+\z
           maxLength: 150
           example: "Ivan"
-        surname:
+        parent_surname:
           type: string
           title: фамилия пользователя
+          pattern: ^[\p{L}\w.@+-]+\z
+          maxLength: 150
+          example: "Ivanov"
+        child_name:
+          type: string
+          title: имя ребенка
+          pattern: ^[\p{L}\w.@+-]+\z
+          maxLength: 150
+          example: "Ivan"
+        child_surname:
+          type: string
+          title: фамилия ребенка
           pattern: ^[\p{L}\w.@+-]+\z
           maxLength: 150
           example: "Ivanov"
@@ -953,13 +892,40 @@ components:
           format: email
           maxLength: 254
           example: "ivanov@yandex.ru"
+    Organizations:
+      title: Организации
+      type: object
+      description: Информация об организациях
+      properties:
+        id:
+          type: integer
+          title: id организации
+          readOnly: true
+        name:
+          type: string
+          title: наименование организации
+          pattern: ^[\p{L}\w.@+-]+\z
+          maxLength: 150
+        description:
+          title: краткая информация
+          type: string
+        image:
+          type: string
+          format: binary
         role:
           type: string
-          description: Администратор или пользователь
+          description: Школа, детский сад или курсы.
           readOnly: true
           enum:
-            - user
-            - admin
+            - school
+            - kindergarten
+            - courses
+        price:
+          type: integer
+          title: цена
+        rating:
+          type: integer
+          title: рейтинг
     Organization:
       title: Организация
       type: object
@@ -986,6 +952,9 @@ components:
         adress:
           type: string
           title: адрес
+        image:
+          type: string
+          format: binary
         role:
           type: string
           description: Школа, детский сад или курсы.
@@ -1036,6 +1005,9 @@ components:
         adress:
           type: string
           title: адрес
+        image:
+          type: string
+          format: binary
         role:
           type: string
           description: Школа, детский сад или курсы.
