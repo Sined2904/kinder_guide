@@ -58,13 +58,13 @@ paths:
                   token:
                     type: string
                     description: JWT-токен для авторизации
-          description: 'Удачное выполнение запроса'
+          description: Удачное выполнение запроса
         400:
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ValidationError'
-          description: 'Отсутствует обязательное поле или оно некорректно'
+          description: Отсутствует обязательное поле или оно некорректно
   /auth/signin/:
     post:
       tags:
@@ -88,13 +88,13 @@ paths:
                   token:
                     type: string
                     description: JWT-токен для авторизации
-          description: 'Удачное выполнение запроса'
+          description: Удачное выполнение запроса
         400:
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ValidationError'
-          description: 'Отсутствует обязательное поле или оно некорректно'
+          description: Отсутствует обязательное поле или оно некорректно
         404:
           description: Пользователь не найден
       security:
@@ -128,7 +128,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ValidationError'
-          description: 'Отсутствует обязательное поле или оно некорректно'
+          description: Отсутствует обязательное поле или оно некорректно
   /auth/reset/confirm/:
     post:
       tags:
@@ -164,7 +164,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ValidationError'
-          description: 'Отсутствует обязательное поле или оно некорректно'
+          description: Отсутствует обязательное поле или оно некорректно
   /me/:
     get:
       tags:
@@ -233,7 +233,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
         400:
-          description: 'Отсутствует обязательное поле или оно некорректно'
+          description: Отсутствует обязательное поле или оно некорректно
           content:
             application/json:
               schema:
@@ -250,7 +250,7 @@ paths:
         Права доступа: **Любой авторизованный пользователь, администратор**
       responses:
         204:
-          description: 'Удачное выполнение запроса'
+          description: Удачное выполнение запроса
         401:
           description: Необходим JWT-токен
         403:
@@ -304,7 +304,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Organization'
         400:
-          description: 'Отсутствует обязательное поле или оно некорректно'
+          description: Отсутствует обязательное поле или оно некорректно
           content:
             application/json:
               schema:
@@ -358,7 +358,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Organization'
         400:
-          description: 'Отсутствует обязательное поле или оно некорректно'
+          description: Отсутствует обязательное поле или оно некорректно
           content:
             application/json:
               schema:
@@ -490,9 +490,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Comment'
-          description: 'Удачное выполнение запроса'
+          description: Удачное выполнение запроса
         400:
-          description: 'Отсутствует обязательное поле или оно некорректно'
+          description: Отсутствует обязательное поле или оно некорректно
           content:
             application/json:
               schema:
@@ -531,7 +531,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Comment'
-          description: 'Удачное выполнение запроса'
+          description: Удачное выполнение запроса
         404:
           description: Не найдена организация или комментарий
     patch:
@@ -552,9 +552,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Comment'
-          description: 'Удачное выполнение запроса'
+          description: Удачное выполнение запроса
         400:
-          description: 'Отсутствует обязательное поле или оно некорректно'
+          description: Отсутствует обязательное поле или оно некорректно
           content:
             application/json:
               schema:
@@ -577,7 +577,7 @@ paths:
         Права доступа: **Автор комментария или администратор**
       responses:
         204:
-          description: 'Удачное выполнение запроса'
+          description: Удачное выполнение запроса
         401:
           description: Необходим JWT-токен
         403:
@@ -633,7 +633,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/News'
         400:
-          description: 'Отсутствует обязательное поле или оно некорректно'
+          description: Отсутствует обязательное поле или оно некорректно
           content:
             application/json:
               schema:
@@ -687,7 +687,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/News'
         400:
-          description: 'Отсутствует обязательное поле или оно некорректно'
+          description: Отсутствует обязательное поле или оно некорректно
           content:
             application/json:
               schema:
