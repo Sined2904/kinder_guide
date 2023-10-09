@@ -911,7 +911,7 @@ components:
           type: string
         image:
           type: string
-          format: binary
+          format: url
         role:
           type: string
           description: Школа, детский сад или курсы.
@@ -952,9 +952,11 @@ components:
         adress:
           type: string
           title: адрес
-        image:
-          type: string
-          format: binary
+        slider_images:
+          type: array
+          title: слайдер с изображениями
+          items:
+            $ref: '#/components/schemas/SliderImage'
         role:
           type: string
           description: Школа, детский сад или курсы.
@@ -1005,9 +1007,11 @@ components:
         adress:
           type: string
           title: адрес
-        image:
-          type: string
-          format: binary
+        slider_images:
+          type: array
+          title: слайдер с изображениями
+          items:
+            $ref: '#/components/schemas/SliderImage'
         role:
           type: string
           description: Школа, детский сад или курсы.
@@ -1048,6 +1052,14 @@ components:
           type: string
         slug:
           type: string
+    SliderImage:
+      title: Слайдер с изображениями
+      type: object
+      properties:
+        image_url:
+          type: string
+          format: url
+          description: URL изображения
     Comment:
       title: Комментарий
       type: object

@@ -20,7 +20,7 @@ class ImageAdmin(admin.ModelAdmin):
     ordering = ['name',]
 
 class ImageAlbumAdmin(admin.ModelAdmin):
-    list_display = ('name')
+    list_display = ('name',)
     empty_value_display = '-пусто-'
     search_fields = ('name', )
     ordering = ['name',]
