@@ -59,8 +59,14 @@ class Education(models.Model):
     )
     telephone = models.CharField(max_length=11, verbose_name='Номер телефона')
     address = models.CharField(max_length=250, verbose_name='Адрес')
-    price = models.PositiveSmallIntegerField(verbose_name='Цена')
-    age = models.PositiveSmallIntegerField(verbose_name='Возраст')
+    price = models.PositiveSmallIntegerField(verbose_name='Цена в месяц')
+    price_of_year = models.PositiveSmallIntegerField(verbose_name='Цена в год')
+    email = models.CharField(max_length=250, verbose_name='Электронный адрес')
+    age = models.CharField(max_length=250, verbose_name='Возраст')
+    classes = models.CharField(max_length=250, verbose_name='Классы')
+    name_author = models.CharField(max_length=250, verbose_name='Имя автора')
+    underground = models.CharField(max_length=250, verbose_name='Метро')
+    area = models.CharField(max_length=250, verbose_name='Округ')
     languages = models.ManyToManyField(
         Language, 
         related_name='education', 
@@ -117,6 +123,7 @@ class Lesson(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class Educational_form(models.Model):
     """Модель форм обучения (для модели Specialist)."""
