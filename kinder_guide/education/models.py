@@ -57,6 +57,7 @@ class Education(models.Model):
         null=True,
         verbose_name='Описание'
     )
+
     telephone = models.CharField(max_length=11, verbose_name='Номер телефона')
     address = models.CharField(max_length=250, verbose_name='Адрес')
     price = models.PositiveSmallIntegerField(verbose_name='Цена в месяц')
