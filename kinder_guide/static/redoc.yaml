@@ -1609,6 +1609,9 @@ components:
         price:
           type: integer
           title: цена
+        rating:
+          type: integer
+          title: рейтинг
         age:
           type: integer
           title: возраст
@@ -1728,6 +1731,9 @@ components:
         price:
           type: integer
           title: цена
+        rating:
+          type: integer
+          title: рейтинг
         age:
           type: integer
           title: возраст
@@ -1847,6 +1853,9 @@ components:
         price:
           type: integer
           title: цена
+        rating:
+          type: integer
+          title: рейтинг
         age:
           type: integer
           title: возраст
