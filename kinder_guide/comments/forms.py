@@ -1,12 +1,13 @@
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
-from .models import Comment
+from .models import Review
+from .constants import CHOICES
 
 
-class CommentForm(forms.ModelForm):
+class ReviewForm(forms.ModelForm):
     class Meta:
-        model = Comment
+        model = Review
         fields = ['content', 'parent']
 
         labels = {
@@ -15,4 +16,5 @@ class CommentForm(forms.ModelForm):
 
         widgets = {
             'content': forms.TextInput(),
+            'rating': forms.RadioSelect(choices=CHOICES),
         }

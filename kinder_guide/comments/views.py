@@ -2,8 +2,8 @@ from django.shortcuts import redirect
 from django.views.generic import DetailView
 
 from ..education.models import Education
-from .models import Comment
-from .forms import CommentForm
+from .models import Review
+from .forms import ReviewForm
 
 
 class PageDetailView(DetailView):
@@ -12,30 +12,30 @@ class PageDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
-        connected_comments = Comment.objects.filter(
-            CommentPost=self.get_object()
+        connected_reviews = Review.objects.filter(
+            ReviewPost=self.get_object()
         )
-        number_of_comments = connected_comments.count()
-        data['comments'] = connected_comments
-        data['number_of_comments'] = number_of_comments
-        data['comment_form'] = CommentForm()
+        number_of_reviews = connected_reviews.count()
+        data['reviews'] = connected_reviews
+        data['number_of_review'] = number_of_reviews
+        data['review_form'] = ReviewForm()
         return data
 
     def post(self, request, *args, **kwargs):
         if request.method == 'POST':
-            comment_form = CommentForm(request.POST)
-            if comment_form.is_valid():
-                content = comment_form.cleaned_data['content']
+            review_form = ReviewForm(request.POST)
+            if review_form.is_valid():
+                content = review_form.cleaned_data['content']
                 try:
-                    parent = comment_form.cleaned_data['parent']
+                    parent = review_form.cleaned_data['parent']
                 except KeyError:
                     parent = None
 
-            new_comment = Comment(
+            new_review = Review(
                 content=content,
                 author=request.user,
-                CommentPost=self.get_object(),
+                ReviewPost=self.get_object(),
                 parent=parent,
             )
-            new_comment.save()
+            new_review.save()
             return redirect(request.path_info)
