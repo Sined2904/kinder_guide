@@ -1,18 +1,20 @@
 from django.contrib import admin
-from .models import Comment
+from .models import Review
 
 
-class CommentAdmin(admin.ModelAdmin):
+class ReviewAdmin(admin.ModelAdmin):
     list_display = (
-        'comment_post',
+        'review_post',
         'author',
         'content',
         'date_posted',
-        'parent'
+        'rating',
+        'parent',
     )
     list_filter = (
         'parent',
-        'date_posted'
+        'date_posted',
+        'rating',
     )
     search_fields = (
         'author',
@@ -21,4 +23,4 @@ class CommentAdmin(admin.ModelAdmin):
     )
 
 
-admin.site.register(Comment, CommentAdmin)
+admin.site.register(Review, ReviewAdmin)
