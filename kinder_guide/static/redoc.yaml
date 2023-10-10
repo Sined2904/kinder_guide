@@ -9,13 +9,11 @@ description: |
     # Описание
     Проект **Kinder Giude** предоставляет возможность записать ребенка в частную школу или детский сад.
     # Алгоритм регистрации пользователей
-    1. Пользователь отправляет POST-запрос на добавление нового пользователя с параметрами `name`, `surname`, `phone_number`, `email`, `password` и `password2` на эндпоинт `/api/v1/auth/signup/`.
-    2. **Kinder_guide** отправляет письмо с кодом подтверждения (`confirmation_code`) на адрес  `email`.
-    3. Пользователь отправляет POST-запрос с параметрами `name` и `confirmation_code` на эндпоинт `/api/v1/auth/token/`, в ответе на запрос ему приходит `token` (JWT-токен).
-    4. При желании пользователь отправляет PATCH-запрос на эндпоинт `/api/v1/users/me/` и заполняет поля в своём профайле.
+    1. Пользователь отправляет POST-запрос на добавление нового пользователя с параметрами `first_name`, `last_name`, `phone`, `email`, `password` и `re_password` на эндпоинт `/api/v1/auth/signup/`, в ответе на запрос ему приходит `token` (JWT-токен).
+    2. Пользователь отправляет POST-запрос с параметрами `email` и `password` на эндпоинт `/api/v1/auth/sugnin/`, в ответе на запрос ему приходит `token` (JWT-токен).
     # Пользовательские роли
-    - **Аноним** — может просматривать страницы образовательных учреждений, читать отзывы и комментарии.
-    - **Аутентифицированный пользователь** (`user`) — может, как и **Аноним**, читать всё, может добавлять организации в избранное; может добавлять и удалять **свои** комментарии. Эта роль присваивается по умолчанию каждому новому пользователю.
+    - **Аноним** — может просматривать страницы образовательных учреждений, читать отзывы.
+    - **Аутентифицированный пользователь** (`user`) — может, как и **Аноним**, читать всё, может добавлять школы в избранное; может добавлять и удалять **свои** отзывы. Эта роль присваивается по умолчанию каждому новому пользователю.
     - **Администратор** (`admin`) — полные права на управление всем контентом проекта.
     - **Суперюзер Django** — обладет правами администратора (`admin`)
 
@@ -27,10 +25,18 @@ tags:
     description: Регистрация пользователей и выдача токенов
   - name: USERS
     description: Личный кабинет
-  - name: ORGANIZATIONS
-    description: Образовательные учреждения (школы, сады)
-  - name: COMMENTS
-    description: Комментарии/Отзывы
+  - name: SCHOOLS
+    description: Школы
+  - name: KINDERGARTENS
+    description: Детские сады
+  - name: COURSES
+    description: Курсы
+  - name: SCHOOL REVIEWS
+    description: Отзывы к школам
+  - name: KINDERGARTENS REVIEWS
+    description: Отзывы к детским садам
+  - name: COURSES REVIEWS
+    description: Отзывы к курсам
   - name: NEWS
     description: Новости
 
@@ -41,11 +47,10 @@ paths:
         - AUTH
       operationId: Регистрация нового пользователя
       description: |
-        Получить код подтверждения на переданный `email`.
-        Права доступа: **Доступно без токена**
-        Поля `email` и `phone_number` должны быть уникальными.
+        Поля `email` и `phone` должны быть уникальными.
         Пароль должен быть не менее 8 символов, содержать заглавные и строчные латинские буквы и цифры.
-        Поля `password` и `password2` должны совпадать.
+        Поля `password` и `re_password` должны совпадать.
+        Права доступа: **Доступно без токена**
       requestBody:
         content:
           application/json:
@@ -56,54 +61,119 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
-          description: 'Удачное выполнение запроса'
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: JWT-токен для авторизации
+          description: Удачное выполнение запроса
         400:
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ValidationError'
-          description: 'Отсутствует обязательное поле или оно некорректно'
-  /auth/token/:
+          description: Отсутствует обязательное поле или оно некорректно
+  /auth/signin/:
     post:
       tags:
         - AUTH
-      operationId: Получение JWT-токена
+      operationId: Авторизация пользователя
       description: |
-        Получение JWT-токена в обмен на email и confirmation code.
-        Права доступа: **Доступно без токена**
+        Получение JWT-токена в обмен на email и password.
+        Права доступа: **Доступно зарегистрированному пользователю**
       requestBody:
         content:
           application/json:
             schema:
-              required:
-                - email
-                - confirmation_code
+              $ref: '#/components/schemas/SignIn'
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: JWT-токен для авторизации
+          description: Удачное выполнение запроса
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+          description: Отсутствует обязательное поле или оно некорректно
+        404:
+          description: Пользователь не найден
+      security:
+      - jwt-token:
+        - write:admin, user
+  /auth/reset/:
+    post:
+      tags:
+        - AUTH
+      operationId: Запрос на восстановление пароля
+      description: |
+        Получение ссылки на восстановление пароля в обмен на email.
+        Права доступа: **Доступно без токена**
+      requestBody:
+        required: email
+        content:
+          application/json:
+            schema:
+              type: object
               properties:
                 email:
                   type: string
                   format: email
                   maxLength: 254
                   example: "ivanov@yandex.ru"
-                confirmation_code:
-                  type: string
-                  writeOnly: true
       responses:
         200:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Token'
-          description: 'Удачное выполнение запроса'
+          description: Успешный запрос. Ссылка на восстановление пароля отправлена на указанную почту.
         400:
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ValidationError'
-          description: 'Отсутствует обязательное поле или оно некорректно'
-        404:
-          description: Пользователь не найден
-  /users/me/:
+          description: Отсутствует обязательное поле или оно некорректно
+  /auth/reset/confirm/:
+    post:
+      tags:
+        - AUTH
+      operationId: Восстановление пароля
+      description: |
+        Восстановление пароля. Поля `password` и `re_password` должны совпадать.
+        Права доступа: **Доступно без токена**
+      requestBody:
+        required:
+          - password
+          - re_password
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                  minLength: 8
+                  pattern: (?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])
+                  example: "123QWErty"
+                re_password:
+                  type: string
+                  minLength: 8
+                  pattern: (?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])
+                  example: "123QWErty"
+      responses:
+        200:
+          description: Успешный запрос. Пароль изменен.
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+          description: Отсутствует обязательное поле или оно некорректно
+  /me/:
     get:
       tags:
         - USERS
@@ -125,6 +195,32 @@ paths:
       security:
       - jwt-token:
         - read:admin, user
+    post:
+      tags:
+        - USERS
+      operationId: Внесение данных своей учетной записи
+      description: |
+        Внести данные в учетную запись.
+        Права доступа: **Любой авторизованный пользователь**
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserWrite'
+      responses:
+        200:
+          description: Удачное выполнение запроса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        401:
+          description: Необходим JWT-токен
+        403:
+          description: Нет прав доступа
+      security:
+      - jwt-token:
+        - write:admin, user
     patch:
       tags:
         - USERS
@@ -136,7 +232,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Me'
+              $ref: '#/components/schemas/UserWrite'
       responses:
         200:
           description: Удачное выполнение запроса
@@ -145,7 +241,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
         400:
-          description: 'Отсутствует обязательное поле или оно некорректно'
+          description: Отсутствует обязательное поле или оно некорректно
           content:
             application/json:
               schema:
@@ -162,171 +258,21 @@ paths:
         Права доступа: **Любой авторизованный пользователь, администратор**
       responses:
         204:
-          description: 'Удачное выполнение запроса'
+          description: Удачное выполнение запроса
         401:
           description: Необходим JWT-токен
         403:
           description: Нет прав доступа
       security:
       - jwt-token:
-        - write:admin
-  /users/:
+        - write:admin  
+  /schools/:
     get:
       tags:
-        - USERS
-      operationId: Получение списка всех пользователей
+        - SCHOOLS
+      operationId: Получение списка всех школ
       description: |
-        Получить список всех пользователей.
-        Права доступа: **Администратор**
-      responses:
-        200:
-          description: Удачное выполнение запроса
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  count:
-                    type: integer
-                  next:
-                    type: string
-                  previous:
-                    type: string
-                  results:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/User'
-        401:
-          description: Необходим JWT-токен
-        403:
-          description: Нет прав доступа
-      security:
-      - jwt-token:
-        - read:admin
-    post:
-      tags:
-        - USERS
-      operationId: Добавление пользователя
-      description: |
-        Добавить нового пользователя.
-        Права доступа: **Администратор**
-        Поля `email` и `phone_number` должны быть уникальными.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserWrite'
-      responses:
-        201:
-          description: Удачное выполнение запроса
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-        400:
-          description: 'Отсутствует обязательное поле или оно некорректно'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ValidationError'
-        401:
-          description: Необходим JWT-токен
-        403:
-          description: Нет прав доступа
-      security:
-      - jwt-token:
-        - write:admin
-  /users/{user_id}/:
-    parameters:
-      - name: user_id
-        in: path
-        required: true
-        description: Id пользователя
-        schema:
-          type: integer
-    get:
-      tags:
-        - USERS
-      operationId: Получение пользователя по id
-      description: |
-        Получить пользователя по id.
-        Права доступа: **Администратор**
-      responses:
-        200:
-          description: Удачное выполнение запроса
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-        401:
-          description: Необходим JWT-токен
-        403:
-          description: Нет прав доступа
-        404:
-          description: Пользователь не найден
-      security:
-      - jwt-token:
-        - read:admin
-    patch:
-      tags:
-        - USERS
-      operationId: Изменение данных пользователя по id
-      description: |
-        Изменить данные пользователя по id.
-        Права доступа: **Администратор**
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/User'
-      responses:
-        200:
-          description: Удачное выполнение запроса
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-        400:
-          description: 'Отсутствует обязательное поле или оно некорректно'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ValidationError'
-        401:
-          description: Необходим JWT-токен
-        403:
-          description: Нет прав доступа
-        404:
-          description: Пользователь не найден
-      security:
-      - jwt-token:
-        - write:admin
-    delete:
-      tags:
-        - USERS
-      operationId: Удаление пользователя по id
-      description: |
-        Удалить пользователя по username.
-        Права доступа: **Администратор**
-      responses:
-        204:
-          description: Удачное выполнение запроса
-        401:
-          description: Необходим JWT-токен
-        403:
-          description: Нет прав доступа
-        404:
-          description: Пользователь не найден
-      security:
-      - jwt-token:
-        - write:admin
-  /organizations/:
-    get:
-      tags:
-        - ORGANIZATIONS
-      operationId: Получение списка всех организаций
-      description: |
-        Получить список всех организаций.
+        Получить список всех школ.
         Права доступа: **Доступно без токена**
       responses:
         200:
@@ -345,28 +291,28 @@ paths:
                   results:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Organization'
+                      $ref: '#/components/schemas/Schools'
     post:
       tags:
-        - ORGANIZATIONS
-      operationId: Добавление организации
+        - SCHOOLS
+      operationId: Добавление школы
       description: |
-        Добавить новую организацию.
+        Добавить новую школу.
         Права доступа: **Администратор**
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/OrganizationWrite'
+              $ref: '#/components/schemas/SchoolWrite'
       responses:
         200:
           description: Удачное выполнение запроса
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Organization'
+                $ref: '#/components/schemas/School'
         400:
-          description: 'Отсутствует обязательное поле или оно некорректно'
+          description: Отсутствует обязательное поле или оно некорректно
           content:
             application/json:
               schema:
@@ -378,20 +324,20 @@ paths:
       security:
       - jwt-token:
         - write:admin
-  /organizations/{organization_id}/:
+  /schools/{school_id}/:
     parameters:
-      - name: organization_id
+      - name: school_id
         in: path
         required: true
-        description: Id организации
+        description: Id школы
         schema:
           type: integer
     get:
       tags:
-        - ORGANIZATIONS
-      operationId: Получение организации по id
+        - SCHOOLS
+      operationId: Получение школы по id
       description: |
-        Получить организацию по id.
+        Получить школу по id.
         Права доступа: **Доступно без токена**
       responses:
         200:
@@ -399,28 +345,28 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Organization'
+                $ref: '#/components/schemas/School'
     patch:
       tags:
-        - ORGANIZATIONS
-      operationId: Изменение данных организации по id
+        - SCHOOLS
+      operationId: Изменение данных школы по id
       description: |
-        Изменить данные организации по id.
+        Изменить данные школы по id.
         Права доступа: **Администратор**
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Organization'
+              $ref: '#/components/schemas/SchoolWrite'
       responses:
         200:
           description: Удачное выполнение запроса
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Organization'
+                $ref: '#/components/schemas/School'
         400:
-          description: 'Отсутствует обязательное поле или оно некорректно'
+          description: Отсутствует обязательное поле или оно некорректно
           content:
             application/json:
               schema:
@@ -430,16 +376,16 @@ paths:
         403:
           description: Нет прав доступа
         404:
-          description: Организация не найдена
+          description: Школа не найдена
       security:
       - jwt-token:
         - write:admin
     delete:
       tags:
-        - ORGANIZATIONS
-      operationId: Удаление данных организации по id
+        - SCHOOLS
+      operationId: Удаление данных школы по id
       description: |
-        Удалить данные организации по id.
+        Удалить данные школы по id.
         Права доступа: **Администратор**
       responses:
         204:
@@ -449,47 +395,43 @@ paths:
         403:
           description: Нет прав доступа
         404:
-          description: Организация не найдена
+          description: Школа не найдена
       security:
       - jwt-token:
         - write:admin
-  /organizations/{organization_id}/favorite/:
+  /school/{school_id}/favorite/:
     parameters:
-      - name: organization_id
+      - name: school_id
         in: path
         required: true
-        description: Id организации
+        description: Id школы
         schema:
           type: integer
     post:
       tags:
-        - ORGANIZATIONS
-      operationId: Добавление организации в избранное
+        - SCHOOLS
+      operationId: Добавление школы в избранное
       description: |
-        Добавить новую организацию в избранное.
+        Добавить новую школу в избранное.
         Права доступа: **Любой авторизованный пользователь**
       responses:
         200:
           description: Удачное выполнение запроса
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
         401:
           description: Необходим JWT-токен
         403:
           description: Нет прав доступа
         404:
-          description: Организация не найдена
+          description: Школа не найдена
       security:
       - jwt-token:
         - write:admin, user
     delete:
       tags:
-        - ORGANIZATIONS
-      operationId: Удаление организации из избранного
+        - SCHOOLS
+      operationId: Удаление школы из избранного
       description: |
-        Удалить организацию из избранного.
+        Удалить школу из избранного.
         Права доступа: **Любой авторизованный пользователь**
       responses:
         204:
@@ -499,24 +441,17 @@ paths:
         403:
           description: Нет прав доступа
         404:
-          description: Организация не найдена
+          description: Школа не найдена
       security:
       - jwt-token:
         - write:admin, user
-  /organizations/{organization_id}/comments/:
-    parameters:
-      - name: organization_id
-        in: path
-        required: true
-        description: Id организации
-        schema:
-          type: integer
+  /kindergartens/:
     get:
       tags:
-        - COMMENTS
-      operationId: Получение списка всех комментариев к организации
+        - KINDERGARTENS
+      operationId: Получение списка всех детских садов
       description: |
-        Получить список всех комментариев к организации по id.
+        Получить список всех детских садов.
         Права доступа: **Доступно без токена**
       responses:
         200:
@@ -535,30 +470,395 @@ paths:
                   results:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Comment'
-        404:
-          description: Не найдена организация или комментарий
+                      $ref: '#/components/schemas/Kindergartens'
     post:
       tags:
-        - COMMENTS
-      operationId: Добавление комментария к организации
+        - KINDERGARTENS
+      operationId: Добавление детского сада
       description: |
-        Добавить новый комментарий к организации.
+        Добавить новый детский сад.
+        Права доступа: **Администратор**
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/KindergartenWrite'
+      responses:
+        200:
+          description: Удачное выполнение запроса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Kindergarten'
+        400:
+          description: Отсутствует обязательное поле или оно некорректно
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        401:
+          description: Необходим JWT-токен
+        403:
+          description: Нет прав доступа
+      security:
+      - jwt-token:
+        - write:admin
+  /kindergartens/{kindergarten_id}/:
+    parameters:
+      - name: kindergarten_id
+        in: path
+        required: true
+        description: Id детского сада
+        schema:
+          type: integer
+    get:
+      tags:
+        - KINDERGARTENS
+      operationId: Получение детского сада по id
+      description: |
+        Получить детский сад по id.
+        Права доступа: **Доступно без токена**
+      responses:
+        200:
+          description: Удачное выполнение запроса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Kindergarten'
+    patch:
+      tags:
+        - KINDERGARTENS
+      operationId: Изменение данных детского сада по id
+      description: |
+        Изменить данные детского сада по id.
+        Права доступа: **Администратор**
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/KindergartenWrite'
+      responses:
+        200:
+          description: Удачное выполнение запроса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Kindergarten'
+        400:
+          description: Отсутствует обязательное поле или оно некорректно
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        401:
+          description: Необходим JWT-токен
+        403:
+          description: Нет прав доступа
+        404:
+          description: Детский сад не найден
+      security:
+      - jwt-token:
+        - write:admin
+    delete:
+      tags:
+        - KINDERGARTENS
+      operationId: Удаление данных детского сада по id
+      description: |
+        Удалить данные детского сада по id.
+        Права доступа: **Администратор**
+      responses:
+        204:
+          description: Удачное выполнение запроса
+        401:
+          description: Необходим JWT-токен
+        403:
+          description: Нет прав доступа
+        404:
+          description: Детский сад не найден
+      security:
+      - jwt-token:
+        - write:admin
+  /kindergartens/{kindergarten_id}/favorite/:
+    parameters:
+      - name: kindergarten_id
+        in: path
+        required: true
+        description: Id детского сада
+        schema:
+          type: integer
+    post:
+      tags:
+        - KINDERGARTENS
+      operationId: Добавление детского сада в избранное
+      description: |
+        Добавить новый детский сад в избранное.
+        Права доступа: **Любой авторизованный пользователь**
+      responses:
+        200:
+          description: Удачное выполнение запроса
+        401:
+          description: Необходим JWT-токен
+        403:
+          description: Нет прав доступа
+        404:
+          description: Детский сад не найден
+      security:
+      - jwt-token:
+        - write:admin, user
+    delete:
+      tags:
+        - KINDERGARTENS
+      operationId: Удаление детского сада из избранного
+      description: |
+        Удалить детский сад из избранного.
+        Права доступа: **Любой авторизованный пользователь**
+      responses:
+        204:
+          description: Удачное выполнение запроса
+        401:
+          description: Необходим JWT-токен
+        403:
+          description: Нет прав доступа
+        404:
+          description: Детский сад не найден
+      security:
+      - jwt-token:
+        - write:admin, user
+  /courses/:
+    get:
+      tags:
+        - COURSES
+      operationId: Получение списка всех курсов
+      description: |
+        Получить список всех курсов.
+        Права доступа: **Доступно без токена**
+      responses:
+        200:
+          description: Удачное выполнение запроса
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                  next:
+                    type: string
+                  previous:
+                    type: string
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Coursess'
+    post:
+      tags:
+        - COURSES
+      operationId: Добавление курсов
+      description: |
+        Добавить новые курсы.
+        Права доступа: **Администратор**
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CoursesWrite'
+      responses:
+        200:
+          description: Удачное выполнение запроса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Courses'
+        400:
+          description: Отсутствует обязательное поле или оно некорректно
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        401:
+          description: Необходим JWT-токен
+        403:
+          description: Нет прав доступа
+      security:
+      - jwt-token:
+        - write:admin
+  /courses/{courses_id}/:
+    parameters:
+      - name: courses_id
+        in: path
+        required: true
+        description: Id курсов
+        schema:
+          type: integer
+    get:
+      tags:
+        - COURSES
+      operationId: Получение курсов по id
+      description: |
+        Получить дынные курсов по id.
+        Права доступа: **Доступно без токена**
+      responses:
+        200:
+          description: Удачное выполнение запроса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Courses'
+    patch:
+      tags:
+        - COURSES
+      operationId: Изменение данных курсов по id
+      description: |
+        Изменить данные курсов по id.
+        Права доступа: **Администратор**
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CoursesWrite'
+      responses:
+        200:
+          description: Удачное выполнение запроса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Courses'
+        400:
+          description: Отсутствует обязательное поле или оно некорректно
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        401:
+          description: Необходим JWT-токен
+        403:
+          description: Нет прав доступа
+        404:
+          description: Курсы не найдены
+      security:
+      - jwt-token:
+        - write:admin
+    delete:
+      tags:
+        - COURSES
+      operationId: Удаление данных курсов по id
+      description: |
+        Удалить данные курсов по id.
+        Права доступа: **Администратор**
+      responses:
+        204:
+          description: Удачное выполнение запроса
+        401:
+          description: Необходим JWT-токен
+        403:
+          description: Нет прав доступа
+        404:
+          description: Курсы не найдены
+      security:
+      - jwt-token:
+        - write:admin
+  /courses/{courses_id}/favorite/:
+    parameters:
+      - name: courses_id
+        in: path
+        required: true
+        description: Id курсов
+        schema:
+          type: integer
+    post:
+      tags:
+        - COURSES
+      operationId: Добавление курсов в избранное
+      description: |
+        Добавить новые курсы в избранное.
+        Права доступа: **Любой авторизованный пользователь**
+      responses:
+        200:
+          description: Удачное выполнение запроса
+        401:
+          description: Необходим JWT-токен
+        403:
+          description: Нет прав доступа
+        404:
+          description: Курсы не найдены
+      security:
+      - jwt-token:
+        - write:admin, user
+    delete:
+      tags:
+        - COURSES
+      operationId: Удаление курсов из избранного
+      description: |
+        Удалить курсы из избранного.
+        Права доступа: **Любой авторизованный пользователь**
+      responses:
+        204:
+          description: Удачное выполнение запроса
+        401:
+          description: Необходим JWT-токен
+        403:
+          description: Нет прав доступа
+        404:
+          description: Курсы не найдены
+      security:
+      - jwt-token:
+        - write:admin, user
+  /schools/{school_id}/reviews/:
+    parameters:
+      - name: school_id
+        in: path
+        required: true
+        description: Id школы
+        schema:
+          type: integer
+    get:
+      tags:
+        - SCHOOL REVIEWS
+      operationId: Получение списка всех отзывов к школе
+      description: |
+        Получить список всех отзывов к школе по id.
+        Права доступа: **Доступно без токена**
+      responses:
+        200:
+          description: Удачное выполнение запроса
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                  next:
+                    type: string
+                  previous:
+                    type: string
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Review'
+        404:
+          description: Не найдена школа или отзыв
+    post:
+      tags:
+        - SCHOOL REVIEWS
+      operationId: Добавление отзыва к школе
+      description: |
+        Добавить новый отзыв к школе.
         Права доступа: **Аутентифицированные пользователи**
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Comment'
+              $ref: '#/components/schemas/Review'
       responses:
         201:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Comment'
-          description: 'Удачное выполнение запроса'
+                $ref: '#/components/schemas/Review'
+          description: Удачное выполнение запроса
         400:
-          description: 'Отсутствует обязательное поле или оно некорректно'
+          description: Отсутствует обязательное поле или оно некорректно
           content:
             application/json:
               schema:
@@ -566,61 +866,61 @@ paths:
         401:
           description: Необходим JWT-токен
         404:
-          description: Не найдена организация или комментарий
+          description: Не найдена школа или отзыв
       security:
       - jwt-token:
         - write:user, admin
-  /organizations/{organization_id}/comments/{comment_id}/:
+  /schools/{school_id}/reviews/{review_id}/:
     parameters:
-      - name: organization_id
+      - name: school_id
         in: path
         required: true
-        description: Id организации
+        description: Id школы
         schema:
           type: integer
-      - name: comment_id
+      - name: review_id
         in: path
         required: true
-        description: Id комментария
+        description: Id отзыва
         schema:
           type: integer
     get:
       tags:
-        - COMMENTS
-      operationId: Получение комментария к организации
+        - SCHOOL REVIEWS
+      operationId: Получение отзыва к школе
       description: |
-        Получить комментарий к организации по id.
+        Получить отзыв к школе по id.
         Права доступа: **Доступно без токена**
       responses:
         200:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Comment'
-          description: 'Удачное выполнение запроса'
+                $ref: '#/components/schemas/Review'
+          description: Удачное выполнение запроса
         404:
-          description: Не найдена организация или комментарий
+          description: Не найдена школа или отзыв
     patch:
       tags:
-        - COMMENTS
-      operationId: Частичное обновление комментария к организации
+        - SCHOOL REVIEWS
+      operationId: Частичное обновление отзыва к школе
       description: |
-        Частично обновить комментарий к организации по id.
-        Права доступа: **Автор комментария или администратор**
+        Частично обновить отзыв к школе по id.
+        Права доступа: **Автор отзыва или администратор**
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Comment'
+              $ref: '#/components/schemas/ReviewWrite'
       responses:
         200:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Comment'
-          description: 'Удачное выполнение запроса'
+                $ref: '#/components/schemas/Review'
+          description: Удачное выполнение запроса
         400:
-          description: 'Отсутствует обязательное поле или оно некорректно'
+          description: Отсутствует обязательное поле или оно некорректно
           content:
             application/json:
               schema:
@@ -630,26 +930,326 @@ paths:
         403:
           description: Нет прав доступа
         404:
-          description: Не найдена организация или комментарий
+          description: Не найдена школа или отзыв
       security:
       - jwt-token:
         - write:user, admin
     delete:
       tags:
-        - COMMENTS
-      operationId: Удаление комментария к организации
+        - SCHOOL REVIEWS
+      operationId: Удаление отзыва к школе
       description: |
-        Удалить комментарий к организации по id.
-        Права доступа: **Автор комментария или администратор**
+        Удалить отзыв к школе по id.
+        Права доступа: **Автор отзыва или администратор**
       responses:
         204:
-          description: 'Удачное выполнение запроса'
+          description: Удачное выполнение запроса
         401:
           description: Необходим JWT-токен
         403:
           description: Нет прав доступа
         404:
-          description: Не найдена организация или комментарий
+          description: Не найдена школа или отзыв
+      security:
+      - jwt-token:
+        - write:user, admin
+  /kindergartens/{kindergarten_id}/reviews/:
+    parameters:
+      - name: kindergarten_id
+        in: path
+        required: true
+        description: Id детского сада
+        schema:
+          type: integer
+    get:
+      tags:
+        - KINDERGARTENS REVIEWS
+      operationId: Получение списка всех отзывов к детскому саду
+      description: |
+        Получить список всех отзывов к детскому саду по id.
+        Права доступа: **Доступно без токена**
+      responses:
+        200:
+          description: Удачное выполнение запроса
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                  next:
+                    type: string
+                  previous:
+                    type: string
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Review'
+        404:
+          description: Не найден детский сад или отзыв
+    post:
+      tags:
+        - KINDERGARTENS REVIEWS
+      operationId: Добавление отзыва к детскому саду
+      description: |
+        Добавить новый отзыв к детскому саду.
+        Права доступа: **Аутентифицированные пользователи**
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Review'
+      responses:
+        201:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+          description: Удачное выполнение запроса
+        400:
+          description: Отсутствует обязательное поле или оно некорректно
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        401:
+          description: Необходим JWT-токен
+        404:
+          description: Не найден детский сад или отзыв
+      security:
+      - jwt-token:
+        - write:user, admin
+  /kindergartens/{kindergarten_id}/reviews/{review_id}/:
+    parameters:
+      - name: kindergarten_id
+        in: path
+        required: true
+        description: Id детского сада
+        schema:
+          type: integer
+      - name: review_id
+        in: path
+        required: true
+        description: Id отзыва
+        schema:
+          type: integer
+    get:
+      tags:
+        - KINDERGARTENS REVIEWS
+      operationId: Получение отзыва к детскому саду
+      description: |
+        Получить отзыв к детскому саду по id.
+        Права доступа: **Доступно без токена**
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+          description: Удачное выполнение запроса
+        404:
+          description: Не найден детский сад или отзыв
+    patch:
+      tags:
+        - KINDERGARTENS REVIEWS
+      operationId: Частичное обновление отзыва к детскому саду
+      description: |
+        Частично обновить отзыв к детскому саду по id.
+        Права доступа: **Автор отзыва или администратор**
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReviewWrite'
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+          description: Удачное выполнение запроса
+        400:
+          description: Отсутствует обязательное поле или оно некорректно
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        401:
+          description: Необходим JWT-токен
+        403:
+          description: Нет прав доступа
+        404:
+          description: Не найден детский сад или отзыв
+      security:
+      - jwt-token:
+        - write:user, admin
+    delete:
+      tags:
+        - KINDERGARTENS REVIEWS
+      operationId: Удаление отзыва к детскому саду
+      description: |
+        Удалить отзыв к детскому саду по id.
+        Права доступа: **Автор отзыва или администратор**
+      responses:
+        204:
+          description: Удачное выполнение запроса
+        401:
+          description: Необходим JWT-токен
+        403:
+          description: Нет прав доступа
+        404:
+          description: Не найден детский сад или отзыв
+      security:
+      - jwt-token:
+        - write:user, admin
+  /courses/{courses_id}/reviews/:
+    parameters:
+      - name: courses_id
+        in: path
+        required: true
+        description: Id курсов
+        schema:
+          type: integer
+    get:
+      tags:
+        - COURSES REVIEWS
+      operationId: Получение списка всех отзывов к курсам
+      description: |
+        Получить список всех отзывов к курсам по id.
+        Права доступа: **Доступно без токена**
+      responses:
+        200:
+          description: Удачное выполнение запроса
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                  next:
+                    type: string
+                  previous:
+                    type: string
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Review'
+        404:
+          description: Не найдены курсы или отзыв
+    post:
+      tags:
+        - COURSES REVIEWS
+      operationId: Добавление отзыва к курсам
+      description: |
+        Добавить новый отзыв к курсам.
+        Права доступа: **Аутентифицированные пользователи**
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Review'
+      responses:
+        201:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+          description: Удачное выполнение запроса
+        400:
+          description: Отсутствует обязательное поле или оно некорректно
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        401:
+          description: Необходим JWT-токен
+        404:
+          description: Не найдены курсы или отзыв
+      security:
+      - jwt-token:
+        - write:user, admin
+  /courses/{courses_id}/reviews/{review_id}/:
+    parameters:
+      - name: courses_id
+        in: path
+        required: true
+        description: Id курсов
+        schema:
+          type: integer
+      - name: review_id
+        in: path
+        required: true
+        description: Id отзыва
+        schema:
+          type: integer
+    get:
+      tags:
+        - COURSES REVIEWS
+      operationId: Получение отзыва к курсам
+      description: |
+        Получить отзыв к курсам по id.
+        Права доступа: **Доступно без токена**
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+          description: Удачное выполнение запроса
+        404:
+          description: Не найдены курсы или отзыв
+    patch:
+      tags:
+        - COURSES REVIEWS
+      operationId: Частичное обновление отзыва к курсам
+      description: |
+        Частично обновить отзыв к курсампо id.
+        Права доступа: **Автор отзыва или администратор**
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReviewWrite'
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+          description: Удачное выполнение запроса
+        400:
+          description: Отсутствует обязательное поле или оно некорректно
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        401:
+          description: Необходим JWT-токен
+        403:
+          description: Нет прав доступа
+        404:
+          description: Не найдены курсы или отзыв
+      security:
+      - jwt-token:
+        - write:user, admin
+    delete:
+      tags:
+        - COURSES REVIEWS
+      operationId: Удаление отзыва к курсам
+      description: |
+        Удалить отзыв к курсам по id.
+        Права доступа: **Автор отзыва или администратор**
+      responses:
+        204:
+          description: Удачное выполнение запроса
+        401:
+          description: Необходим JWT-токен
+        403:
+          description: Нет прав доступа
+        404:
+          description: Не найдены курсы или отзыв
       security:
       - jwt-token:
         - write:user, admin
@@ -699,7 +1299,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/News'
         400:
-          description: 'Отсутствует обязательное поле или оно некорректно'
+          description: Отсутствует обязательное поле или оно некорректно
           content:
             application/json:
               schema:
@@ -753,7 +1353,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/News'
         400:
-          description: 'Отсутствует обязательное поле или оно некорректно'
+          description: Отсутствует обязательное поле или оно некорректно
           content:
             application/json:
               schema:
@@ -800,24 +1400,24 @@ components:
       type: object
       description: Информация о пользователе при регистрации
       required:
-        - name
-        - surname
-        - phone_number
+        - first_name
+        - last_name
+        - phone
         - email
         - password
-        - password2
+        - re_password
       properties:
-        name:
+        first_name:
           type: string
           pattern: ^[\p{L}\w.@+-]+\z
           maxLength: 150
           example: "Ivan"
-        surname:
+        last_name:
           type: string
           pattern: ^[\p{L}\w.@+-]+\z
           maxLength: 150
           example: "Ivanov"
-        phone_number:
+        phone:
           type: string
           pattern: ^\+\d{1,3}[\d()-]{6,14}\d$
           maxLength: 15
@@ -832,40 +1432,59 @@ components:
           minLength: 8
           pattern: (?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])
           example: "123QWErty"
-        password2:
+        re_password:
           type: string
           minLength: 8
           pattern: (?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])
           example: "123QWErty"
-    Token:
-      title: Токен
+    SignIn:
+      title: Авторизация
       type: object
+      description: Информация о пользователе при авторизации
+      required:
+        - email
+        - password
       properties:
-        token:
+        email:
           type: string
-          title: access токен
+          format: email
+          maxLength: 254
+          example: "ivanov@yandex.ru"
+        password:
+          type: string
+          minLength: 8
+          pattern: (?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])
+          example: "123QWErty"
     User:
       title: Пользователь
       type: object
       description: Информация о пользователе
       properties:
-        id:
-          type: integer
-          title: id пользователя
-          readOnly: true
-        name:
+        parent_first_name:
           type: string
           title: имя пользователя
           pattern: ^[\p{L}\w.@+-]+\z
           maxLength: 150
           example: "Ivan"
-        surname:
+        parent_last_name:
           type: string
           title: фамилия пользователя
           pattern: ^[\p{L}\w.@+-]+\z
           maxLength: 150
           example: "Ivanov"
-        phone_number:
+        child_first_name:
+          type: string
+          title: имя пользователя
+          pattern: ^[\p{L}\w.@+-]+\z
+          maxLength: 150
+          example: "Ivan"
+        child_last_name:
+          type: string
+          title: фамилия пользователя
+          pattern: ^[\p{L}\w.@+-]+\z
+          maxLength: 150
+          example: "Ivanov"
+        phone:
           type: string
           title: номер телефона
           pattern: ^\+\d{1,3}[\d()-]{6,14}\d$
@@ -877,71 +1496,48 @@ components:
           format: email
           maxLength: 254
           example: "ivanov@yandex.ru"
-        role:
-          type: string
-          description: Администратор или пользователь.
-          enum:
-            - user
-            - admin
         favorite:
             type: array
             title: избранное
             items:
-              $ref: '#/components/schemas/Organization'
+              anyOf:
+                - $ref: '#/components/schemas/School'
+                - $ref: '#/components/schemas/Kindergarten'
+                - $ref: '#/components/schemas/Corses'
     UserWrite:
       title: Пользователь (POST)
       type: object
       description: Информация о пользователе (POST)
-      required:
-        - name
-        - surname
-        - phone_number
-        - email
-        - password
       properties:
-        name:
-          type: string
-          pattern: ^[\p{L}\w.@+-]+\z
-          maxLength: 150
-          example: "Ivan"
-        surname:
-          type: string
-          pattern: ^[\p{L}\w.@+-]+\z
-          maxLength: 150
-          example: "Ivanov"
-        phone_number:
-          type: string
-          pattern: ^\+\d{1,3}[\d()-]{6,14}\d$
-          maxLength: 15
-          example: "+7(910)000-00-00"
-        email:
-          type: string
-          format: email
-          maxLength: 254
-          example: "ivanov@yandex.ru"
-        password:
-          type: string
-          minLength: 8
-          pattern: (?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])
-          example: "123QWErty"
-    Me:
-      title: Текущий пользователь
-      type: object
-      description: Информация о текущем пользователе
-      properties:
-        name:
+        id:
+          type: integer
+          title: id пользователя
+          readOnly: true
+        parent_first_name:
           type: string
           title: имя пользователя
           pattern: ^[\p{L}\w.@+-]+\z
           maxLength: 150
           example: "Ivan"
-        surname:
+        parent_last_name:
           type: string
           title: фамилия пользователя
           pattern: ^[\p{L}\w.@+-]+\z
           maxLength: 150
           example: "Ivanov"
-        phone_number:
+        child_first_name:
+          type: string
+          title: имя ребенка
+          pattern: ^[\p{L}\w.@+-]+\z
+          maxLength: 150
+          example: "Ivan"
+        child_last_name:
+          type: string
+          title: фамилия ребенка
+          pattern: ^[\p{L}\w.@+-]+\z
+          maxLength: 150
+          example: "Ivanov"
+        phone:
           type: string
           title: номер телефона
           pattern: ^\+\d{1,3}[\d()-]{6,14}\d$
@@ -953,47 +1549,63 @@ components:
           format: email
           maxLength: 254
           example: "ivanov@yandex.ru"
-        role:
-          type: string
-          description: Администратор или пользователь
-          readOnly: true
-          enum:
-            - user
-            - admin
-    Organization:
-      title: Организация
+    Schools:
+      title: Школы
       type: object
-      description: Информация об организации
+      description: Информация о школах
       properties:
         id:
           type: integer
-          title: id организации
+          title: id школы
           readOnly: true
         name:
           type: string
-          title: наименование организации
+          title: наименование школы
           pattern: ^[\p{L}\w.@+-]+\z
           maxLength: 150
         description:
           title: краткая информация
           type: string
-        phone_number:
+        image:
+          type: string
+          format: url
+        price:
+          type: integer
+          title: цена
+        rating:
+          type: integer
+          title: рейтинг
+    School:
+      title: Школа
+      type: object
+      description: Информация о школе
+      properties:
+        id:
+          type: integer
+          title: id школы
+          readOnly: true
+        name:
+          type: string
+          title: наименование школы
+          pattern: ^[\p{L}\w.@+-]+\z
+          maxLength: 150
+        description:
+          type: string
+          title: краткая информация
+        telephone:
           type: string
           title: номер телефона
           pattern: ^\+\d{1,3}[\d()-]{6,14}\d$
           maxLength: 15
           example: "+7(910)000-00-00"
-        adress:
+        address:
           type: string
           title: адрес
-        role:
-          type: string
-          description: Школа, детский сад или курсы.
-          readOnly: true
-          enum:
-            - school
-            - kindergarten
-            - courses
+        album:
+          type: array
+          title: альбом с изображениями
+          items:
+            $ref: '#/components/schemas/Album'
         price:
           type: integer
           title: цена
@@ -1010,39 +1622,274 @@ components:
           title: профиль
           items:
             $ref: '#/components/schemas/Profile'
-    OrganizationWrite:
-      title: Организация (POST)
+    SchoolWrite:
+      title: Школа (POST)
       type: object
-      description: Информация об организации (POST)
+      description: Информация о школе (POST)
       required:
         - name
-        - phone_number
-        - role
+        - telephone
       properties:
         name:
           type: string
-          title: наименование организации
+          title: наименование школы
           pattern: ^[\p{L}\w.@+-]+\z
           maxLength: 150
         description:
           type: string
           title: краткая информация
-        phone_number:
+        telephone:
           type: string
           title: номер телефона
           pattern: ^\+\d{1,3}[\d()-]{6,14}\d$
           maxLength: 15
           example: "+7(910)000-00-00"
-        adress:
+        address:
           type: string
           title: адрес
-        role:
+        album:
+          type: array
+          title: альбом с изображениями
+          items:
+            $ref: '#/components/schemas/Album'
+        price:
+          type: integer
+          title: цена
+        age:
+          type: integer
+          title: возраст
+        languages:
+          type: array
+          title: языки
+          items:
+            $ref: '#/components/schemas/Language'
+        profiles:
+          type: array
+          title: профиль
+          items:
+            $ref: '#/components/schemas/Profile'
+    Kindergartens:
+      title: Детские сады
+      type: object
+      description: Информация о детских садах
+      properties:
+        id:
+          type: integer
+          title: id детского сада
+          readOnly: true
+        name:
           type: string
-          description: Школа, детский сад или курсы.
-          enum:
-            - school
-            - kindergarten
-            - courses
+          title: наименование детского сада
+          pattern: ^[\p{L}\w.@+-]+\z
+          maxLength: 150
+        description:
+          title: краткая информация
+          type: string
+        image:
+          type: string
+          format: url
+        price:
+          type: integer
+          title: цена
+        rating:
+          type: integer
+          title: рейтинг
+    Kindergarten:
+      title: Детский сад
+      type: object
+      description: Информация о детском саде
+      properties:
+        id:
+          type: integer
+          title: id детского сада
+          readOnly: true
+        name:
+          type: string
+          title: наименование детского сада
+          pattern: ^[\p{L}\w.@+-]+\z
+          maxLength: 150
+        description:
+          type: string
+          title: краткая информация
+        telephone:
+          type: string
+          title: номер телефона
+          pattern: ^\+\d{1,3}[\d()-]{6,14}\d$
+          maxLength: 15
+          example: "+7(910)000-00-00"
+        address:
+          type: string
+          title: адрес
+        album:
+          type: array
+          title: альбом с изображениями
+          items:
+            $ref: '#/components/schemas/Album'
+        price:
+          type: integer
+          title: цена
+        age:
+          type: integer
+          title: возраст
+        languages:
+          type: array
+          title: языки
+          items:
+            $ref: '#/components/schemas/Language'
+        profiles:
+          type: array
+          title: профиль
+          items:
+            $ref: '#/components/schemas/Profile'
+    KindergartenWrite:
+      title: Детский сад (POST)
+      type: object
+      description: Информация о детском саде (POST)
+      required:
+        - name
+        - telephone
+      properties:
+        name:
+          type: string
+          title: наименование детского сада
+          pattern: ^[\p{L}\w.@+-]+\z
+          maxLength: 150
+        description:
+          type: string
+          title: краткая информация
+        telephone:
+          type: string
+          title: номер телефона
+          pattern: ^\+\d{1,3}[\d()-]{6,14}\d$
+          maxLength: 15
+          example: "+7(910)000-00-00"
+        address:
+          type: string
+          title: адрес
+        album:
+          type: array
+          title: альбом с изображениями
+          items:
+            $ref: '#/components/schemas/Album'
+        price:
+          type: integer
+          title: цена
+        age:
+          type: integer
+          title: возраст
+        languages:
+          type: array
+          title: языки
+          items:
+            $ref: '#/components/schemas/Language'
+        profiles:
+          type: array
+          title: профиль
+          items:
+            $ref: '#/components/schemas/Profile'
+    Coursess:
+      title: Курсы
+      type: object
+      description: Информация о курсах
+      properties:
+        id:
+          type: integer
+          title: id курсов
+          readOnly: true
+        name:
+          type: string
+          title: наименование курсов
+          pattern: ^[\p{L}\w.@+-]+\z
+          maxLength: 150
+        description:
+          title: краткая информация
+          type: string
+        image:
+          type: string
+          format: url
+        price:
+          type: integer
+          title: цена
+        rating:
+          type: integer
+          title: рейтинг
+    Courses:
+      title: Курсы
+      type: object
+      description: Информация о курсах
+      properties:
+        id:
+          type: integer
+          title: id курсов
+          readOnly: true
+        name:
+          type: string
+          title: наименование курсов
+          pattern: ^[\p{L}\w.@+-]+\z
+          maxLength: 150
+        description:
+          type: string
+          title: краткая информация
+        telephone:
+          type: string
+          title: номер телефона
+          pattern: ^\+\d{1,3}[\d()-]{6,14}\d$
+          maxLength: 15
+          example: "+7(910)000-00-00"
+        address:
+          type: string
+          title: адрес
+        album:
+          type: array
+          title: альбом с изображениями
+          items:
+            $ref: '#/components/schemas/Album'
+        price:
+          type: integer
+          title: цена
+        age:
+          type: integer
+          title: возраст
+        languages:
+          type: array
+          title: языки
+          items:
+            $ref: '#/components/schemas/Language'
+        profiles:
+          type: array
+          title: профиль
+          items:
+            $ref: '#/components/schemas/Profile'
+    CoursesWrite:
+      title: Курсы (POST)
+      type: object
+      description: Информация о курсах (POST)
+      required:
+        - name
+        - telephone
+      properties:
+        name:
+          type: string
+          title: наименование курсов
+          pattern: ^[\p{L}\w.@+-]+\z
+          maxLength: 150
+        description:
+          type: string
+          title: краткая информация
+        telephone:
+          type: string
+          title: номер телефона
+          pattern: ^\+\d{1,3}[\d()-]{6,14}\d$
+          maxLength: 15
+          example: "+7(910)000-00-00"
+        address:
+          type: string
+          title: адрес
+        album:
+          type: array
+          title: альбом с изображениями
+          items:
+            $ref: '#/components/schemas/Album'
         price:
           type: integer
           title: цена
@@ -1076,28 +1923,64 @@ components:
           type: string
         slug:
           type: string
-    Comment:
-      title: Комментарий
+    Album:
+      title: Альбом с изображениями
       type: object
-      description: Содержание комментария
+      properties:
+        image_url:
+          type: string
+          format: url
+          description: URL изображения
+    Review:
+      title: Отзыв
+      type: object
+      description: Содержание отзыва
       required:
         - content
+        - grade
       properties:
         id:
           type: integer
-          title: id комментария
+          title: id отзыва
           readOnly: true
         content:
           type: string
-          title: Текст комментария
+          title: Текст отзыва
+        grade:
+          type: integer
+          title: Оценка от 1 до 5
         author:
           type: string
-          title: Name автора комментария
+          title: Name автора отзыва
           readOnly: true
-        pub_date:
+        date_posted:
           type: string
           format: date-time
-          title: Дата публикации комментария
+          title: Дата публикации отзыва
+          readOnly: true
+    ReviewWrite:
+      title: Отзыв (PATCH)
+      type: object
+      description: Содержание отзыва (PATCH)
+      properties:
+        id:
+          type: integer
+          title: id отзыва
+          readOnly: true
+        content:
+          type: string
+          title: Текст отзыва
+        grade:
+          type: integer
+          title: Оценка от 1 до 5
+        author:
+          type: string
+          title: Name автора отзыва
+          readOnly: true
+        date_posted:
+          type: string
+          format: date-time
+          title: Дата публикации отзыва
           readOnly: true
     News:
       title: Новость
@@ -1121,7 +2004,7 @@ components:
           pattern: ^[\p{L}\w.@+-]+\z
           maxLength: 150
           readOnly: true
-        pub_date:
+        date_posted:
           type: string
           format: date-time
           title: Дата публикации новости
@@ -1151,7 +2034,7 @@ components:
           pattern: ^[\p{L}\w.@+-]+\z
           maxLength: 150
           readOnly: true
-        pub_date:
+        date_posted:
           type: string
           format: date-time
           title: Дата публикации новости

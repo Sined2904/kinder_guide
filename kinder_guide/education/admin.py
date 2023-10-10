@@ -12,6 +12,19 @@ class LanguageAdmin(admin.ModelAdmin):
     search_fields = ('name', )
     ordering = ['name',]
 
+    
+class ImageAdmin(admin.ModelAdmin):
+    list_display = ('name', 'image', 'default', 'album')
+    empty_value_display = '-пусто-'
+    search_fields = ('name', )
+    ordering = ['name',]
+
+class ImageAlbumAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    empty_value_display = '-пусто-'
+    search_fields = ('name', )
+    ordering = ['name',]
+
 
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug')
