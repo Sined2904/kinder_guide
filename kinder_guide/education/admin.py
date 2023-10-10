@@ -2,8 +2,8 @@ from django.contrib import admin
 
 from .forms import MinOneForm
 from .models import (Achievement, Education, Educational_form,
-                     Favourites_education, Favourites_specialist, Image,
-                     ImageAlbum, Language, Lesson, Profile, Specialist)
+                     Favourites_education, Favourites_specialist,
+                     Language, Lesson, Profile, Specialist)
 
 
 class LanguageAdmin(admin.ModelAdmin):
@@ -87,7 +87,7 @@ class Favourites_specialistAdmin(admin.ModelAdmin):
     empty_value_display = '-пусто-'
     ordering = ['user',]
 
-ImageAlbumAdmin
+
 admin.site.register(Language, LanguageAdmin)
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Education, EducationAdmin)
@@ -97,5 +97,3 @@ admin.site.register(Educational_form, Educational_formAdmin)
 admin.site.register(Achievement, AchievementAdmin)
 admin.site.register(Specialist, SpecialistAdmin)
 admin.site.register(Favourites_specialist, Favourites_specialistAdmin)
-admin.site.register(Image, ImageAdmin)
-admin.site.register(ImageAlbum, ImageAlbumAdmin)
