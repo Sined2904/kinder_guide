@@ -157,12 +157,12 @@ paths:
                 password:
                   type: string
                   minLength: 8
-                  pattern: (?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])
+                  pattern: ^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$
                   example: "123QWErty"
                 re_password:
                   type: string
                   minLength: 8
-                  pattern: (?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])
+                  pattern: ^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$
                   example: "123QWErty"
       responses:
         200:
@@ -1430,12 +1430,12 @@ components:
         password:
           type: string
           minLength: 8
-          pattern: (?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])
+          pattern: ^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$
           example: "123QWErty"
         re_password:
           type: string
           minLength: 8
-          pattern: (?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])
+          pattern: ^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$
           example: "123QWErty"
     SignIn:
       title: Авторизация
@@ -1453,7 +1453,7 @@ components:
         password:
           type: string
           minLength: 8
-          pattern: (?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])
+          pattern: ^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$
           example: "123QWErty"
     User:
       title: Пользователь
@@ -1589,6 +1589,12 @@ components:
           title: наименование школы
           pattern: ^[\p{L}\w.@+-]+\z
           maxLength: 150
+        rating:
+          type: integer
+          title: рейтинг
+        reviews:
+          type: integer
+          title: количество отзывов
         description:
           type: string
           title: краткая информация
@@ -1601,6 +1607,18 @@ components:
         address:
           type: string
           title: адрес
+        underground:
+          type: string
+          title: метро
+        area:
+          type: string
+          title: округ
+        email:
+          type: string
+          title: адрес электронной почты
+          format: email
+          maxLength: 254
+          example: "school@yandex.ru"
         album:
           type: array
           title: альбом с изображениями
@@ -1608,13 +1626,17 @@ components:
             $ref: '#/components/schemas/Album'
         price:
           type: integer
-          title: цена
-        rating:
+          title: цена за месяц
+        price_of_year:
           type: integer
-          title: рейтинг
+          title: цена за год
         age:
           type: integer
           title: возраст
+        classes:
+          type: string
+          title: классы
+          example: "С 1 по 11"
         languages:
           type: array
           title: языки
@@ -1650,6 +1672,18 @@ components:
         address:
           type: string
           title: адрес
+        underground:
+          type: string
+          title: метро
+        area:
+          type: string
+          title: округ
+        email:
+          type: string
+          title: адрес электронной почты
+          format: email
+          maxLength: 254
+          example: "school@yandex.ru"
         album:
           type: array
           title: альбом с изображениями
@@ -1657,10 +1691,17 @@ components:
             $ref: '#/components/schemas/Album'
         price:
           type: integer
-          title: цена
+          title: цена за месяц
+        price_of_year:
+          type: integer
+          title: цена за год
         age:
           type: integer
           title: возраст
+        classes:
+          type: string
+          title: классы
+          example: "С 1 по 11"
         languages:
           type: array
           title: языки
@@ -1711,6 +1752,12 @@ components:
           title: наименование детского сада
           pattern: ^[\p{L}\w.@+-]+\z
           maxLength: 150
+        rating:
+          type: integer
+          title: рейтинг
+        reviews:
+          type: integer
+          title: количество отзывов
         description:
           type: string
           title: краткая информация
@@ -1723,6 +1770,18 @@ components:
         address:
           type: string
           title: адрес
+        underground:
+          type: string
+          title: метро
+        area:
+          type: string
+          title: округ
+        email:
+          type: string
+          title: адрес электронной почты
+          format: email
+          maxLength: 254
+          example: "kindergarten@yandex.ru"
         album:
           type: array
           title: альбом с изображениями
@@ -1730,23 +1789,46 @@ components:
             $ref: '#/components/schemas/Album'
         price:
           type: integer
-          title: цена
-        rating:
+          title: цена за месяц
+        price_of_year:
           type: integer
-          title: рейтинг
+          title: цена за год
         age:
           type: integer
           title: возраст
+        working_hours:
+          type: string
+          title: время работы
+          example: "С 8:00 до 20:00"
+        group_suze:
+          type: string
+          title: размер группы
+          example: "До 15 человек"
         languages:
           type: array
           title: языки
           items:
             $ref: '#/components/schemas/Language'
-        profiles:
+        sport_dev:
           type: array
-          title: профиль
+          title: спортивное развитие
           items:
-            $ref: '#/components/schemas/Profile'
+            $ref: '#/components/schemas/Sport_dev'
+        create_dev:
+          type: array
+          title: творческое развитие
+          items:
+            $ref: '#/components/schemas/Create_dev'
+        music_dev:
+          type: array
+          title: музыкальное развитие
+          items:
+            $ref: '#/components/schemas/Music_dev'
+        intel_dev:
+          type: array
+          title: интеллектуальное развитие
+          items:
+            $ref: '#/components/schemas/Intel_dev'
     KindergartenWrite:
       title: Детский сад (POST)
       type: object
@@ -1772,6 +1854,18 @@ components:
         address:
           type: string
           title: адрес
+        underground:
+          type: string
+          title: метро
+        area:
+          type: string
+          title: округ
+        email:
+          type: string
+          title: адрес электронной почты
+          format: email
+          maxLength: 254
+          example: "kindergarten@yandex.ru"
         album:
           type: array
           title: альбом с изображениями
@@ -1779,20 +1873,26 @@ components:
             $ref: '#/components/schemas/Album'
         price:
           type: integer
-          title: цена
+          title: цена за месяц
+        price_of_year:
+          type: integer
+          title: цена за год
         age:
           type: integer
           title: возраст
+        working_hours:
+          type: string
+          title: время работы
+          example: "С 8:00 до 20:00"
+        group_suze:
+          type: string
+          title: размер группы
+          example: "До 15 человек"
         languages:
           type: array
           title: языки
           items:
             $ref: '#/components/schemas/Language'
-        profiles:
-          type: array
-          title: профиль
-          items:
-            $ref: '#/components/schemas/Profile'
     Coursess:
       title: Курсы
       type: object
@@ -1833,6 +1933,12 @@ components:
           title: наименование курсов
           pattern: ^[\p{L}\w.@+-]+\z
           maxLength: 150
+        rating:
+          type: integer
+          title: рейтинг
+        reviews:
+          type: integer
+          title: количество отзывов
         description:
           type: string
           title: краткая информация
@@ -1845,6 +1951,18 @@ components:
         address:
           type: string
           title: адрес
+        underground:
+          type: string
+          title: метро
+        area:
+          type: string
+          title: округ
+        email:
+          type: string
+          title: адрес электронной почты
+          format: email
+          maxLength: 254
+          example: "courses@yandex.ru"
         album:
           type: array
           title: альбом с изображениями
@@ -1853,22 +1971,9 @@ components:
         price:
           type: integer
           title: цена
-        rating:
-          type: integer
-          title: рейтинг
         age:
           type: integer
           title: возраст
-        languages:
-          type: array
-          title: языки
-          items:
-            $ref: '#/components/schemas/Language'
-        profiles:
-          type: array
-          title: профиль
-          items:
-            $ref: '#/components/schemas/Profile'
     CoursesWrite:
       title: Курсы (POST)
       type: object
@@ -1894,6 +1999,18 @@ components:
         address:
           type: string
           title: адрес
+        underground:
+          type: string
+          title: метро
+        area:
+          type: string
+          title: округ
+        email:
+          type: string
+          title: адрес электронной почты
+          format: email
+          maxLength: 254
+          example: "courses@yandex.ru"
         album:
           type: array
           title: альбом с изображениями
@@ -1922,6 +2039,7 @@ components:
       properties:
         name:
           type: string
+          example: "Английский"
         slug:
           type: string
     Profile:
@@ -1930,6 +2048,42 @@ components:
       properties:
         name:
           type: string
+        slug:
+          type: string
+    Sport_dev:
+      title: Спортивное развитие
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Футбол"
+        slug:
+          type: string
+    Create_dev:
+      title: Творческое развитие
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Рукоделие"
+        slug:
+          type: string
+    Music_dev:
+      title: Музыкальное развитие
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Вокал"
+        slug:
+          type: string
+    Intel_dev:
+      title: Интеллектуальное развитие
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Шахматы"
         slug:
           type: string
     Album:
