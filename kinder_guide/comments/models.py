@@ -1,13 +1,14 @@
 from django.contrib.auth import get_user_model
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
 
 # Page is a temporary placeholder for the edu model's name
-class Comment(models.Model):
-    comment_post = models.ForeignKey(
+class Review(models.Model):
+    review_post = models.ForeignKey(
         'education.Education',
         on_delete=models.CASCADE,
-        related_name='comments'
+        related_name='reviews'
     )
     author = models.ForeignKey(
         get_user_model(),
@@ -16,6 +17,13 @@ class Comment(models.Model):
     content = models.TextField()
     date_posted = models.DateTimeField(
         auto_now_add=True)
+    rating = models.IntegerField(default=0,
+                                 validators=[
+                                     MaxValueValidator(5),
+                                     MinValueValidator(0),
+                                     ]
+                                 )
+
     parent = models.ForeignKey(
         'self',
         null=True,
@@ -32,7 +40,7 @@ class Comment(models.Model):
 
     @property
     def children(self):
-        return Comment.objects.filter(parent=self).order_by('-id')
+        return Review.objects.filter(parent=self).order_by('-id')
 
     @property
     def is_parent(self):
