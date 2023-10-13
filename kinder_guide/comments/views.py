@@ -1,41 +1,34 @@
-from django.shortcuts import redirect
-from django.views.generic import DetailView
+from requests import Response
+from rest_framework import viewsets
 
-from ..education.models import Education
 from .models import Review
-from .forms import ReviewForm
+from .serializers import ReviewSerializer
+from .pagination import ReviewPagination
 
 
-class PageDetailView(DetailView):
-    template_name = 'sample_page.html'
-    model = Education
+class ReviewViewSet(viewsets.ModelViewSet):
+    queryset = Review.objects.all()
+    serializer_class = ReviewSerializer
+    pagination_class = ReviewPagination
 
-    def get_context_data(self, **kwargs):
-        data = super().get_context_data(**kwargs)
-        connected_reviews = Review.objects.filter(
-            ReviewPost=self.get_object()
+    def list(self, request, *args, **kwargs):
+        id = self.kwargs.get('id')
+        return Review.objects.filter(review_post=id).order_by('-id')
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=201, headers=headers)
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(
+            instance,
+            data=request.data,
+            partial=partial
         )
-        number_of_reviews = connected_reviews.count()
-        data['reviews'] = connected_reviews
-        data['number_of_review'] = number_of_reviews
-        data['review_form'] = ReviewForm()
-        return data
-
-    def post(self, request, *args, **kwargs):
-        if request.method == 'POST':
-            review_form = ReviewForm(request.POST)
-            if review_form.is_valid():
-                content = review_form.cleaned_data['content']
-                try:
-                    parent = review_form.cleaned_data['parent']
-                except KeyError:
-                    parent = None
-
-            new_review = Review(
-                content=content,
-                author=request.user,
-                ReviewPost=self.get_object(),
-                parent=parent,
-            )
-            new_review.save()
-            return redirect(request.path_info)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
