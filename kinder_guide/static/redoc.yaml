@@ -55,17 +55,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SignUp'
+              $ref: '#/components/schemas/SignUpWrite'
       responses:
         200:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  token:
-                    type: string
-                    description: JWT-токен для авторизации
+                $ref: '#/components/schemas/SignUp'
           description: Удачное выполнение запроса
         400:
           content:
@@ -79,7 +75,7 @@ paths:
         - AUTH
       operationId: Авторизация пользователя
       description: |
-        Получение JWT-токена в обмен на email и password.
+        Получение refresh и access в обмен на email и password.
         Права доступа: **Доступно зарегистрированному пользователю**
       requestBody:
         content:
@@ -93,9 +89,14 @@ paths:
               schema:
                 type: object
                 properties:
-                  token:
+                  refresh:
                     type: string
-                    description: JWT-токен для авторизации
+                    description: refresh-токен
+                    example: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTYyMDk0MTQ3NywianRpIjoiODUzYzE5MTg5NzMwNDQwNTk1ZjI3ZTBmOTAzZDcxZDEiLCJ1c2VyX2lkIjoxfQ.0vJBPIUZG4MjeU_Q-mhr5Gqjx7sFlO6AShlfeINK8nA"
+                  access:
+                    type: string
+                    description: access-токен
+                    example: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjIwODU1Mzc3LCJqdGkiOiJkY2EwNmRiYTEzNWQ0ZjNiODdiZmQ3YzU2Y2ZjNGE0YiIsInVzZXJfaWQiOjF9.eZfkpeNVfKLzBY7U0h5gMdTwUnGP3LjRn5g8EIvWlVg"
           description: Удачное выполнение запроса
         400:
           content:
@@ -1399,6 +1400,34 @@ components:
       title: Регистрация
       type: object
       description: Информация о пользователе при регистрации
+      properties:
+        id:
+          type: integer
+          title: id пользователя
+        first_name:
+          type: string
+          pattern: ^[\p{L}\w.@+-]+\z
+          maxLength: 150
+          example: "Ivan"
+        last_name:
+          type: string
+          pattern: ^[\p{L}\w.@+-]+\z
+          maxLength: 150
+          example: "Ivanov"
+        phone:
+          type: string
+          pattern: ^\+\d{1,3}[\d()-]{6,14}\d$
+          maxLength: 15
+          example: "+7(910)000-00-00"
+        email:
+          type: string
+          format: email
+          maxLength: 254
+          example: "ivanov@yandex.ru"
+    SignUpWrite:
+      title: Регистрация (POST)
+      type: object
+      description: Информация о пользователе при регистрации (POST)
       required:
         - first_name
         - last_name
