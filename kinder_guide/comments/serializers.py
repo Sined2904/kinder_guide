@@ -1,8 +1,21 @@
 from rest_framework import serializers
-from .models import Review
+
+from .models import ReviewCourse, ReviewKindergarten, ReviewSchool
 
 
-class ReviewSerializer(serializers.ModelSerializer):
+class ReviewSchoolSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Review
+        model = ReviewSchool
+        fields = '__all__'
+
+
+class ReviewCourseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ReviewCourse
+        fields = '__all__'
+
+
+class ReviewKindergartenSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ReviewKindergarten
         fields = '__all__'

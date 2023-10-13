@@ -3,13 +3,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
 
-# Page is a temporary placeholder for the edu model's name
 class Review(models.Model):
-    review_post = models.ForeignKey(
-        'education.Education',
-        on_delete=models.CASCADE,
-        related_name='reviews'
-    )
     author = models.ForeignKey(
         get_user_model(),
         on_delete=models.CASCADE
@@ -17,20 +11,13 @@ class Review(models.Model):
     content = models.TextField()
     date_posted = models.DateTimeField(
         auto_now_add=True)
-    rating = models.IntegerField(default=0,
-                                 validators=[
-                                     MaxValueValidator(5),
-                                     MinValueValidator(0),
-                                     ]
-                                 )
-
-    parent = models.ForeignKey(
-        'self',
-        null=True,
-        blank=True,
-        on_delete=models.CASCADE,
-        related_name='replies',
-    )
+    rating = models.IntegerField(
+        default=0,
+        validators=[
+            MaxValueValidator(5),
+            MinValueValidator(0),
+            ]
+        )
 
     class Meta:
         ordering = ['-date_posted']
@@ -38,10 +25,26 @@ class Review(models.Model):
     def __str__(self):
         return f'{self.author}: {self.content}'
 
-    @property
-    def children(self):
-        return Review.objects.filter(parent=self).order_by('-id')
 
-    @property
-    def is_parent(self):
-        return self.parent is None
+class ReviewSchool(Review):
+    review_post = models.ForeignKey(
+        'education.School',
+        on_delete=models.CASCADE,
+        related_name='reviews'
+    )
+
+
+class ReviewCourse(Review):
+    review_post = models.ForeignKey(
+        'education.Course',
+        on_delete=models.CASCADE,
+        related_name='reviews'
+    )
+
+
+class ReviewKindergarten(Review):
+    review_post = models.ForeignKey(
+        'education.Kindergarten',
+        on_delete=models.CASCADE,
+        related_name='reviews'
+    )
