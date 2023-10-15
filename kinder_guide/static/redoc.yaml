@@ -1471,7 +1471,7 @@ components:
           title: фамилия пользователя
           pattern: ^[\p{L}\w.@+-]+\z
           maxLength: 150
-          example: pIvanov'
+          example: 'Ivanov'
         child_first_name:
           type: string
           title: имя пользователя
