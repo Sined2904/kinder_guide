@@ -1489,13 +1489,13 @@ components:
       type: object
       description: Информация о пользователе
       properties:
-        parent_first_name:
+        first_name:
           type: string
           title: имя пользователя
           pattern: ^[\p{L}\w.@+-]+\z
           maxLength: 150
           example: "Ivan"
-        parent_last_name:
+        last_name:
           type: string
           title: фамилия пользователя
           pattern: ^[\p{L}\w.@+-]+\z
@@ -1542,13 +1542,13 @@ components:
           type: integer
           title: id пользователя
           readOnly: true
-        parent_first_name:
+        first_name:
           type: string
           title: имя пользователя
           pattern: ^[\p{L}\w.@+-]+\z
           maxLength: 150
           example: "Ivan"
-        parent_last_name:
+        last_name:
           type: string
           title: фамилия пользователя
           pattern: ^[\p{L}\w.@+-]+\z
