@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Review
+from .models import ReviewKindergarten, ReviewSchool, ReviewCourse
 
 
 class ReviewAdmin(admin.ModelAdmin):
@@ -21,4 +21,6 @@ class ReviewAdmin(admin.ModelAdmin):
     )
 
 
-admin.site.register(Review, ReviewAdmin)
+admin.site.register(ReviewKindergarten, ReviewAdmin)
+admin.site.register(ReviewSchool, ReviewAdmin)
+admin.site.register(ReviewCourse, ReviewAdmin)
