@@ -1,12 +1,47 @@
 from django.db import models
 from user.models import MyUser
-from phonenumber_field.modelfields import PhoneNumberField
 
-class Language(models.Model):
-    """Модель языков (для модели School)."""
-    name = models.CharField(max_length=256, verbose_name='Название языка')
+#Абстрактные модели
+class Model_For_Additions(models.Model):
+    """Абстрактная модель для различных дополнений."""
+    name = models.CharField(max_length=256, verbose_name='Название')
     slug = models.SlugField(max_length=50, unique=True, verbose_name='Slug')
 
+    class Meta:
+        abstract = True
+
+
+class Education(models.Model):
+    """Абстрактная модель для учебных заведений."""
+    name = models.CharField(
+            max_length=250,
+            null=False,
+            verbose_name='Название школы'
+        )
+    description = models.TextField(
+        blank=True,
+        null=True,
+        verbose_name='Описание'
+    )
+    album = models.ImageField(
+        upload_to="education/",
+        verbose_name="Изображение",
+    )
+    telephone = models.CharField(max_length=250, verbose_name='Телефон')
+    address = models.CharField(max_length=250, verbose_name='Адрес')
+    email = models.EmailField(max_length=250, verbose_name='Электронный адрес')
+    underground = models.CharField(max_length=250, verbose_name='Метро')
+    area = models.CharField(max_length=250, verbose_name='Округ')
+    price = models.PositiveSmallIntegerField(verbose_name='Цена в месяц')
+    age = models.CharField(max_length=250, verbose_name='Возраст')
+
+    class Meta:
+        abstract = True
+
+
+#Модели про школу
+class Language(Model_For_Additions):
+    """Модель языков (для модели School)."""
     class Meta:
         ordering = ('name', )
         verbose_name = 'Язык'
@@ -16,12 +51,8 @@ class Language(models.Model):
         return self.name
 
 
-class Profile(models.Model):
+class Profile(Model_For_Additions):
     """Модель профилей (для модели School)."""
-    name = models.CharField(max_length=256, verbose_name='Название профиля')
-    slug = models.SlugField(max_length=50, unique=True, verbose_name='Slug')
-    #возможно нужно будет добавить разные предметы из которых состоит профиль
-
     class Meta:
         ordering = ('name', )
         verbose_name = 'Профиль'
@@ -31,33 +62,11 @@ class Profile(models.Model):
         return self.name
 
 
-class School(models.Model):
-    """Модель образовательного учрждения."""
-    name = models.CharField(
-        max_length=250,
-        null=False,
-        verbose_name='Название школы'
-    )
-    album = models.ImageField(
-        upload_to="education/",
-        verbose_name="Изображение",
-    )
-    description = models.TextField(
-        blank=True,
-        null=True,
-        verbose_name='Описание'
-    )
-
-    telephone = PhoneNumberField(blank=True, region='RU')
-    address = models.CharField(max_length=250, verbose_name='Адрес')
-    price = models.PositiveSmallIntegerField(verbose_name='Цена в месяц')
+class School(Education):
+    """Модель школы."""
     price_of_year = models.PositiveSmallIntegerField(verbose_name='Цена в год')
-    email = models.EmailField(max_length=250, verbose_name='Электронный адрес')
-    age = models.CharField(max_length=250, verbose_name='Возраст')
     classes = models.CharField(max_length=250, verbose_name='Классы')
     name_author = models.CharField(max_length=250, verbose_name='Имя автора')
-    underground = models.CharField(max_length=250, verbose_name='Метро')
-    area = models.CharField(max_length=250, verbose_name='Округ')
     languages = models.ManyToManyField(
         Language,
         related_name='school', 
@@ -77,13 +86,13 @@ class School(models.Model):
         return self.name
 
 
-class Favourites_school(models.Model):
+class Favourites_School(models.Model):
     """Модель Избранного для школы"""
     user = models.ForeignKey(
         MyUser,
         on_delete=models.CASCADE,
         verbose_name='Пользователь',
-        related_name='favourites_education'
+        related_name='favourites_school'
     )
     school = models.ForeignKey(
         School,
@@ -93,125 +102,149 @@ class Favourites_school(models.Model):
     )
 
     class Meta:
-        verbose_name = 'Избранное - учебные учреждения'
-        verbose_name_plural = 'Избранное - учебные учреждения'
+        verbose_name = 'Избранное - школа'
+        verbose_name_plural = 'Избранное - школы'
 
     def __str__(self):
-        return f'Пользователь {self.user} добавил в избранное {self.education}'
+        return f'Пользователь {self.user} добавил в избранное {self.school}'
 
 
-'''
-class Lesson(models.Model):
-    """Модель уроков (для модели Specialist)."""
-    name = models.CharField(max_length=256, verbose_name='Название урока')
-    slug = models.SlugField(max_length=50, unique=True, verbose_name='Slug')
-
+#Модели про детский сад
+class Sport(Model_For_Additions):
+    """Модель спортивных занятий (для модели Kindergartens)."""
     class Meta:
-        ordering = ('name',)
-        verbose_name = 'Урок'
-        verbose_name_plural = 'Уроки'
+        ordering = ('name', )
+        verbose_name = 'Спортивное занятие'
+        verbose_name_plural = 'Спортивные занятия'
 
     def __str__(self):
         return self.name
 
 
-class Educational_form(models.Model):
-    """Модель форм обучения (для модели Specialist)."""
-    name = models.CharField(max_length=256, verbose_name='Форма обучения')
-    slug = models.SlugField(max_length=50, unique=True, verbose_name='Slug')
-
+class Create(Model_For_Additions):
+    """Модель творческих занятий (для модели Kindergartens)."""
     class Meta:
-        ordering = ('name',)
-        verbose_name = 'Форма обучения'
-        verbose_name_plural = 'Формы обучения'
+        ordering = ('name', )
+        verbose_name = 'Творческое занятие'
+        verbose_name_plural = 'Творческие занятия'
 
     def __str__(self):
         return self.name
 
 
-class Achievement(models.Model):
-    """Модель достижений (для модели Specialist)."""
-    name = models.CharField(max_length=256, verbose_name='Достижения')
-    slug = models.SlugField(max_length=50, unique=True, verbose_name='Slug')
-
+class Intelligence(Model_For_Additions):
+    """Модель интеллектуальных занятий (для модели Kindergartens)."""
     class Meta:
-        ordering = ('name',)
-        verbose_name = 'Достижение'
-        verbose_name_plural = 'Достижения'
+        ordering = ('name', )
+        verbose_name = 'Интеллектуальное занятие'
+        verbose_name_plural = 'Интеллектуальные занятия'
 
     def __str__(self):
         return self.name
 
 
-class Specialist(models.Model):
-    """Модель специалиста."""
-    ROLE_CHOICES = (
-        ('Репетитор', 'Репетитор'),
-        ('Психолог', 'Психолог'),
-    )
-    role = models.CharField(
-        max_length=25, choices=ROLE_CHOICES, default=None,
-        verbose_name='Выберите тип'
-    )
-    image = models.ImageField(
-        upload_to="specialist/",
-        verbose_name="Изображение",
-    )    
-    first_name = models.CharField(max_length=25, verbose_name='Имя')
-    last_name = models.CharField(max_length=25, verbose_name='Фамилия')
-    patronymic = models.CharField(max_length=25, verbose_name='Отчество')
-    experience = models.PositiveSmallIntegerField(verbose_name='Стаж работы(лет)')
-    lessons = models.ManyToManyField(
-        Lesson,
-        related_name='specialist', 
-        verbose_name='Уроки'
-    )
-    educational_form = models.ManyToManyField(
-        Educational_form,
-        related_name='specialist', 
-        verbose_name='Форма обучения'
-    )
-    #Округ(а)
-    price_min = models.PositiveSmallIntegerField(verbose_name='от')
-    price_max = models.PositiveSmallIntegerField(verbose_name='до')
-    #добавить расписание
-    #Образование (в форме таблицы + прирепленные фото дипломов)
-    achievement = models.ForeignKey(
-        Achievement,
-        null=True,
-        on_delete=models.SET_NULL,
-        related_name='specialist',
-        verbose_name='Достижения',
-    )
-
-
+class Music(Model_For_Additions):
+    """Модель музыкальных занятий (для модели Kindergartens)."""
     class Meta:
-        verbose_name = "Специалист"
-        verbose_name_plural = "Специалисты"
+        ordering = ('name', )
+        verbose_name = 'Музыкальное занятие'
+        verbose_name_plural = 'Музыкальные занятия'
 
     def __str__(self):
-        return f'{self.last_name}{self.first_name}{self.patronymic}'
+        return self.name
 
 
-class Favourites_specialist(models.Model):
-    """Модель Избранного для спациалиста"""
+class Kindergartens(Education):
+    """Модель детского сада."""
+    price_of_year = models.PositiveSmallIntegerField(verbose_name='Цена в год')
+    working_hours = models.CharField(max_length=250, verbose_name='Время работы')
+    group_suze = models.CharField(max_length=250, verbose_name='Размер группы')
+    languages = models.ManyToManyField(
+        Language,
+        related_name='kindergartens', 
+        verbose_name='Иностранные языки'
+    )
+    sport_dev = models.ManyToManyField(
+        Sport,
+        related_name='kindergartens', 
+        verbose_name='Спортивное развитие'
+    )
+    create_dev = models.ManyToManyField(
+        Create,
+        related_name='kindergartens', 
+        verbose_name='Творческое развитие'
+    )
+    music_dev = models.ManyToManyField(
+        Music,
+        related_name='kindergartens', 
+        verbose_name='Музыкальное развитие'
+    )
+    intel_dev = models.ManyToManyField(
+        Intelligence,
+        related_name='kindergartens', 
+        verbose_name='Интеллектуальное развитие'
+    )
+
+    class Meta:
+        verbose_name = "Детский сад"
+        verbose_name_plural = "Детские сады"
+
+    def __str__(self):
+        return self.name
+
+
+class Favourites_Kindergartens(models.Model):
+    """Модель Избранного для детского сада."""
     user = models.ForeignKey(
         MyUser,
         on_delete=models.CASCADE,
         verbose_name='Пользователь',
-        related_name='favourites_specialist'
+        related_name='favourites_kindergartens'
     )
-    specialist = models.ForeignKey(
-        Specialist,
+    kindergartens = models.ForeignKey(
+        Kindergartens,
         on_delete=models.CASCADE,
-        verbose_name='Специалист в избранном',
+        verbose_name='Детский садик в избранном',
         related_name='favourites_users'
     )
 
     class Meta:
-        verbose_name = 'Избранное - специалисты'
-        verbose_name_plural = 'Избранное - специалисты'
+        verbose_name = 'Избранное - детский садик'
+        verbose_name_plural = 'Избранное - детские сады'
 
     def __str__(self):
-        return f'Пользователь {self.user} добавил в избранное {self.specialist}'
-'''
+        return f'Пользователь {self.user} добавил в избранное {self.kindergartens}'
+
+
+#Модели про курсы
+class Course(Education):
+    """Модель курса."""
+    class Meta:
+        verbose_name = "Курс"
+        verbose_name_plural = "Курсы"
+
+    def __str__(self):
+        return self.name
+
+
+class Favourites_Course(models.Model):
+    """Модель Избранного для курсов."""
+    user = models.ForeignKey(
+        MyUser,
+        on_delete=models.CASCADE,
+        verbose_name='Пользователь',
+        related_name='favourites_course'
+    )
+    course = models.ForeignKey(
+        Course,
+        on_delete=models.CASCADE,
+        verbose_name='Курс в избранном',
+        related_name='favourites_users'
+    )
+
+    class Meta:
+        verbose_name = 'Избранное - курс'
+        verbose_name_plural = 'Избранное - курсы'
+
+    def __str__(self):
+        return f'Пользователь {self.user} добавил в избранное {self.course}'
