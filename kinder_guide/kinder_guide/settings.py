@@ -33,7 +33,6 @@ INSTALLED_APPS = [
     'comments',
     'about_us',
     'news',
-    "phonenumber_field",
 ]
 
 MIDDLEWARE = [
