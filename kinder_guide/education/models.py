@@ -32,7 +32,7 @@ class Profile(models.Model):
 
 
 class School(models.Model):
-    """Модель образовательного учрждения."""
+    """Модель школы."""
     name = models.CharField(
         max_length=250,
         null=False,
@@ -47,7 +47,6 @@ class School(models.Model):
         null=True,
         verbose_name='Описание'
     )
-
     telephone = PhoneNumberField(blank=True, region='RU')
     address = models.CharField(max_length=250, verbose_name='Адрес')
     price = models.PositiveSmallIntegerField(verbose_name='Цена в месяц')
@@ -93,8 +92,8 @@ class Favourites_school(models.Model):
     )
 
     class Meta:
-        verbose_name = 'Избранное - учебные учреждения'
-        verbose_name_plural = 'Избранное - учебные учреждения'
+        verbose_name = 'Избранное - школа'
+        verbose_name_plural = 'Избранное - школы'
 
     def __str__(self):
         return f'Пользователь {self.user} добавил в избранное {self.education}'
