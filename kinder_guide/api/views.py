@@ -1,5 +1,5 @@
 from rest_framework import viewsets, status
-from education.models import School, Favourites_school
+from education.models import School, Favourites_School
 from .serializers import SchoolSerializer, SchoolShortSerializer
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
