@@ -6,7 +6,7 @@ from django.db import models
 # Page is a temporary placeholder for the edu model's name
 class Review(models.Model):
     review_post = models.ForeignKey(
-        'education.Education',
+        'education.School',
         on_delete=models.CASCADE,
         related_name='reviews'
     )

@@ -7,6 +7,7 @@ from news.feeds import LatestNewsFeed
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include('djoser.urls')),
+    path('api/', include('api.urls', namespace='api')),
     path('feed/', LatestNewsFeed(), name = 'news_feed'),
     path(
         'redoc/',
