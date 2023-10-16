@@ -1,26 +1,11 @@
 from django.contrib import admin
 
 from .forms import MinOneForm
-from .models import (Achievement, Education, Educational_form,
-                     Favourites_education, Favourites_specialist,
-                     Language, Lesson, Profile, Specialist)
+from .models import (Language, Profile, School)
 
 
 class LanguageAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug')
-    empty_value_display = '-пусто-'
-    search_fields = ('name', )
-    ordering = ['name',]
-
-    
-class ImageAdmin(admin.ModelAdmin):
-    list_display = ('name', 'image', 'default', 'album')
-    empty_value_display = '-пусто-'
-    search_fields = ('name', )
-    ordering = ['name',]
-
-class ImageAlbumAdmin(admin.ModelAdmin):
-    list_display = ('name',)
     empty_value_display = '-пусто-'
     search_fields = ('name', )
     ordering = ['name',]
@@ -33,11 +18,31 @@ class ProfileAdmin(admin.ModelAdmin):
     ordering = ['name',]
 
 
-class EducationAdmin(admin.ModelAdmin):
-    list_display = ('name', 'album', 'role', 'description',
-                    'telephone', 'address', 'price', 'age')
+class SchoolAdmin(admin.ModelAdmin):
+    list_display = ('name', 'album', 'description',
+                    'telephone', 'address', 'price', 'price_of_year', 
+                    'email', 'classes', 'name_author', 'underground', 
+                    'area', 'age')
     search_fields = ('name',)
     empty_value_display = '-пусто-'
+    ordering = ['name',]
+
+
+admin.site.register(Language, LanguageAdmin)
+admin.site.register(Profile, ProfileAdmin)
+admin.site.register(School, SchoolAdmin)
+
+'''
+class ImageAdmin(admin.ModelAdmin):
+    list_display = ('name', 'image', 'default', 'album')
+    empty_value_display = '-пусто-'
+    search_fields = ('name', )
+    ordering = ['name',]
+
+class ImageAlbumAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    empty_value_display = '-пусто-'
+    search_fields = ('name', )
     ordering = ['name',]
 
 
@@ -86,14 +91,16 @@ class Favourites_specialistAdmin(admin.ModelAdmin):
     list_filter = ('user',)
     empty_value_display = '-пусто-'
     ordering = ['user',]
+'''
 
 
-admin.site.register(Language, LanguageAdmin)
-admin.site.register(Profile, ProfileAdmin)
-admin.site.register(Education, EducationAdmin)
+
+'''
+
 admin.site.register(Favourites_education, Favourites_educationAdmin)
 admin.site.register(Lesson, LessonAdmin)
 admin.site.register(Educational_form, Educational_formAdmin)
 admin.site.register(Achievement, AchievementAdmin)
 admin.site.register(Specialist, SpecialistAdmin)
 admin.site.register(Favourites_specialist, Favourites_specialistAdmin)
+'''

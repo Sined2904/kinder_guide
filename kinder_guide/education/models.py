@@ -1,8 +1,9 @@
 from django.db import models
 from user.models import MyUser
+from phonenumber_field.modelfields import PhoneNumberField
 
 class Language(models.Model):
-    """Модель языков (для модели Education)."""
+    """Модель языков (для модели School)."""
     name = models.CharField(max_length=256, verbose_name='Название языка')
     slug = models.SlugField(max_length=50, unique=True, verbose_name='Slug')
 
@@ -16,8 +17,8 @@ class Language(models.Model):
 
 
 class Profile(models.Model):
-    """Модель профилей (для модели Education)."""
-    name = models.CharField(max_length=256, verbose_name='Название языка')
+    """Модель профилей (для модели School)."""
+    name = models.CharField(max_length=256, verbose_name='Название профиля')
     slug = models.SlugField(max_length=50, unique=True, verbose_name='Slug')
     #возможно нужно будет добавить разные предметы из которых состоит профиль
 
@@ -30,27 +31,16 @@ class Profile(models.Model):
         return self.name
 
 
-class Education(models.Model):
+class School(models.Model):
     """Модель образовательного учрждения."""
-    ROLE_CHOICES = (
-        ('Школа', 'Школа'),
-        ('Сад', 'Сад'),
-        ('Курс', 'Курс'),
-    )
     name = models.CharField(
         max_length=250,
         null=False,
-        verbose_name='Название образовательного учрждения'
+        verbose_name='Название школы'
     )
     album = models.ImageField(
         upload_to="education/",
         verbose_name="Изображение",
-    )
-    role = models.CharField(
-        max_length=25,
-        choices=ROLE_CHOICES,
-        default=None,
-        verbose_name='Выберите тип'
     )
     description = models.TextField(
         blank=True,
@@ -58,47 +48,45 @@ class Education(models.Model):
         verbose_name='Описание'
     )
 
-    telephone = models.CharField(max_length=11, verbose_name='Номер телефона')
+    telephone = PhoneNumberField(blank=True, region='RU')
     address = models.CharField(max_length=250, verbose_name='Адрес')
     price = models.PositiveSmallIntegerField(verbose_name='Цена в месяц')
     price_of_year = models.PositiveSmallIntegerField(verbose_name='Цена в год')
-    email = models.CharField(max_length=250, verbose_name='Электронный адрес')
+    email = models.EmailField(max_length=250, verbose_name='Электронный адрес')
     age = models.CharField(max_length=250, verbose_name='Возраст')
     classes = models.CharField(max_length=250, verbose_name='Классы')
     name_author = models.CharField(max_length=250, verbose_name='Имя автора')
     underground = models.CharField(max_length=250, verbose_name='Метро')
     area = models.CharField(max_length=250, verbose_name='Округ')
     languages = models.ManyToManyField(
-        Language, 
-        related_name='education', 
+        Language,
+        related_name='school', 
         verbose_name='Языки'
     )
     profile = models.ManyToManyField(
-        Profile, 
-        related_name='education', 
+        Profile,
+        related_name='school', 
         verbose_name='Профиль'
     )
-    #добавить расписание, когда определятся как это выглядит
-    #добавить "развитие". Что это?
 
     class Meta:
-        verbose_name = "Учебное заведение"
-        verbose_name_plural = "Учебные заведения"
+        verbose_name = "Школа"
+        verbose_name_plural = "Школы"
 
     def __str__(self):
         return self.name
 
 
-class Favourites_education(models.Model):
-    """Модель Избранного для учебного учреждения"""
+class Favourites_school(models.Model):
+    """Модель Избранного для школы"""
     user = models.ForeignKey(
         MyUser,
         on_delete=models.CASCADE,
         verbose_name='Пользователь',
         related_name='favourites_education'
     )
-    education = models.ForeignKey(
-        Education,
+    school = models.ForeignKey(
+        School,
         on_delete=models.CASCADE,
         verbose_name='Учебное заведение в избранном',
         related_name='favourites_users'
@@ -112,6 +100,7 @@ class Favourites_education(models.Model):
         return f'Пользователь {self.user} добавил в избранное {self.education}'
 
 
+'''
 class Lesson(models.Model):
     """Модель уроков (для модели Specialist)."""
     name = models.CharField(max_length=256, verbose_name='Название урока')
@@ -225,3 +214,4 @@ class Favourites_specialist(models.Model):
 
     def __str__(self):
         return f'Пользователь {self.user} добавил в избранное {self.specialist}'
+'''
