@@ -31,7 +31,7 @@ class SchoolViewSet(viewsets.ModelViewSet):
         serializer = SchoolSerializer(school)
         return Response(serializer.data)
 
-    @action(detail=False, methods=['GET'])
+    @action(methods=['post', 'delete'], detail=True)
     def favorite(self, request):
         school = get_object_or_404(School, id=id)
         if request.method == 'DELETE':
