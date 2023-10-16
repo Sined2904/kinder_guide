@@ -32,13 +32,13 @@ class SchoolViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     @action(methods=['post', 'delete'], detail=True)
-    def favorite(self, request):
-        school = get_object_or_404(School, id=id)
-        if request.method == 'DELETE':
-            school_in_favorite = Favourites_school.objects.filter(
+    def favorite(self, request, pk):
+        school = get_object_or_404(School, id=pk)
+        school_in_favorite = Favourites_school.objects.filter(
                 user=request.user,
                 school=school
             )
+        if request.method == 'DELETE':
             if school_in_favorite.exists():
                 school_in_favorite.delete()
                 return Response(status=status.HTTP_204_NO_CONTENT)
@@ -47,5 +47,7 @@ class SchoolViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
         else:
+            if school_in_favorite.exists():
+                return Response({'errors': 'Вы уже подписались'})
             Favourites_school.objects.create(user=request.user, school=school)
             return Response(status=status.HTTP_201_CREATED)
