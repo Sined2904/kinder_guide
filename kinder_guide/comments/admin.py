@@ -9,10 +9,8 @@ class ReviewAdmin(admin.ModelAdmin):
         'content',
         'date_posted',
         'rating',
-        'parent',
     )
     list_filter = (
-        'parent',
         'date_posted',
         'rating',
     )
