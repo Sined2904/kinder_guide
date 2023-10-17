@@ -1,41 +1,42 @@
-from django.shortcuts import redirect
-from django.views.generic import DetailView
+from requests import Response
+from rest_framework import status, viewsets
 
-from ..education.models import Education
-from .models import Review
-from .forms import ReviewForm
+from .constants import UNAUTHORIZED
+from .models import ReviewCourse, ReviewKindergarten, ReviewSchool
+from .serializers import (ReviewCourseSerializer, ReviewKindergartenSerializer,
+                          ReviewSchoolSerializer)
 
 
-class PageDetailView(DetailView):
-    template_name = 'sample_page.html'
-    model = Education
+class ReviewSchoolViewSet(viewsets.ModelViewSet):
+    queryset = ReviewSchool.objects.all()
+    serializer_class = ReviewSchoolSerializer
 
-    def get_context_data(self, **kwargs):
-        data = super().get_context_data(**kwargs)
-        connected_reviews = Review.objects.filter(
-            ReviewPost=self.get_object()
-        )
-        number_of_reviews = connected_reviews.count()
-        data['reviews'] = connected_reviews
-        data['number_of_review'] = number_of_reviews
-        data['review_form'] = ReviewForm()
-        return data
+    def get_queryset(self, request, *args, **kwargs):
+        school_id = self.kwargs.get('school_id')
+        return ReviewSchool.objects.filter(review_post=school_id).order_by('-id')
 
-    def post(self, request, *args, **kwargs):
-        if request.method == 'POST':
-            review_form = ReviewForm(request.POST)
-            if review_form.is_valid():
-                content = review_form.cleaned_data['content']
-                try:
-                    parent = review_form.cleaned_data['parent']
-                except KeyError:
-                    parent = None
-
-            new_review = Review(
-                content=content,
-                author=request.user,
-                ReviewPost=self.get_object(),
-                parent=parent,
+    def create(self, request, *args, **kwargs):
+        if request.user.is_authenticated():
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            self.perform_create(serializer)
+            serializer.save(user=request.user, school_id=self.kwargs['school_id'])
+            headers = self.get_success_headers(serializer.data)
+            return Response(
+                serializer.data,
+                status=status.HTTP_201_CREATED,
+                headers=headers
             )
-            new_review.save()
-            return redirect(request.path_info)
+        else:
+            return Response(UNAUTHORIZED, status=status.HTTP_401_UNAUTHORIZED)
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(
+            instance,
+            data=request.data,
+            partial=partial
+        )
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
