@@ -1,4 +1,5 @@
 from pathlib import Path
+from datetime import timedelta
 import os
 
 
@@ -11,6 +12,8 @@ DEBUG = True
 
 # IF TRUE - USES SQLITE3 FOR LOCAL TASTING, IF FALSE - USES POSTGRESQL
 LOCAL_DB = True
+
+LOCAL_EMAIL = False
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'kinder.acceleratorpracticum.ru', '45.86.181.122']
 CORS_ORIGIN_ALLOW_ALL = True
@@ -143,10 +146,12 @@ AUTH_USER_MODEL = 'user.MyUser'
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',
+        # 'rest_framework.permissions.IsAuthenticated'
     ],
 
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',
+        # 'rest_framework.authentication.TokenAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
     'DEFAULT_THROTTLE_CLASSES': [
         'rest_framework.throttling.UserRateThrottle',
@@ -156,7 +161,55 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 6,
 }
 
+SIMPLE_JWT = {
+    # 'AUTH_HEADER_TYPES': ('JWT',),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+    'AUTH_HEADER_TYPES': ('Bearer',),
+}
+
+
 DJOSER = {
     'LOGIN_FIELD': 'email',
     'HIDE_USERS': False,
+    "USER_CREATE_PASSWORD_RETYPE": True,
+    "PASSWORD_RESET_CONFIRM_RETYPE": True,
+    'PASSWORD_RESET_CONFIRM_URL': '#/password-reset/{uid}/{token}',
+    'SEND_CONFIRMATION_EMAIL': True,
+    'SERIALIZERS': {
+        'current_user': 'user.serializers.CustomUserSerializer',
+        'user_create': 'djoser.serializers.UserCreateSerializer',
+        'user_delete': 'user.serializers.CusstomUserDeleteSerializer'
+    },
+    'PERMISSIONS': {
+        'user_create': ['rest_framework.permissions.AllowAny'],
+        'user': ['djoser.permissions.CurrentUserOrAdminOrReadOnly'],
+        'password_reset': ['rest_framework.permissions.AllowAny'],
+        'password_reset_confirm': ['rest_framework.permissions.AllowAny'],
+        'user_delete': ['rest_framework.permissions.CurrentUserOrAdmin'],
+        'token_create': ['rest_framework.permissions.AllowAny'],
+    }
 }
+
+# Email settings
+
+EMAIL_BACKEND_NAME = "KinderGuide@yandex.ru"
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+
+if LOCAL_EMAIL:
+
+    EMAIL_HOST = 'smtp.yandex.ru'
+    EMAIL_PORT = 465
+    EMAIL_USE_SSL = True
+
+    EMAIL_HOST_USER = "KinderGuide@yandex.ru"
+    EMAIL_HOST_PASSWORD = 'weurkytpoluwaopw'
+
+    DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+    SERVER_EMAIL = EMAIL_HOST_USER
+else:
+    EMAIL_HOST = 'skvmrelay.netangels.ru'
+    EMAIL_PORT = 25
+
+EMAIL_ADMIN = EMAIL_BACKEND_NAME
+DEFAULT_FROM_EMAIL = EMAIL_BACKEND_NAME
