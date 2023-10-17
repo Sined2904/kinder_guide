@@ -30,13 +30,31 @@ class Education(models.Model):
     telephone = models.CharField(max_length=250, verbose_name='Телефон')
     address = models.CharField(max_length=250, verbose_name='Адрес')
     email = models.EmailField(max_length=250, verbose_name='Электронный адрес')
-    underground = models.CharField(max_length=250, verbose_name='Метро')
+    underground = models.ManyToManyField(
+        'Underground',
+        related_name='%(class)s', 
+        verbose_name='Языки'
+    )
     area = models.CharField(max_length=250, verbose_name='Округ')
     price = models.PositiveSmallIntegerField(verbose_name='Цена в месяц')
     age = models.CharField(max_length=250, verbose_name='Возраст')
 
     class Meta:
         abstract = True
+
+
+class Underground(models.Model):
+    """Модель метро."""
+    name = models.CharField(max_length=256, verbose_name='Название')
+    slug = models.SlugField(max_length=50, unique=True, verbose_name='Slug')
+
+    class Meta:
+        ordering = ('name', )
+        verbose_name = 'Метро'
+        verbose_name_plural = 'Метро'
+
+    def __str__(self):
+        return self.name
 
 
 #Модели про школу

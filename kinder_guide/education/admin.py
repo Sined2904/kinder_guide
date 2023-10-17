@@ -23,7 +23,7 @@ class ProfileAdmin(admin.ModelAdmin):
 class SchoolAdmin(admin.ModelAdmin):
     list_display = ('name', 'album', 'description',
                     'telephone', 'address', 'price', 'price_of_year', 
-                    'email', 'classes', 'name_author', 'underground', 
+                    'email', 'classes', 'name_author',
                     'area', 'age')
     search_fields = ('name',)
     empty_value_display = '-пусто-'
@@ -69,7 +69,7 @@ class MusicAdmin(admin.ModelAdmin):
 class KindergartensAdmin(admin.ModelAdmin):
     list_display = ('name', 'album', 'description',
                     'telephone', 'address', 'price', 
-                    'email', 'underground', 
+                    'email',
                     'area', 'age', 'price_of_year', 'working_hours', 'group_suze')
     search_fields = ('name',)
     empty_value_display = '-пусто-'
