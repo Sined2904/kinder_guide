@@ -72,13 +72,17 @@ class SchoolSerializer(serializers.ModelSerializer):
     profile = ProfileSerializer(many=True)
     album = AlbumSerializer(many=True)
     rating = serializers.SerializerMethodField()
+    reviews = serializers.SerializerMethodField()
 
     def get_rating(self, obj):
         return get_avg_rating(ReviewSchool)
 
+    def get_reviews(self, obj):
+        return obj.reviews.count()
+
     class Meta:
         model = School
-        fields = ['id', 'name', 'rating', 'description', 'telephone',
+        fields = ['id', 'name', 'rating', 'reviews', 'description', 'telephone',
                   'address', 'underground', 'area', 'email',
                   'album', 'price', 'price_of_year', 'age',
                   'classes', 'languages', 'profile', 'name_author']
@@ -93,13 +97,17 @@ class KindergartensShortSerializer(serializers.ModelSerializer):
 
 class KindergartensSerializer(serializers.ModelSerializer):
     rating = serializers.SerializerMethodField()
+    reviews = serializers.SerializerMethodField()
 
     def get_rating(self, obj):
         return get_avg_rating(ReviewKindergarten)
 
+    def get_reviews(self, obj):
+        return obj.reviews.count()
+
     class Meta:
         model = Kindergartens
-        fields = ['id', 'name', 'ratin', 'album', 'description',
+        fields = ['id', 'name', 'ratin', 'reviews', 'album', 'description',
                     'telephone', 'address', 'price', 'price_of_year',
                     'email', 'classes', 'name_author', 'underground',
                     'area', 'languages', 'profile', 'age', 'working_hours',
@@ -115,13 +123,17 @@ class CourseShortSerializer(serializers.ModelSerializer):
 
 class CourseSerializer(serializers.ModelSerializer):
     rating = serializers.SerializerMethodField()
+    reviews = serializers.SerializerMethodField()
 
     def get_rating(self, obj):
         return get_avg_rating(ReviewCourse)
 
+    def get_reviews(self, obj):
+        return obj.reviews.count()
+
     class Meta:
         model = Course
-        fields = ['id', 'name', 'rating', 'album', 'description',
+        fields = ['id', 'name', 'rating', 'reviews', 'album', 'description',
                     'telephone', 'address', 'price',
                     'email', 'underground',
                     'area', 'age']
