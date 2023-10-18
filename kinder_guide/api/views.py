@@ -18,6 +18,27 @@ from .serializers import (CourseSerializer, CourseShortSerializer,
                           SchoolSerializer, SchoolShortSerializer)
 
 
+class ReviewCoursesViewSet(viewsets.ModelViewSet):
+    '''Вьюсет для Отзывов курсов.'''
+    queryset = ReviewCourse.objects.all()
+    serializer_class = ReviewCourseSerializer
+    permission_classes = (IsAuthenticatedOrReadOnly,)
+
+
+class ReviewKindergartenViewSet(viewsets.ModelViewSet):
+    '''Вьюсет для Отзывов Десткого сада.'''
+    queryset = ReviewKindergarten.objects.all()
+    serializer_class = ReviewKindergartenSerializer
+    permission_classes = (IsAuthenticatedOrReadOnly,)
+
+
+class ReviewSchoolViewSet(viewsets.ModelViewSet):
+    '''Вьюсет для Отзывов школ.'''
+    queryset = ReviewSchool.objects.all()
+    serializer_class = ReviewSchoolSerializer
+    permission_classes = (IsAuthenticatedOrReadOnly,)
+
+
 class SchoolViewSet(viewsets.ModelViewSet):
     '''Вьюсет для Школы.'''
 
@@ -151,24 +172,3 @@ class CourseViewSet(viewsets.ModelViewSet):
                 return Response({'errors': 'Вы уже подписались'})
             Favourites_Course.objects.create(user=request.user, course=course)
             return Response(status=status.HTTP_201_CREATED)
-
-
-class ReviewCoursesViewSet(viewsets.ModelViewSet):
-    '''Вьюсет для Отзывов курсов.'''
-    queryset = ReviewCourse.objects.all()
-    serializer_class = ReviewCourseSerializer
-    permission_classes = (IsAuthenticatedOrReadOnly,)
-
-
-class ReviewKindergartenViewSet(viewsets.ModelViewSet):
-    '''Вьюсет для Отзывов Десткого сада.'''
-    queryset = ReviewKindergarten.objects.all()
-    serializer_class = ReviewKindergartenSerializer
-    permission_classes = (IsAuthenticatedOrReadOnly,)
-
-
-class ReviewSchoolViewSet(viewsets.ModelViewSet):
-    '''Вьюсет для Отзывов школ.'''
-    queryset = ReviewSchool.objects.all()
-    serializer_class = ReviewSchoolSerializer
-    permission_classes = (IsAuthenticatedOrReadOnly,)
