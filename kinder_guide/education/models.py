@@ -1,7 +1,7 @@
 from django.db import models
 from user.models import MyUser
 
-#Абстрактные модели
+#Абстрактные и общие модели
 class Model_For_Additions(models.Model):
     """Абстрактная модель для различных дополнений."""
     name = models.CharField(max_length=256, verbose_name='Название')
@@ -10,9 +10,42 @@ class Model_For_Additions(models.Model):
     class Meta:
         abstract = True
 
+class Underground(Model_For_Additions):
+    """Модель метро."""
+    class Meta:
+        ordering = ('name', )
+        verbose_name = 'Метро'
+        verbose_name_plural = 'Метро'
 
-class Education(models.Model):
-    """Абстрактная модель для учебных заведений."""
+    def __str__(self):
+        return self.name
+
+
+class Language(Model_For_Additions):
+    """Модель языков."""
+    class Meta:
+        ordering = ('name', )
+        verbose_name = 'Язык'
+        verbose_name_plural = 'Языки'
+
+    def __str__(self):
+        return self.name
+
+
+#Модели про школу
+class Profile(Model_For_Additions):
+    """Модель профилей (для модели School)."""
+    class Meta:
+        ordering = ('name', )
+        verbose_name = 'Профиль'
+        verbose_name_plural = 'Профили'
+
+    def __str__(self):
+        return self.name
+
+
+class School(models.Model):
+    """Модель школы."""
     name = models.CharField(
             max_length=250,
             null=False,
@@ -31,57 +64,13 @@ class Education(models.Model):
     address = models.CharField(max_length=250, verbose_name='Адрес')
     email = models.EmailField(max_length=250, verbose_name='Электронный адрес')
     underground = models.ManyToManyField(
-        'Underground',
-        related_name='%(class)s', 
-        verbose_name='Языки'
+        Underground,
+        related_name='school',
+        verbose_name='Метро'
     )
     area = models.CharField(max_length=250, verbose_name='Округ')
     price = models.PositiveSmallIntegerField(verbose_name='Цена в месяц')
     age = models.CharField(max_length=250, verbose_name='Возраст')
-
-    class Meta:
-        abstract = True
-
-
-class Underground(models.Model):
-    """Модель метро."""
-    name = models.CharField(max_length=256, verbose_name='Название')
-    slug = models.SlugField(max_length=50, unique=True, verbose_name='Slug')
-
-    class Meta:
-        ordering = ('name', )
-        verbose_name = 'Метро'
-        verbose_name_plural = 'Метро'
-
-    def __str__(self):
-        return self.name
-
-
-#Модели про школу
-class Language(Model_For_Additions):
-    """Модель языков (для модели School)."""
-    class Meta:
-        ordering = ('name', )
-        verbose_name = 'Язык'
-        verbose_name_plural = 'Языки'
-
-    def __str__(self):
-        return self.name
-
-
-class Profile(Model_For_Additions):
-    """Модель профилей (для модели School)."""
-    class Meta:
-        ordering = ('name', )
-        verbose_name = 'Профиль'
-        verbose_name_plural = 'Профили'
-
-    def __str__(self):
-        return self.name
-
-
-class School(Education):
-    """Модель школы."""
     price_of_year = models.PositiveSmallIntegerField(verbose_name='Цена в год')
     classes = models.CharField(max_length=250, verbose_name='Классы')
     name_author = models.CharField(max_length=250, verbose_name='Имя автора')
@@ -172,8 +161,34 @@ class Music(Model_For_Additions):
         return self.name
 
 
-class Kindergartens(Education):
+class Kindergartens(models.Model):
     """Модель детского сада."""
+    name = models.CharField(
+            max_length=250,
+            null=False,
+            verbose_name='Название школы'
+        )
+    description = models.TextField(
+        blank=True,
+        null=True,
+        verbose_name='Описание'
+    )
+    album = models.ImageField(
+        upload_to="education/",
+        verbose_name="Изображение",
+    )
+    telephone = models.CharField(max_length=250, verbose_name='Телефон')
+    address = models.CharField(max_length=250, verbose_name='Адрес')
+    email = models.EmailField(max_length=250, verbose_name='Электронный адрес')
+    underground = models.ManyToManyField(
+        Underground,
+        related_name='kindergartens',
+        verbose_name='Метро'
+    )
+    area = models.CharField(max_length=250, verbose_name='Округ')
+    price = models.PositiveSmallIntegerField(verbose_name='Цена в месяц')
+    age = models.CharField(max_length=250, verbose_name='Возраст')
+
     price_of_year = models.PositiveSmallIntegerField(verbose_name='Цена в год')
     working_hours = models.CharField(max_length=250, verbose_name='Время работы')
     group_suze = models.CharField(max_length=250, verbose_name='Размер группы')
@@ -235,8 +250,33 @@ class Favourites_Kindergartens(models.Model):
 
 
 #Модели про курсы
-class Course(Education):
+class Course(models.Model):
     """Модель курса."""
+    name = models.CharField(
+            max_length=250,
+            null=False,
+            verbose_name='Название школы'
+        )
+    description = models.TextField(
+        blank=True,
+        null=True,
+        verbose_name='Описание'
+    )
+    album = models.ImageField(
+        upload_to="education/",
+        verbose_name="Изображение",
+    )
+    telephone = models.CharField(max_length=250, verbose_name='Телефон')
+    address = models.CharField(max_length=250, verbose_name='Адрес')
+    email = models.EmailField(max_length=250, verbose_name='Электронный адрес')
+    underground = models.ManyToManyField(
+        Underground,
+        related_name='course',
+        verbose_name='Метро'
+    )
+    area = models.CharField(max_length=250, verbose_name='Округ')
+    price = models.PositiveSmallIntegerField(verbose_name='Цена в месяц')
+    age = models.CharField(max_length=250, verbose_name='Возраст')
     class Meta:
         verbose_name = "Курс"
         verbose_name_plural = "Курсы"
