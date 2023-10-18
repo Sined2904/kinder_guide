@@ -58,6 +58,7 @@ class KindergartensShortSerializer(serializers.ModelSerializer):
 
 
 class KindergartensSerializer(serializers.ModelSerializer):
+    album = AlbumSerializer(many=True)
 
     class Meta:
         model = Kindergartens
@@ -76,7 +77,8 @@ class CourseShortSerializer(serializers.ModelSerializer):
 
 
 class CourseSerializer(serializers.ModelSerializer):
-
+    album = AlbumSerializer(many=True)
+    
     class Meta:
         model = Course
         fields = ['id', 'name', 'album', 'description',

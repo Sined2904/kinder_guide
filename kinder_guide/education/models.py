@@ -191,18 +191,22 @@ class Kindergartens(models.Model):
         null=True,
         verbose_name='Описание'
     )
-    album = models.ImageField(
-        upload_to="education/",
-        verbose_name="Изображение",
+    album =  models.ManyToManyField(
+        Album,
+        related_name='kindergartens',
+        verbose_name='фото'
     )
     telephone = models.CharField(max_length=250, verbose_name='Телефон')
     address = models.CharField(max_length=250, verbose_name='Адрес')
     email = models.EmailField(max_length=250, verbose_name='Электронный адрес')
-    underground = models.ManyToManyField(
+    underground = models.CharField(max_length=250, verbose_name='Метро')
+    '''
+    models.ManyToManyField(
         Underground,
         related_name='kindergartens',
         verbose_name='Метро'
     )
+    '''
     area = models.CharField(max_length=250, verbose_name='Округ')
     price = models.PositiveSmallIntegerField(verbose_name='Цена в месяц')
     age = models.CharField(max_length=250, verbose_name='Возраст')
@@ -210,32 +214,46 @@ class Kindergartens(models.Model):
     price_of_year = models.PositiveSmallIntegerField(verbose_name='Цена в год')
     working_hours = models.CharField(max_length=250, verbose_name='Время работы')
     group_suze = models.CharField(max_length=250, verbose_name='Размер группы')
-    languages = models.ManyToManyField(
+    languages = models.CharField(max_length=250, verbose_name='Языки')
+    '''
+    models.ManyToManyField(
         Language,
         related_name='kindergartens', 
         verbose_name='Иностранные языки'
     )
-    sport_dev = models.ManyToManyField(
+    '''
+    sport_dev = models.CharField(max_length=250, verbose_name='Спортивное развитие')
+    '''
+    models.ManyToManyField(
         Sport,
         related_name='kindergartens', 
         verbose_name='Спортивное развитие'
     )
-    create_dev = models.ManyToManyField(
+    '''
+    create_dev = models.CharField(max_length=250, verbose_name='Творческое развитие')
+    '''
+    models.ManyToManyField(
         Create,
         related_name='kindergartens', 
         verbose_name='Творческое развитие'
     )
-    music_dev = models.ManyToManyField(
+    '''
+    music_dev = models.CharField(max_length=250, verbose_name='Музыкальное развитие')
+    '''
+    models.ManyToManyField(
         Music,
         related_name='kindergartens', 
         verbose_name='Музыкальное развитие'
     )
-    intel_dev = models.ManyToManyField(
+    '''
+    intel_dev = models.CharField(max_length=250, verbose_name='Интеллектуальное развитие')
+    '''
+    models.ManyToManyField(
         Intelligence,
         related_name='kindergartens', 
         verbose_name='Интеллектуальное развитие'
     )
-
+    '''
     class Meta:
         verbose_name = "Детский сад"
         verbose_name_plural = "Детские сады"
@@ -281,20 +299,24 @@ class Course(models.Model):
         verbose_name='Описание'
     )
     album = models.ImageField(
-        upload_to="education/",
+        upload_to="course/",
         verbose_name="Изображение",
     )
     telephone = models.CharField(max_length=250, verbose_name='Телефон')
     address = models.CharField(max_length=250, verbose_name='Адрес')
     email = models.EmailField(max_length=250, verbose_name='Электронный адрес')
-    underground = models.ManyToManyField(
+    underground = models.CharField(max_length=250, verbose_name='Метро')
+    '''
+    models.ManyToManyField(
         Underground,
         related_name='course',
         verbose_name='Метро'
     )
+    '''
     area = models.CharField(max_length=250, verbose_name='Округ')
     price = models.PositiveSmallIntegerField(verbose_name='Цена в месяц')
     age = models.CharField(max_length=250, verbose_name='Возраст')
+    
     class Meta:
         verbose_name = "Курс"
         verbose_name_plural = "Курсы"
