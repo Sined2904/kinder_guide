@@ -22,14 +22,14 @@ class MyUser(AbstractUser):
     last_name = models.TextField('Фамилия', max_length=150,)
     phone = models.CharField(
         'Номер телефона',
-        max_length=15,
+        max_length=16,
         unique=True,
         validators=[
             RegexValidator(
                 # regex=r'^\+?1?\d{9,15}$',
                 # message='Номер должен быть набран в формате "+999999999".'
                 regex=r'^\+\d{1,3}[\d()-]{6,14}\d$',
-                message='Номер должен быть набран в формате "+9(9)9999999".'
+                message='Номер должен быть набран в формате "+9(999)999-99-99".'
             )
         ]
     )

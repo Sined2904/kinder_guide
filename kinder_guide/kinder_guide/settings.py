@@ -101,18 +101,21 @@ else:
 
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
+    # {
+    #     'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    # },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {
+            'min_length': 8,
+        }
     },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    # {
+    #     'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    # },
+    # {
+    #     'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    # },
 ]
 
 
@@ -177,9 +180,9 @@ SIMPLE_JWT = {
 DJOSER = {
     'LOGIN_FIELD': 'email',
     'HIDE_USERS': False,
-    "USER_CREATE_PASSWORD_RETYPE": True,
+    "USER_CREATE_PASSWORD_RETYPE": False,
     "PASSWORD_RESET_CONFIRM_RETYPE": True,
-    'PASSWORD_RESET_CONFIRM_URL': '#/password-reset/{uid}/{token}',
+    'PASSWORD_RESET_CONFIRM_URL': 'api/auth/reset/confirm//{uid}/{token}',
     'SEND_CONFIRMATION_EMAIL': True,
     'SERIALIZERS': {
         'current_user': 'user.serializers.CustomUserSerializer',
@@ -209,7 +212,7 @@ if LOCAL_EMAIL:
     EMAIL_USE_SSL = True
 
     EMAIL_HOST_USER = "KinderGuide@yandex.ru"
-    EMAIL_HOST_PASSWORD = 'weurkytpoluwaopw'
+    EMAIL_HOST_PASSWORD = 'lirxjjyrfsotscvl'
 
     DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
     SERVER_EMAIL = EMAIL_HOST_USER
