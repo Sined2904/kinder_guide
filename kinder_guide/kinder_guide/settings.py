@@ -13,7 +13,7 @@ DEBUG = False
 # IF TRUE - USES SQLITE3 FOR LOCAL TASTING, IF FALSE - USES POSTGRESQL
 LOCAL_DB = False
 
-LOCAL_EMAIL = True
+LOCAL_EMAIL = False
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'kinder.acceleratorpracticum.ru', '45.86.181.122']
 
