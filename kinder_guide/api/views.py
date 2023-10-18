@@ -1,11 +1,21 @@
-from rest_framework import viewsets, status
-from education.models import School, Favourites_School, Kindergartens, Favourites_Kindergartens, Course, Favourites_Course
-from .serializers import SchoolSerializer, SchoolShortSerializer, KindergartensShortSerializer, CourseShortSerializer, KindergartensSerializer, CourseSerializer
-from rest_framework.response import Response
+from comments.models import ReviewCourse, ReviewKindergarten, ReviewSchool
 from django.shortcuts import get_object_or_404
-from .permissions import IsAdminOrReadOnly
-from rest_framework.pagination import PageNumberPagination
+from education.models import (Course, Favourites_Course,
+                              Favourites_Kindergartens, Favourites_School,
+                              Kindergartens, School)
+from requests import Response
+from rest_framework import status, viewsets
 from rest_framework.decorators import action
+from rest_framework.pagination import PageNumberPagination
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.response import Response
+
+from .permissions import IsAdminOrReadOnly
+from .serializers import (CourseSerializer, CourseShortSerializer,
+                          KindergartensSerializer,
+                          KindergartensShortSerializer, ReviewCourseSerializer,
+                          ReviewKindergartenSerializer, ReviewSchoolSerializer,
+                          SchoolSerializer, SchoolShortSerializer)
 
 
 class SchoolViewSet(viewsets.ModelViewSet):
@@ -51,7 +61,7 @@ class SchoolViewSet(viewsets.ModelViewSet):
                 return Response({'errors': 'Вы уже подписались'})
             Favourites_School.objects.create(user=request.user, school=school)
             return Response(status=status.HTTP_201_CREATED)
-        
+
 
 class KindergartensViewSet(viewsets.ModelViewSet):
     '''Вьюсет для Десткого сада.'''
@@ -96,7 +106,7 @@ class KindergartensViewSet(viewsets.ModelViewSet):
                 return Response({'errors': 'Вы уже подписались'})
             Favourites_Kindergartens.objects.create(user=request.user, kindergartens=kindergarten)
             return Response(status=status.HTTP_201_CREATED)
-        
+
 
 class CourseViewSet(viewsets.ModelViewSet):
     '''Вьюсет для Курсов.'''
@@ -141,3 +151,24 @@ class CourseViewSet(viewsets.ModelViewSet):
                 return Response({'errors': 'Вы уже подписались'})
             Favourites_Course.objects.create(user=request.user, course=course)
             return Response(status=status.HTTP_201_CREATED)
+
+
+class ReviewCoursesViewSet(viewsets.ModelViewSet):
+    '''Вьюсет для Отзывов курсов.'''
+    queryset = ReviewCourse.objects.all()
+    serializer_class = ReviewCourseSerializer
+    permission_classes = (IsAuthenticatedOrReadOnly,)
+
+
+class ReviewKindergartenViewSet(viewsets.ModelViewSet):
+    '''Вьюсет для Отзывов Десткого сада.'''
+    queryset = ReviewKindergarten.objects.all()
+    serializer_class = ReviewKindergartenSerializer
+    permission_classes = (IsAuthenticatedOrReadOnly,)
+
+
+class ReviewSchoolViewSet(viewsets.ModelViewSet):
+    '''Вьюсет для Отзывов школ.'''
+    queryset = ReviewSchool.objects.all()
+    serializer_class = ReviewSchoolSerializer
+    permission_classes = (IsAuthenticatedOrReadOnly,)
