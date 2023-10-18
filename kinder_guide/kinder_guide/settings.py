@@ -17,9 +17,14 @@ LOCAL_EMAIL = False
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'kinder.acceleratorpracticum.ru', '45.86.181.122']
 
+
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000',
+    'http://localhost',
 ]
+CORS_ORIGIN_WHITELIST = ('http://localhost',)
+
+
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
