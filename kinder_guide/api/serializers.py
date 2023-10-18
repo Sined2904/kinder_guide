@@ -2,6 +2,7 @@ from comments.models import ReviewCourse, ReviewKindergarten, ReviewSchool
 from education.models import (Album, Course, Kindergartens, Language, Profile,
                               School, Underground)
 from rest_framework import serializers
+
 from .utils import get_avg_rating
 
 
@@ -73,7 +74,7 @@ class SchoolSerializer(serializers.ModelSerializer):
     rating = serializers.SerializerMethodField()
 
     def get_rating(self, obj):
-        return get_avg_rating()
+        return get_avg_rating(ReviewSchool)
 
     class Meta:
         model = School
@@ -91,10 +92,14 @@ class KindergartensShortSerializer(serializers.ModelSerializer):
 
 
 class KindergartensSerializer(serializers.ModelSerializer):
+    rating = serializers.SerializerMethodField()
+
+    def get_rating(self, obj):
+        return get_avg_rating(ReviewKindergarten)
 
     class Meta:
         model = Kindergartens
-        fields = ['id', 'name', 'album', 'description',
+        fields = ['id', 'name', 'ratin', 'album', 'description',
                     'telephone', 'address', 'price', 'price_of_year',
                     'email', 'classes', 'name_author', 'underground',
                     'area', 'languages', 'profile', 'age', 'working_hours',
@@ -109,11 +114,14 @@ class CourseShortSerializer(serializers.ModelSerializer):
 
 
 class CourseSerializer(serializers.ModelSerializer):
+    rating = serializers.SerializerMethodField()
+
+    def get_rating(self, obj):
+        return get_avg_rating(ReviewCourse)
 
     class Meta:
         model = Course
-        fields = ['id', 'name', 'album', 'description',
+        fields = ['id', 'name', 'rating', 'album', 'description',
                     'telephone', 'address', 'price',
                     'email', 'underground',
                     'area', 'age']
-
