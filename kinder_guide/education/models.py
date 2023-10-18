@@ -32,6 +32,14 @@ class Language(Model_For_Additions):
         return self.name
 
 
+class Album(models.Model):
+    """Абстрактная модель для различных дополнений."""
+    name = models.CharField(max_length=256, verbose_name='Название')
+    image = models.ImageField(upload_to="education/", verbose_name='фото')
+
+    def __str__(self):
+        return self.name
+
 #Модели про школу
 class Profile(Model_For_Additions):
     """Модель профилей (для модели School)."""
@@ -56,9 +64,10 @@ class School(models.Model):
         null=True,
         verbose_name='Описание'
     )
-    album = models.ImageField(
-        upload_to="education/",
-        verbose_name="Изображение",
+    album = models.ManyToManyField(
+        Album,
+        related_name='school',
+        verbose_name='фото'
     )
     telephone = models.CharField(max_length=250, verbose_name='Телефон')
     address = models.CharField(max_length=250, verbose_name='Адрес')
