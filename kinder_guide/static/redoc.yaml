@@ -4,18 +4,18 @@ info:
   title: kinder_guide API
   version: 1.0.0
 
-description: |
-    запросы к API начинаются с `/api/v1/`
-    # Описание
-    Проект **Kinder Giude** предоставляет возможность записать ребенка в частную школу или детский сад.
-    # Алгоритм регистрации пользователей
-    1. Пользователь отправляет POST-запрос на добавление нового пользователя с параметрами `first_name`, `last_name`, `phone`, `email`, `password` и `re_password` на эндпоинт `/api/v1/auth/signup/`, в ответе на запрос ему приходит `token` (JWT-токен).
-    2. Пользователь отправляет POST-запрос с параметрами `email` и `password` на эндпоинт `/api/v1/auth/sugnin/`, в ответе на запрос ему приходит `token` (JWT-токен).
-    # Пользовательские роли
-    - **Аноним** — может просматривать страницы образовательных учреждений, читать отзывы.
-    - **Аутентифицированный пользователь** (`user`) — может, как и **Аноним**, читать всё, может добавлять школы в избранное; может добавлять и удалять **свои** отзывы. Эта роль присваивается по умолчанию каждому новому пользователю.
-    - **Администратор** (`admin`) — полные права на управление всем контентом проекта.
-    - **Суперюзер Django** — обладет правами администратора (`admin`)
+  description: |
+      запросы к API начинаются с `/api/v1/`
+      # Описание
+      Проект **Kinder Giude** предоставляет возможность записать ребенка в частную школу или детский сад.
+      # Алгоритм регистрации пользователей
+      1. Пользователь отправляет POST-запрос на добавление нового пользователя с параметрами `first_name`, `last_name`, `phone`, `email` и `password` на эндпоинт `/api/v1/auth/signup/`, в ответе на запрос возвращаются сохраненные данные пользователя .
+      2. Пользователь отправляет POST-запрос с параметрами `email` и `password` на эндпоинт `/api/v1/auth/sugnin/`, в ответе на запрос ему приходят `refresh` (refresh-токен) и `access` (access-токен).
+      # Пользовательские роли
+      - **Аноним** — может просматривать страницы образовательных учреждений, читать отзывы.
+      - **Аутентифицированный пользователь** (`user`) — может, как и **Аноним**, читать всё, может добавлять школы в избранное; может добавлять и удалять **свои** отзывы. Эта роль присваивается по умолчанию каждому новому пользователю.
+      - **Администратор** (`admin`) — полные права на управление всем контентом проекта.
+      - **Суперюзер Django** — обладет правами администратора (`admin`)
 
 servers:
   - url: /api/v1/
@@ -47,25 +47,20 @@ paths:
         - AUTH
       operationId: Регистрация нового пользователя
       description: |
-        Поля `email` и `phone` должны быть уникальными.
-        Пароль должен быть не менее 8 символов, содержать заглавные и строчные латинские буквы и цифры.
-        Поля `password` и `re_password` должны совпадать.
+        Поля `email` и `phone` должны быть уникальными.  
+        Пароль должен быть не менее 8 символов.  
         Права доступа: **Доступно без токена**
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SignUp'
+              $ref: '#/components/schemas/SignUpWrite'
       responses:
         200:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  token:
-                    type: string
-                    description: JWT-токен для авторизации
+                $ref: '#/components/schemas/SignUp'
           description: Удачное выполнение запроса
         400:
           content:
@@ -79,7 +74,7 @@ paths:
         - AUTH
       operationId: Авторизация пользователя
       description: |
-        Получение JWT-токена в обмен на email и password.
+        Получение refresh и access в обмен на email и password.  
         Права доступа: **Доступно зарегистрированному пользователю**
       requestBody:
         content:
@@ -93,9 +88,14 @@ paths:
               schema:
                 type: object
                 properties:
-                  token:
+                  refresh:
                     type: string
-                    description: JWT-токен для авторизации
+                    description: refresh-токен
+                    example: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTYyMDk0MTQ3NywianRpIjoiODUzYzE5MTg5NzMwNDQwNTk1ZjI3ZTBmOTAzZDcxZDEiLCJ1c2VyX2lkIjoxfQ.0vJBPIUZG4MjeU_Q-mhr5Gqjx7sFlO6AShlfeINK8nA'
+                  access:
+                    type: string
+                    description: access-токен
+                    example: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjIwODU1Mzc3LCJqdGkiOiJkY2EwNmRiYTEzNWQ0ZjNiODdiZmQ3YzU2Y2ZjNGE0YiIsInVzZXJfaWQiOjF9.eZfkpeNVfKLzBY7U0h5gMdTwUnGP3LjRn5g8EIvWlVg'
           description: Удачное выполнение запроса
         400:
           content:
@@ -114,7 +114,7 @@ paths:
         - AUTH
       operationId: Запрос на восстановление пароля
       description: |
-        Получение ссылки на восстановление пароля в обмен на email.
+        Получение ссылки на восстановление пароля в обмен на email.  
         Права доступа: **Доступно без токена**
       requestBody:
         required: email
@@ -143,7 +143,7 @@ paths:
         - AUTH
       operationId: Восстановление пароля
       description: |
-        Восстановление пароля. Поля `password` и `re_password` должны совпадать.
+        Восстановление пароля. Поля `password` и `re_password` должны совпадать.  
         Права доступа: **Доступно без токена**
       requestBody:
         required:
@@ -152,18 +152,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                password:
-                  type: string
-                  minLength: 8
-                  pattern: ^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$
-                  example: '123QWErty'
-                re_password:
-                  type: string
-                  minLength: 8
-                  pattern: ^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$
-                  example: '123QWErty'
+              $ref: '#/components/schemas/Confirm'
       responses:
         200:
           description: Успешный запрос. Пароль изменен.
@@ -179,7 +168,7 @@ paths:
         - USERS
       operationId: Получение данных своей учетной записи
       description: |
-        Получить данные своей учетной записи.
+        Получить данные своей учетной записи.  
         Права доступа: **Любой авторизованный пользователь**
       responses:
         200:
@@ -200,7 +189,7 @@ paths:
         - USERS
       operationId: Внесение данных своей учетной записи
       description: |
-        Внести данные в учетную запись.
+        Внести данные в учетную запись.  
         Права доступа: **Любой авторизованный пользователь**
       requestBody:
         content:
@@ -226,7 +215,7 @@ paths:
         - USERS
       operationId: Изменение данных своей учетной записи
       description: |
-        Изменить данные своей учетной записи.
+        Изменить данные своей учетной записи.  
         Права доступа: **Любой авторизованный пользователь**
       requestBody:
         content:
@@ -254,7 +243,7 @@ paths:
         - USERS
       operationId: Удаление своего аккаунта
       description: |
-        Удалить пользователя.
+        Удалить пользователя.  
         Права доступа: **Любой авторизованный пользователь, администратор**
       responses:
         204:
@@ -272,7 +261,7 @@ paths:
         - SCHOOLS
       operationId: Получение списка всех школ
       description: |
-        Получить список всех школ.
+        Получить список всех школ.  
         Права доступа: **Доступно без токена**
       responses:
         200:
@@ -297,7 +286,7 @@ paths:
         - SCHOOLS
       operationId: Добавление школы
       description: |
-        Добавить новую школу.
+        Добавить новую школу.  
         Права доступа: **Администратор**
       requestBody:
         content:
@@ -337,7 +326,7 @@ paths:
         - SCHOOLS
       operationId: Получение школы по id
       description: |
-        Получить школу по id.
+        Получить школу по id.  
         Права доступа: **Доступно без токена**
       responses:
         200:
@@ -351,7 +340,7 @@ paths:
         - SCHOOLS
       operationId: Изменение данных школы по id
       description: |
-        Изменить данные школы по id.
+        Изменить данные школы по id.  
         Права доступа: **Администратор**
       requestBody:
         content:
@@ -385,7 +374,7 @@ paths:
         - SCHOOLS
       operationId: Удаление данных школы по id
       description: |
-        Удалить данные школы по id.
+        Удалить данные школы по id.  
         Права доступа: **Администратор**
       responses:
         204:
@@ -412,7 +401,7 @@ paths:
         - SCHOOLS
       operationId: Добавление школы в избранное
       description: |
-        Добавить новую школу в избранное.
+        Добавить новую школу в избранное.  
         Права доступа: **Любой авторизованный пользователь**
       responses:
         200:
@@ -431,7 +420,7 @@ paths:
         - SCHOOLS
       operationId: Удаление школы из избранного
       description: |
-        Удалить школу из избранного.
+        Удалить школу из избранного.  
         Права доступа: **Любой авторизованный пользователь**
       responses:
         204:
@@ -451,7 +440,7 @@ paths:
         - KINDERGARTENS
       operationId: Получение списка всех детских садов
       description: |
-        Получить список всех детских садов.
+        Получить список всех детских садов.  
         Права доступа: **Доступно без токена**
       responses:
         200:
@@ -476,7 +465,7 @@ paths:
         - KINDERGARTENS
       operationId: Добавление детского сада
       description: |
-        Добавить новый детский сад.
+        Добавить новый детский сад.  
         Права доступа: **Администратор**
       requestBody:
         content:
@@ -516,7 +505,7 @@ paths:
         - KINDERGARTENS
       operationId: Получение детского сада по id
       description: |
-        Получить детский сад по id.
+        Получить детский сад по id.  
         Права доступа: **Доступно без токена**
       responses:
         200:
@@ -530,7 +519,7 @@ paths:
         - KINDERGARTENS
       operationId: Изменение данных детского сада по id
       description: |
-        Изменить данные детского сада по id.
+        Изменить данные детского сада по id.  
         Права доступа: **Администратор**
       requestBody:
         content:
@@ -564,7 +553,7 @@ paths:
         - KINDERGARTENS
       operationId: Удаление данных детского сада по id
       description: |
-        Удалить данные детского сада по id.
+        Удалить данные детского сада по id.  
         Права доступа: **Администратор**
       responses:
         204:
@@ -591,7 +580,7 @@ paths:
         - KINDERGARTENS
       operationId: Добавление детского сада в избранное
       description: |
-        Добавить новый детский сад в избранное.
+        Добавить новый детский сад в избранное.  
         Права доступа: **Любой авторизованный пользователь**
       responses:
         200:
@@ -610,7 +599,7 @@ paths:
         - KINDERGARTENS
       operationId: Удаление детского сада из избранного
       description: |
-        Удалить детский сад из избранного.
+        Удалить детский сад из избранного.  
         Права доступа: **Любой авторизованный пользователь**
       responses:
         204:
@@ -630,7 +619,7 @@ paths:
         - COURSES
       operationId: Получение списка всех курсов
       description: |
-        Получить список всех курсов.
+        Получить список всех курсов.  
         Права доступа: **Доступно без токена**
       responses:
         200:
@@ -655,7 +644,7 @@ paths:
         - COURSES
       operationId: Добавление курсов
       description: |
-        Добавить новые курсы.
+        Добавить новые курсы.  
         Права доступа: **Администратор**
       requestBody:
         content:
@@ -695,7 +684,7 @@ paths:
         - COURSES
       operationId: Получение курсов по id
       description: |
-        Получить дынные курсов по id.
+        Получить дынные курсов по id.  
         Права доступа: **Доступно без токена**
       responses:
         200:
@@ -709,7 +698,7 @@ paths:
         - COURSES
       operationId: Изменение данных курсов по id
       description: |
-        Изменить данные курсов по id.
+        Изменить данные курсов по id.  
         Права доступа: **Администратор**
       requestBody:
         content:
@@ -743,7 +732,7 @@ paths:
         - COURSES
       operationId: Удаление данных курсов по id
       description: |
-        Удалить данные курсов по id.
+        Удалить данные курсов по id.  
         Права доступа: **Администратор**
       responses:
         204:
@@ -770,7 +759,7 @@ paths:
         - COURSES
       operationId: Добавление курсов в избранное
       description: |
-        Добавить новые курсы в избранное.
+        Добавить новые курсы в избранное.  
         Права доступа: **Любой авторизованный пользователь**
       responses:
         200:
@@ -789,7 +778,7 @@ paths:
         - COURSES
       operationId: Удаление курсов из избранного
       description: |
-        Удалить курсы из избранного.
+        Удалить курсы из избранного.  
         Права доступа: **Любой авторизованный пользователь**
       responses:
         204:
@@ -816,7 +805,7 @@ paths:
         - SCHOOL REVIEWS
       operationId: Получение списка всех отзывов к школе
       description: |
-        Получить список всех отзывов к школе по id.
+        Получить список всех отзывов к школе по id.  
         Права доступа: **Доступно без токена**
       responses:
         200:
@@ -843,7 +832,7 @@ paths:
         - SCHOOL REVIEWS
       operationId: Добавление отзыва к школе
       description: |
-        Добавить новый отзыв к школе.
+        Добавить новый отзыв к школе.  
         Права доступа: **Аутентифицированные пользователи**
       requestBody:
         content:
@@ -889,7 +878,7 @@ paths:
         - SCHOOL REVIEWS
       operationId: Получение отзыва к школе
       description: |
-        Получить отзыв к школе по id.
+        Получить отзыв к школе по id.  
         Права доступа: **Доступно без токена**
       responses:
         200:
@@ -905,7 +894,7 @@ paths:
         - SCHOOL REVIEWS
       operationId: Частичное обновление отзыва к школе
       description: |
-        Частично обновить отзыв к школе по id.
+        Частично обновить отзыв к школе по id.  
         Права доступа: **Автор отзыва или администратор**
       requestBody:
         content:
@@ -939,7 +928,7 @@ paths:
         - SCHOOL REVIEWS
       operationId: Удаление отзыва к школе
       description: |
-        Удалить отзыв к школе по id.
+        Удалить отзыв к школе по id.  
         Права доступа: **Автор отзыва или администратор**
       responses:
         204:
@@ -966,7 +955,7 @@ paths:
         - KINDERGARTENS REVIEWS
       operationId: Получение списка всех отзывов к детскому саду
       description: |
-        Получить список всех отзывов к детскому саду по id.
+        Получить список всех отзывов к детскому саду по id.  
         Права доступа: **Доступно без токена**
       responses:
         200:
@@ -993,7 +982,7 @@ paths:
         - KINDERGARTENS REVIEWS
       operationId: Добавление отзыва к детскому саду
       description: |
-        Добавить новый отзыв к детскому саду.
+        Добавить новый отзыв к детскому саду.  
         Права доступа: **Аутентифицированные пользователи**
       requestBody:
         content:
@@ -1039,7 +1028,7 @@ paths:
         - KINDERGARTENS REVIEWS
       operationId: Получение отзыва к детскому саду
       description: |
-        Получить отзыв к детскому саду по id.
+        Получить отзыв к детскому саду по id.  
         Права доступа: **Доступно без токена**
       responses:
         200:
@@ -1055,7 +1044,7 @@ paths:
         - KINDERGARTENS REVIEWS
       operationId: Частичное обновление отзыва к детскому саду
       description: |
-        Частично обновить отзыв к детскому саду по id.
+        Частично обновить отзыв к детскому саду по id.  
         Права доступа: **Автор отзыва или администратор**
       requestBody:
         content:
@@ -1089,7 +1078,7 @@ paths:
         - KINDERGARTENS REVIEWS
       operationId: Удаление отзыва к детскому саду
       description: |
-        Удалить отзыв к детскому саду по id.
+        Удалить отзыв к детскому саду по id.  
         Права доступа: **Автор отзыва или администратор**
       responses:
         204:
@@ -1116,7 +1105,7 @@ paths:
         - COURSES REVIEWS
       operationId: Получение списка всех отзывов к курсам
       description: |
-        Получить список всех отзывов к курсам по id.
+        Получить список всех отзывов к курсам по id.  
         Права доступа: **Доступно без токена**
       responses:
         200:
@@ -1143,7 +1132,7 @@ paths:
         - COURSES REVIEWS
       operationId: Добавление отзыва к курсам
       description: |
-        Добавить новый отзыв к курсам.
+        Добавить новый отзыв к курсам.  
         Права доступа: **Аутентифицированные пользователи**
       requestBody:
         content:
@@ -1189,7 +1178,7 @@ paths:
         - COURSES REVIEWS
       operationId: Получение отзыва к курсам
       description: |
-        Получить отзыв к курсам по id.
+        Получить отзыв к курсам по id.  
         Права доступа: **Доступно без токена**
       responses:
         200:
@@ -1205,7 +1194,7 @@ paths:
         - COURSES REVIEWS
       operationId: Частичное обновление отзыва к курсам
       description: |
-        Частично обновить отзыв к курсампо id.
+        Частично обновить отзыв к курсампо id.  
         Права доступа: **Автор отзыва или администратор**
       requestBody:
         content:
@@ -1239,7 +1228,7 @@ paths:
         - COURSES REVIEWS
       operationId: Удаление отзыва к курсам
       description: |
-        Удалить отзыв к курсам по id.
+        Удалить отзыв к курсам по id.  
         Права доступа: **Автор отзыва или администратор**
       responses:
         204:
@@ -1259,7 +1248,7 @@ paths:
         - NEWS
       operationId: Получение списка всех новостей
       description: |
-        Получить список всех новостей.
+        Получить список всех новостей.  
         Права доступа: **Доступно без токена**
       responses:
         200:
@@ -1284,7 +1273,7 @@ paths:
         - NEWS
       operationId: Добавление новости
       description: |
-        Добавить новость.
+        Добавить новость.  
         Права доступа: **Администратор**
       requestBody:
         content:
@@ -1324,7 +1313,7 @@ paths:
         - NEWS
       operationId: Получение новости по id
       description: |
-        Получить новость по id.
+        Получить новость по id.  
         Права доступа: **Доступно без токена**
       responses:
         200:
@@ -1338,7 +1327,7 @@ paths:
         - NEWS
       operationId: Изменение новости по id
       description: |
-        Изменить новость по id.
+        Изменить новость по id.  
         Права доступа: **Администратор**
       requestBody:
         content:
@@ -1372,7 +1361,7 @@ paths:
         - NEWS
       operationId: Удаление новости по id
       description: |
-        Удалить новость по id.
+        Удалить новость по id.  
         Права доступа: **Администратор**
       responses:
         204:
@@ -1399,13 +1388,40 @@ components:
       title: Регистрация
       type: object
       description: Информация о пользователе при регистрации
+      properties:
+        id:
+          type: integer
+          title: id пользователя
+        first_name:
+          type: string
+          pattern: ^[\p{L}\w.@+-]+\z
+          maxLength: 150
+          example: 'Ivan'
+        last_name:
+          type: string
+          pattern: ^[\p{L}\w.@+-]+\z
+          maxLength: 150
+          example: 'Ivanov'
+        phone:
+          type: string
+          pattern: ^\+\d{1,3}[\d()-]{6,14}\d$
+          maxLength: 18
+          example: '+7(910)000-00-00'
+        email:
+          type: string
+          format: email
+          maxLength: 254
+          example: 'ivanov@yandex.ru'
+    SignUpWrite:
+      title: Регистрация (POST)
+      type: object
+      description: Информация о пользователе при регистрации (POST)
       required:
         - first_name
         - last_name
         - phone
         - email
         - password
-        - re_password
       properties:
         first_name:
           type: string
@@ -1420,7 +1436,7 @@ components:
         phone:
           type: string
           pattern: ^\+\d{1,3}[\d()-]{6,14}\d$
-          maxLength: 15
+          maxLength: 18
           example: '+7(910)000-00-00'
         email:
           type: string
@@ -1430,12 +1446,7 @@ components:
         password:
           type: string
           minLength: 8
-          pattern: ^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$
-          example: '123QWErty'
-        re_password:
-          type: string
-          minLength: 8
-          pattern: ^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$
+          pattern: ^.{8,}$
           example: '123QWErty'
     SignIn:
       title: Авторизация
@@ -1453,7 +1464,28 @@ components:
         password:
           type: string
           minLength: 8
-          pattern: ^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$
+          pattern: ^.{8,}$
+          example: '123QWErty'
+    Confirm:
+      title: Подтверждение пароля
+      type: object
+      description: Информация о новом подтвержденном пароле
+      properties:
+        uid:
+          type: string
+          example: 'MTY'
+        token:
+          type: string
+          example: 'bw2spn-370ba533372a2f6e52d038f75713acc3'
+        new_password:
+          type: string
+          minLength: 8
+          pattern: ^.{8,}$
+          example: '123QWErty'
+        re_new_password:
+          type: string
+          minLength: 8
+          pattern: ^.{8,}$
           example: '123QWErty'
     User:
       title: Пользователь
@@ -1488,7 +1520,7 @@ components:
           type: string
           title: номер телефона
           pattern: ^\+\d{1,3}[\d()-]{6,14}\d$
-          maxLength: 15
+          maxLength: 18
           example: '+7(910)000-00-00'
         email:
           type: string
@@ -1541,7 +1573,7 @@ components:
           type: string
           title: номер телефона
           pattern: ^\+\d{1,3}[\d()-]{6,14}\d$
-          maxLength: 15
+          maxLength: 18
           example: '+7(910)000-00-00'
         email:
           type: string
@@ -1602,7 +1634,7 @@ components:
           type: string
           title: номер телефона
           pattern: ^\+\d{1,3}[\d()-]{6,14}\d$
-          maxLength: 15
+          maxLength: 18
           example: '+7(910)000-00-00'
         address:
           type: string
@@ -1667,7 +1699,7 @@ components:
           type: string
           title: номер телефона
           pattern: ^\+\d{1,3}[\d()-]{6,14}\d$
-          maxLength: 15
+          maxLength: 18
           example: '+7(910)000-00-00'
         address:
           type: string
@@ -1765,7 +1797,7 @@ components:
           type: string
           title: номер телефона
           pattern: ^\+\d{1,3}[\d()-]{6,14}\d$
-          maxLength: 15
+          maxLength: 18
           example: '+7(910)000-00-00'
         address:
           type: string
@@ -1849,7 +1881,7 @@ components:
           type: string
           title: номер телефона
           pattern: ^\+\d{1,3}[\d()-]{6,14}\d$
-          maxLength: 15
+          maxLength: 18
           example: '+7(910)000-00-00'
         address:
           type: string
@@ -1946,7 +1978,7 @@ components:
           type: string
           title: номер телефона
           pattern: ^\+\d{1,3}[\d()-]{6,14}\d$
-          maxLength: 15
+          maxLength: 18
           example: '+7(910)000-00-00'
         address:
           type: string
@@ -1994,7 +2026,7 @@ components:
           type: string
           title: номер телефона
           pattern: ^\+\d{1,3}[\d()-]{6,14}\d$
-          maxLength: 15
+          maxLength: 18
           example: '+7(910)000-00-00'
         address:
           type: string
