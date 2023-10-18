@@ -58,6 +58,6 @@ urlpatterns = [
         ReviewSchoolViewSet.as_view({'get': 'list', 'post': 'create'}),
         name='schools_reviews'
     ),
-    path('auth/', include('djoser.urls')),
+    # path('auth/', include('djoser.urls')),
     path('feed/', LatestNewsFeed(), name = 'news_feed'),
 ]
