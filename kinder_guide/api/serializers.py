@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 from education.models import School, Kindergartens, Course, Underground, Language, Profile, Album
 
-
+'''
 class UndergroundSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -22,7 +22,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = ['name', 'slug']
-
+'''
 
 class SchoolShortSerializer(serializers.ModelSerializer):
 
@@ -38,9 +38,9 @@ class AlbumSerializer(serializers.ModelSerializer):
         fields = ['image',]
 
 class SchoolSerializer(serializers.ModelSerializer):
-    underground = UndergroundSerializer(many=True)
-    languages = LanguageSerializer(many=True)
-    profile = ProfileSerializer(many=True)
+    #underground = UndergroundSerializer(many=True)
+    #languages = LanguageSerializer(many=True)
+    #profile = ProfileSerializer(many=True)
     album = AlbumSerializer(many=True)
     class Meta:
         model = School
