@@ -11,15 +11,17 @@ SECRET_KEY = 'django-insecure-yir#vh&^tzfltm4qd=1*wp6@4()41%n0*mz2edk0b7g6f(q_kb
 DEBUG = False
 
 # IF TRUE - USES SQLITE3 FOR LOCAL TASTING, IF FALSE - USES POSTGRESQL
-LOCAL_DB = False
+LOCAL_DB = True
 
 LOCAL_EMAIL = False
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'kinder.acceleratorpracticum.ru', '45.86.181.122']
 
+
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000',
+    'http://localhost',
 ]
+CORS_ORIGIN_WHITELIST = ('http://localhost',)
 
 INSTALLED_APPS = [
     'django.contrib.admin',
