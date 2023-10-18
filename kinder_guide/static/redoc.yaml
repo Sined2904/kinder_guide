@@ -1607,6 +1607,9 @@ components:
         rating:
           type: integer
           title: рейтинг
+        reviews:
+          type: integer
+          title: количество отзывов
     School:
       title: Школа
       type: object
@@ -1770,6 +1773,9 @@ components:
         rating:
           type: integer
           title: рейтинг
+        reviews:
+          type: integer
+          title: количество отзывов
     Kindergarten:
       title: Детский сад
       type: object
@@ -1951,6 +1957,9 @@ components:
         rating:
           type: integer
           title: рейтинг
+        reviews:
+          type: integer
+          title: количество отзывов
     Courses:
       title: Курсы
       type: object
