@@ -4,7 +4,7 @@ from .forms import MinOneForm
 from .models import (Language, Profile, School, Favourites_School, 
                      Sport, Create, Intelligence, Music, Kindergartens, 
                      Favourites_Kindergartens, Course, Favourites_Course, 
-                     Underground)
+                     Underground, Album)
 
 class UndergroundAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug')
@@ -12,6 +12,11 @@ class UndergroundAdmin(admin.ModelAdmin):
     search_fields = ('name', )
     ordering = ['name',]
 
+class AlbumdAdmin(admin.ModelAdmin):
+    list_display = ('name', 'image')
+    empty_value_display = '-пусто-'
+    search_fields = ('name', )
+    ordering = ['name',]
 
 #Школа
 class LanguageAdmin(admin.ModelAdmin):
@@ -29,7 +34,7 @@ class ProfileAdmin(admin.ModelAdmin):
 
 
 class SchoolAdmin(admin.ModelAdmin):
-    list_display = ('name', 'album', 'description', 'telephone', 
+    list_display = ('name', 'description', 'telephone', 
                     'address', 'price', 'price_of_year', 'email', 
                     'classes', 'name_author','area', 'age')
     search_fields = ('name',)
@@ -90,7 +95,6 @@ class Favourites_KindergartensAdmin(admin.ModelAdmin):
     ordering = ['user',]
 
 #Курсы
-Course
 class CourseAdmin(admin.ModelAdmin):
     list_display = ('name', 'album', 'description',
                     'telephone', 'address', 'price', 
@@ -108,6 +112,7 @@ class Favourites_CourseAdmin(admin.ModelAdmin):
     ordering = ['user',]
 
 
+admin.site.register(Album, AlbumdAdmin)
 admin.site.register(Underground, UndergroundAdmin)
 admin.site.register(Language, LanguageAdmin)
 admin.site.register(Profile, ProfileAdmin)
