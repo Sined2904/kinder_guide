@@ -1,12 +1,12 @@
-from comments.views import (ReviewCoursesViewSet, ReviewKindergartenViewSet,
-                            ReviewSchoolViewSet)
 from django.urls import include, path
 from djoser import views
 from news.feeds import LatestNewsFeed
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt import views as token_views
 
-from .views import CourseViewSet, KindergartensViewSet, SchoolViewSet
+from .views import (CourseViewSet, KindergartensViewSet, ReviewCoursesViewSet,
+                    ReviewKindergartenViewSet, ReviewSchoolViewSet,
+                    SchoolViewSet)
 
 app_name = 'api'
 
@@ -45,19 +45,19 @@ urlpatterns = [
     ),
     path(
         'courses/<int:courses_id>/reviews/',
-        ReviewCoursesViewSet.as_view({'get': 'list', 'post': 'create'}),
+        ReviewCoursesViewSet.as_view({'get': 'list', 'post': 'create', 'delete': 'delete', 'update': 'update'}),
         name='courses_reviews'
     ),
     path(
         'kindergartens/<int:kindergarten_id>/reviews/',
-        ReviewKindergartenViewSet.as_view({'get': 'list', 'post': 'create'}),
-        name='kindergartens_reviews'
+        ReviewKindergartenViewSet.as_view({'get': 'list', 'post': 'create', 'delete': 'delete', 'update': 'update'}),
+        name='kindergartens_reviews',
     ),
     path(
         'schools/<int:school_id>/reviews/',
-        ReviewSchoolViewSet.as_view({'get': 'list', 'post': 'create'}),
-        name='schools_reviews'
+        ReviewSchoolViewSet.as_view({'get': 'list', 'post': 'create', 'delete': 'delete', 'update': 'update'}),
+        name='schools_reviews',
     ),
-    path('auth/', include('djoser.urls')),
+    # path('auth/', include('djoser.urls')),
     path('feed/', LatestNewsFeed(), name = 'news_feed'),
 ]
