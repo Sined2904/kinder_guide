@@ -137,8 +137,8 @@ class CourseViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAdminOrReadOnly,)
     pagination_class = PageNumberPagination
 
-    def get_object(self):
-        return get_object_or_404(Course, id=self.kwargs['id'])
+    # def get_object(self):
+    #     return get_object_or_404(Course, id=self.kwargs['id'])
 
     def list(self, request):
         queryset = Course.objects.all()
@@ -147,7 +147,7 @@ class CourseViewSet(viewsets.ModelViewSet):
         return self.get_paginated_response(serializer.data)
 
     def retrieve(self, request, pk=None):
-        queryset = Kindergartens.objects.all()
+        queryset = Course.objects.all()
         course = get_object_or_404(queryset, pk=pk)
         serializer = CourseSerializer(course)
         return Response(serializer.data)
