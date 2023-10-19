@@ -1,3 +1,4 @@
+import base64
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 from education.models import School, Kindergartens, Course, Underground, Language, Profile, Album
@@ -32,10 +33,11 @@ class SchoolShortSerializer(serializers.ModelSerializer):
 
 
 class AlbumSerializer(serializers.ModelSerializer):
-
+    image = serializers.ImageField()
     class Meta:
         model = Album
         fields = ['image',]
+
 
 class SchoolSerializer(serializers.ModelSerializer):
     #underground = UndergroundSerializer(many=True)
