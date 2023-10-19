@@ -69,6 +69,7 @@ class School(models.Model):
         related_name='school',
         verbose_name='фото'
     )
+    working_hours = models.CharField(max_length=250, verbose_name='Время работы')
     telephone = models.CharField(max_length=250, verbose_name='Телефон')
     address = models.CharField(max_length=250, verbose_name='Адрес')
     email = models.EmailField(max_length=250, verbose_name='Электронный адрес')
