@@ -4,7 +4,7 @@ from .forms import MinOneForm
 from .models import (Language, Profile, School, Favourites_School, 
                      Sport, Create, Intelligence, Music, Kindergartens, 
                      Favourites_Kindergartens, Course, Favourites_Course, 
-                     Underground, Album)
+                     Underground, Album, CourseAlbum)
 
 class UndergroundAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug')
@@ -95,6 +95,10 @@ class Favourites_KindergartensAdmin(admin.ModelAdmin):
     ordering = ['user',]
 
 #Курсы
+class CourseAlbumInline(admin.TabularInline):  
+    model = CourseAlbum
+
+
 class CourseAdmin(admin.ModelAdmin):
     list_display = ('name', 'description',
                     'telephone', 'address', 'price', 
@@ -103,6 +107,7 @@ class CourseAdmin(admin.ModelAdmin):
     search_fields = ('name',)
     empty_value_display = '-пусто-'
     ordering = ['name',]
+    inlines = [CourseAlbumInline]
 
 
 class Favourites_CourseAdmin(admin.ModelAdmin):
@@ -126,4 +131,3 @@ admin.site.register(Course, CourseAdmin)
 admin.site.register(Favourites_School, Favourites_SchoolAdmin)
 admin.site.register(Favourites_Kindergartens, Favourites_KindergartensAdmin)
 admin.site.register(Favourites_Course, Favourites_CourseAdmin)
-
