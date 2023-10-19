@@ -149,7 +149,7 @@ class CourseViewSet(viewsets.ModelViewSet):
     def retrieve(self, request, pk=None):
         queryset = Kindergartens.objects.all()
         course = get_object_or_404(queryset, pk=pk)
-        serializer = SchoolSerializer(course)
+        serializer = CourseSerializer(course)
         return Response(serializer.data)
 
     @action(methods=['post', 'delete'], detail=True)
