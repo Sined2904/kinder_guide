@@ -131,4 +131,3 @@ admin.site.register(Course, CourseAdmin)
 admin.site.register(Favourites_School, Favourites_SchoolAdmin)
 admin.site.register(Favourites_Kindergartens, Favourites_KindergartensAdmin)
 admin.site.register(Favourites_Course, Favourites_CourseAdmin)
-
