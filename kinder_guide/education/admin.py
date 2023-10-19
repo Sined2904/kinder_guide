@@ -79,7 +79,7 @@ class MusicAdmin(admin.ModelAdmin):
 
 
 class KindergartensAdmin(admin.ModelAdmin):
-    list_display = ('name', 'album', 'description',
+    list_display = ('name', 'description',
                     'telephone', 'address', 'price', 
                     'email',
                     'area', 'age', 'price_of_year', 'working_hours', 'group_suze')
@@ -96,7 +96,7 @@ class Favourites_KindergartensAdmin(admin.ModelAdmin):
 
 #Курсы
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ('name', 'album', 'description',
+    list_display = ('name', 'description',
                     'telephone', 'address', 'price', 
                     'email', 'underground', 
                     'area', 'age')
@@ -122,6 +122,7 @@ admin.site.register(Create, CreateAdmin)
 admin.site.register(Intelligence, IntelligenceAdmin)
 admin.site.register(Music, MusicAdmin)
 admin.site.register(Kindergartens, KindergartensAdmin)
+admin.site.register(Course, CourseAdmin)
 admin.site.register(Favourites_School, Favourites_SchoolAdmin)
 admin.site.register(Favourites_Kindergartens, Favourites_KindergartensAdmin)
 admin.site.register(Favourites_Course, Favourites_CourseAdmin)

@@ -31,7 +31,7 @@ class ReviewKindergartenSerializer(ReviewSerializer):
         model = ReviewKindergarten
         fields = ['id', 'content', 'grade', 'author', 'date_posted']
 
-
+'''
 class UndergroundSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -51,7 +51,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = ['name', 'slug']
-
+'''
 
 class SchoolShortSerializer(serializers.ModelSerializer):
 
@@ -67,9 +67,9 @@ class AlbumSerializer(serializers.ModelSerializer):
         fields = ['image',]
 
 class SchoolSerializer(serializers.ModelSerializer):
-    underground = UndergroundSerializer(many=True)
-    languages = LanguageSerializer(many=True)
-    profile = ProfileSerializer(many=True)
+    #underground = UndergroundSerializer(many=True)
+    #languages = LanguageSerializer(many=True)
+    #profile = ProfileSerializer(many=True)
     album = AlbumSerializer(many=True)
     rating = serializers.SerializerMethodField()
     reviews = serializers.SerializerMethodField()
@@ -98,7 +98,8 @@ class KindergartensShortSerializer(serializers.ModelSerializer):
 class KindergartensSerializer(serializers.ModelSerializer):
     rating = serializers.SerializerMethodField()
     reviews = serializers.SerializerMethodField()
-
+    album = AlbumSerializer(many=True)
+    
     def get_rating(self, obj):
         return get_avg_rating(ReviewKindergarten)
 
@@ -109,8 +110,8 @@ class KindergartensSerializer(serializers.ModelSerializer):
         model = Kindergartens
         fields = ['id', 'name', 'ratin', 'reviews', 'album', 'description',
                     'telephone', 'address', 'price', 'price_of_year',
-                    'email', 'classes', 'name_author', 'underground',
-                    'area', 'languages', 'profile', 'age', 'working_hours',
+                    'email', 'underground',
+                    'area', 'languages', 'age','working_hours',
                     'group_suze', 'sport_dev', 'create_dev', 'music_dev', 'intel_dev']
 
 
@@ -124,12 +125,14 @@ class CourseShortSerializer(serializers.ModelSerializer):
 class CourseSerializer(serializers.ModelSerializer):
     rating = serializers.SerializerMethodField()
     reviews = serializers.SerializerMethodField()
-
+    album = AlbumSerializer(many=True)
+    
     def get_rating(self, obj):
         return get_avg_rating(ReviewCourse)
 
     def get_reviews(self, obj):
         return obj.reviews.count()
+
 
     class Meta:
         model = Course

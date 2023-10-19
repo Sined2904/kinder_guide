@@ -13,6 +13,7 @@ class CustomUserSerializer(UserSerializer):
         model = User
         fields = [
             'email',
+            'phone',
             'first_name',
             'last_name',
             'child_first_name',
