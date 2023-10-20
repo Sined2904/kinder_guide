@@ -24,6 +24,29 @@ class ReviewCoursesViewSet(viewsets.ModelViewSet):
     serializer_class = ReviewCourseSerializer
     permission_classes = (IsAuthenticatedOrReadOnly,)
 
+    def create(self, request, courses_id):
+        request.data['author'] = self.request.user.id
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(review_post_id=courses_id)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    def delete(self, request, courses_id, review_id):
+        try:
+            review = ReviewCourse.objects.get(
+                id=review_id,
+                review_post_id=courses_id
+            )
+        except ReviewCourse.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        self.check_object_permissions(request, review)
+        review.delete()
+        return Response(
+            'Удачное выполнение запроса',
+            status=status.HTTP_204_NO_CONTENT
+        )
+
 
 class ReviewKindergartenViewSet(viewsets.ModelViewSet):
     '''Вьюсет для Отзывов Десткого сада.'''
@@ -31,12 +54,54 @@ class ReviewKindergartenViewSet(viewsets.ModelViewSet):
     serializer_class = ReviewKindergartenSerializer
     permission_classes = (IsAuthenticatedOrReadOnly,)
 
+    def create(self, request, kindergarten_id):
+        request.data['author'] = self.request.user.id
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        serializer.save(review_post_id=kindergarten_id)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    def delete(self, request, kindergarten_id, review_id):
+        try:
+            review = ReviewKindergarten.objects.get(
+                id=review_id,
+                review_post_id=kindergarten_id
+            )
+        except ReviewKindergarten.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        self.check_object_permissions(request, review)
+        review.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 class ReviewSchoolViewSet(viewsets.ModelViewSet):
     '''Вьюсет для Отзывов школ.'''
     queryset = ReviewSchool.objects.all()
     serializer_class = ReviewSchoolSerializer
     permission_classes = (IsAuthenticatedOrReadOnly,)
+
+    def create(self, request, school_id):
+        request.data['author'] = self.request.user.id
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        serializer.save(review_post_id=school_id)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    def delete(self, request, school_id, review_id):
+        try:
+            review = ReviewSchool.objects.get(
+                id=review_id,
+                review_post_id=school_id
+            )
+        except ReviewSchool.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        self.check_object_permissions(request, review)
+        review.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class SchoolViewSet(viewsets.ModelViewSet):
