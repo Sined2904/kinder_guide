@@ -1,8 +1,9 @@
 
+from django.db.models import Avg
 from django.shortcuts import get_object_or_404
 from comments.models import ReviewCourse, ReviewKindergarten, ReviewSchool
 from education.models import (Album, Course, Kindergartens, Language, Profile,
-                              School, Underground)
+                              School, Underground, CourseAlbum)
 from rest_framework import serializers
 from .utils import get_avg_rating
 
@@ -116,6 +117,12 @@ class KindergartensSerializer(serializers.ModelSerializer):
                     'area', 'languages', 'age','working_hours',
                     'group_suze', 'sport_dev', 'create_dev', 'music_dev', 'intel_dev']
 
+class CourseAlbumSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CourseAlbum
+        fields = ['image',]
+
 
 class CourseShortSerializer(serializers.ModelSerializer):
 
@@ -124,14 +131,20 @@ class CourseShortSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'description', 'album', 'price']
 
 
+def get_avg_rating(course):
+    reviews = ReviewCourse.objects.filter(review_post=course)
+    avg_rating = reviews.aggregate(Avg('rating'))
+    return avg_rating['rating__avg'] or 0
+
+
 class CourseSerializer(serializers.ModelSerializer):
     rating = serializers.SerializerMethodField()
     reviews = serializers.SerializerMethodField()
-    album = AlbumSerializer(many=True)
+    album = CourseAlbumSerializer(many=True)
     
     def get_rating(self, obj):
-        return get_avg_rating(ReviewCourse)
-
+        return get_avg_rating(obj)
+    
     def get_reviews(self, obj):
         return obj.reviews.count()
 

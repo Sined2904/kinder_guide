@@ -285,6 +285,20 @@ class Favourites_Kindergartens(models.Model):
     def __str__(self):
         return f'Пользователь {self.user} добавил в избранное {self.kindergartens}'
 
+class CourseAlbum(models.Model):
+    """Абстрактная модель для различных дополнений."""
+    name = models.CharField(max_length=256, verbose_name='Название')
+    image = models.ImageField(upload_to="course/", verbose_name='фото')
+    course = models.ForeignKey(
+        'Course',
+        on_delete=models.CASCADE,
+        related_name='album',
+        verbose_name='Курсы'
+    )
+
+    def __str__(self):
+        return self.name
+    
 
 #Модели про курсы
 class Course(models.Model):
@@ -292,16 +306,12 @@ class Course(models.Model):
     name = models.CharField(
             max_length=250,
             null=False,
-            verbose_name='Название школы'
+            verbose_name='Название курсов'
         )
     description = models.TextField(
         blank=True,
         null=True,
         verbose_name='Описание'
-    )
-    album = models.ImageField(
-        upload_to="course/",
-        verbose_name="Изображение",
     )
     telephone = models.CharField(max_length=250, verbose_name='Телефон')
     address = models.CharField(max_length=250, verbose_name='Адрес')
