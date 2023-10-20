@@ -1,10 +1,11 @@
+
 from django.db.models import Avg
+from django.shortcuts import get_object_or_404
 from comments.models import ReviewCourse, ReviewKindergarten, ReviewSchool
 from education.models import (Album, Course, Kindergartens, Language, Profile,
                               School, Underground, CourseAlbum)
 from rest_framework import serializers
-
-from .utils import get_avg_rating, get_avg_rating_course
+from .utils import get_avg_rating
 
 
 class ReviewSerializer(serializers.ModelSerializer):
@@ -62,10 +63,11 @@ class SchoolShortSerializer(serializers.ModelSerializer):
 
 
 class AlbumSerializer(serializers.ModelSerializer):
-
+    image = serializers.ImageField()
     class Meta:
         model = Album
         fields = ['image',]
+
 
 class SchoolSerializer(serializers.ModelSerializer):
     #underground = UndergroundSerializer(many=True)
@@ -109,7 +111,7 @@ class KindergartensSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Kindergartens
-        fields = ['id', 'name', 'ratin', 'reviews', 'album', 'description',
+        fields = ['id', 'name', 'rating', 'reviews', 'album', 'description',
                     'telephone', 'address', 'price', 'price_of_year',
                     'email', 'underground',
                     'area', 'languages', 'age','working_hours',
