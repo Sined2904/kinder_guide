@@ -44,17 +44,17 @@ urlpatterns = [
         name="me",
     ),
     path(
-        'courses/<int:courses_id>/reviews/',
+        'v1/courses/<int:courses_id>/reviews/',
         ReviewCoursesViewSet.as_view({'get': 'list', 'post': 'create', 'delete': 'delete', 'update': 'update'}),
         name='courses_reviews'
     ),
     path(
-        'kindergartens/<int:kindergarten_id>/reviews/',
+        'v1/kindergartens/<int:kindergarten_id>/reviews/',
         ReviewKindergartenViewSet.as_view({'get': 'list', 'post': 'create', 'delete': 'delete', 'update': 'update'}),
         name='kindergartens_reviews',
     ),
     path(
-        'schools/<int:school_id>/reviews/',
+        'v1/schools/<int:school_id>/reviews/',
         ReviewSchoolViewSet.as_view({'get': 'list', 'post': 'create', 'delete': 'delete', 'update': 'update'}),
         name='schools_reviews',
     ),
