@@ -24,6 +24,16 @@ ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'kinder.acceleratorpracticum.ru', '45
 # CORS_ORIGIN_WHITELIST = ('http://localhost',)
 CORS_ALLOW_ALL_ORIGINS = DEBUG
 
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+    'FETCH',
+]
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
