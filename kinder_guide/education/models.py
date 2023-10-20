@@ -286,7 +286,7 @@ class Favourites_Kindergartens(models.Model):
         return f'Пользователь {self.user} добавил в избранное {self.kindergartens}'
 
 class CourseAlbum(models.Model):
-    """Абстрактная модель для различных дополнений."""
+    """Модель альбома изображений для курсов."""
     name = models.CharField(max_length=256, verbose_name='Название')
     image = models.ImageField(upload_to="course/", verbose_name='фото')
     course = models.ForeignKey(
