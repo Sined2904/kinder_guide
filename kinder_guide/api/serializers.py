@@ -5,7 +5,7 @@ from comments.models import ReviewCourse, ReviewKindergarten, ReviewSchool
 from education.models import (Album, Course, Kindergartens, Language, Profile,
                               School, Underground, CourseAlbum)
 from rest_framework import serializers
-from .utils import get_avg_rating
+from .utils import get_avg_rating, get_avg_rating_course
 
 
 class ReviewSerializer(serializers.ModelSerializer):
