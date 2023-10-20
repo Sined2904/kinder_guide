@@ -293,7 +293,8 @@ class CourseAlbum(models.Model):
         'Course',
         on_delete=models.CASCADE,
         related_name='album',
-        verbose_name='Курсы'
+        verbose_name='Курсы',
+        null=True
     )
 
     def __str__(self):
