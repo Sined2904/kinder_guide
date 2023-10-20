@@ -1,0 +1,6 @@
+[submodule "kinder_guide/frontend"]
+	path = kinder_guide/frontend
+	url = https://github.com/search-and-order-services-kindergartens/kinderguide-frontend
+[submodule "frontend"]
+	path = frontend
+	url = https://github.com/search-and-order-services-kindergartens/kinderguide-frontend
