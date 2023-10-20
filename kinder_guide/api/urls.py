@@ -19,17 +19,17 @@ router.register('courses', CourseViewSet, basename='courses')
 urlpatterns = [
     path('v1/', include(router.urls)),
     path(
-        "auth/signup",
+        "auth/signup/",
         views.UserViewSet.as_view({"post": "create"}),
         name="signup",
     ),
     path(
-        "auth/signin",
+        "auth/signin/",
         token_views.TokenObtainPairView.as_view(),
         name="token_obtain_pair",
     ),
     path(
-        "auth/reset",
+        "auth/reset/",
         views.UserViewSet.as_view({"post": "reset_password"}),
         name="reset_password",
     ),
