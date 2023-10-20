@@ -19,17 +19,17 @@ router.register('courses', CourseViewSet, basename='courses')
 urlpatterns = [
     path('v1/', include(router.urls)),
     path(
-        "auth/signup",
+        "auth/signup/",
         views.UserViewSet.as_view({"post": "create"}),
         name="signup",
     ),
     path(
-        "auth/signin",
+        "auth/signin/",
         token_views.TokenObtainPairView.as_view(),
         name="token_obtain_pair",
     ),
     path(
-        "auth/reset",
+        "auth/reset/",
         views.UserViewSet.as_view({"post": "reset_password"}),
         name="reset_password",
     ),
@@ -44,19 +44,34 @@ urlpatterns = [
         name="me",
     ),
     path(
-        'courses/<int:courses_id>/reviews/',
+        'v1/courses/<int:courses_id>/reviews/',
         ReviewCoursesViewSet.as_view({'get': 'list', 'post': 'create', 'delete': 'delete', 'update': 'update'}),
         name='courses_reviews'
     ),
     path(
-        'kindergartens/<int:kindergarten_id>/reviews/',
-        ReviewKindergartenViewSet.as_view({'get': 'list', 'post': 'create', 'delete': 'delete', 'update': 'update'}),
+        'v1/kindergartens/<int:kindergarten_id>/reviews/',
+        ReviewKindergartenViewSet.as_view({'get': 'list', 'post': 'create', 'update': 'update'}),
         name='kindergartens_reviews',
     ),
     path(
-        'schools/<int:school_id>/reviews/',
-        ReviewSchoolViewSet.as_view({'get': 'list', 'post': 'create', 'delete': 'delete', 'update': 'update'}),
+        'v1/schools/<int:school_id>/reviews/',
+        ReviewSchoolViewSet.as_view({'get': 'list', 'post': 'create', 'update': 'update'}),
         name='schools_reviews',
+    ),
+    path(
+        'v1/courses/<int:courses_id>/reviews/<int:review_id>/',
+        ReviewCoursesViewSet.as_view({'delete': 'delete'}),
+        name='courses_review_delete',
+    ),
+    path(
+        'v1/kindergartens/<int:kindergarten_id>/reviews/<int:review_id>/',
+        ReviewCoursesViewSet.as_view({'delete': 'delete'}),
+        name='kindergartens_review_delete',
+    ),
+    path(
+        'v1/schools/<int:school_id>/reviews/<int:review_id>/',
+        ReviewSchoolViewSet.as_view({'delete': 'delete'}),
+        name='schools_review_delete',
     ),
     # path('auth/', include('djoser.urls')),
     path('feed/', LatestNewsFeed(), name = 'news_feed'),
