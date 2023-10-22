@@ -86,7 +86,7 @@ class SchoolSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'rating', 'reviews', 'description', 'telephone',
                   'address', 'underground', 'area', 'email',
                   'album', 'price', 'price_of_year', 'age',
-                  'classes', 'languages', 'profile', 'name_author']
+                  'classes', 'languages', 'profile', 'name_author', 'working_hours']
 
 
 class KindergartensShortSerializer(serializers.ModelSerializer):
