@@ -194,7 +194,7 @@ DJOSER = {
     'HIDE_USERS': False,
     "USER_CREATE_PASSWORD_RETYPE": False,
     "PASSWORD_RESET_CONFIRM_RETYPE": True,
-    'PASSWORD_RESET_CONFIRM_URL': 'api/auth/reset/confirm//{uid}/{token}',
+    'PASSWORD_RESET_CONFIRM_URL': 'password-reset/{uid}/{token}',
     'SEND_CONFIRMATION_EMAIL': True,
     'SERIALIZERS': {
         'current_user': 'user.serializers.CustomUserSerializer',
@@ -206,7 +206,7 @@ DJOSER = {
         'user': ['djoser.permissions.CurrentUserOrAdminOrReadOnly'],
         'password_reset': ['rest_framework.permissions.AllowAny'],
         'password_reset_confirm': ['rest_framework.permissions.AllowAny'],
-        'user_delete': ['rest_framework.permissions.CurrentUserOrAdmin'],
+        'user_delete': ['djoser.permissions.CurrentUserOrAdmin'],
         'token_create': ['rest_framework.permissions.AllowAny'],
     }
 }
