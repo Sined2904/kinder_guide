@@ -54,19 +54,18 @@ class ProfileSerializer(serializers.ModelSerializer):
         fields = ['name', 'slug']
 '''
 
-class SchoolShortSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = School
-        fields = ['id', 'name', 'description', 'album', 'price']
-
-
 class AlbumSerializer(serializers.ModelSerializer):
     image = serializers.ImageField()
     class Meta:
         model = Album
         fields = ['image',]
 
+
+class SchoolShortSerializer(serializers.ModelSerializer):
+    album = AlbumSerializer(many=True)
+    class Meta:
+        model = School
+        fields = ['id', 'name', 'description', 'album', 'price']
 
 class SchoolSerializer(serializers.ModelSerializer):
     #underground = UndergroundSerializer(many=True)
