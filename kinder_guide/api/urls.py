@@ -45,32 +45,32 @@ urlpatterns = [
     ),
     path(
         'v1/courses/<int:courses_id>/reviews/',
-        ReviewCoursesViewSet.as_view({'get': 'list', 'post': 'create', 'delete': 'delete', 'update': 'update'}),
+        ReviewCoursesViewSet.as_view({'get': 'list', 'post': 'create', 'delete': 'delete'}),
         name='courses_reviews'
     ),
     path(
         'v1/kindergartens/<int:kindergarten_id>/reviews/',
-        ReviewKindergartenViewSet.as_view({'get': 'list', 'post': 'create', 'update': 'update'}),
+        ReviewKindergartenViewSet.as_view({'get': 'list', 'post': 'create'}),
         name='kindergartens_reviews',
     ),
     path(
         'v1/schools/<int:school_id>/reviews/',
-        ReviewSchoolViewSet.as_view({'get': 'list', 'post': 'create', 'update': 'update'}),
+        ReviewSchoolViewSet.as_view({'get': 'list', 'post': 'create'}),
         name='schools_reviews',
     ),
     path(
         'v1/courses/<int:courses_id>/reviews/<int:review_id>/',
-        ReviewCoursesViewSet.as_view({'delete': 'delete'}),
+        ReviewCoursesViewSet.as_view({'delete': 'delete', 'update': 'update'}),
         name='courses_review_delete',
     ),
     path(
         'v1/kindergartens/<int:kindergarten_id>/reviews/<int:review_id>/',
-        ReviewCoursesViewSet.as_view({'delete': 'delete'}),
+        ReviewCoursesViewSet.as_view({'delete': 'delete', 'update': 'update'}),
         name='kindergartens_review_delete',
     ),
     path(
         'v1/schools/<int:school_id>/reviews/<int:review_id>/',
-        ReviewSchoolViewSet.as_view({'delete': 'delete'}),
+        ReviewSchoolViewSet.as_view({'delete': 'delete', 'update': 'update'}),
         name='schools_review_delete',
     ),
     # path('auth/', include('djoser.urls')),
