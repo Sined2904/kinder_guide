@@ -24,6 +24,12 @@ class ReviewCoursesViewSet(viewsets.ModelViewSet):
     serializer_class = ReviewCourseSerializer
     permission_classes = (IsAuthenticatedOrReadOnly,)
 
+    def list(self, request, courses_id):
+        course_id = self.kwargs.get('courses_id')
+        queryset = self.queryset.filter(review_post_id=course_id)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
     def create(self, request, courses_id):
         request.data['author'] = self.request.user.id
         serializer = self.get_serializer(data=request.data)
@@ -54,6 +60,12 @@ class ReviewKindergartenViewSet(viewsets.ModelViewSet):
     serializer_class = ReviewKindergartenSerializer
     permission_classes = (IsAuthenticatedOrReadOnly,)
 
+    def list(self, request, kindergarten_id):
+        kindergarten_id = self.kwargs.get('kindergarten_id')
+        queryset = self.queryset.filter(review_post_id=kindergarten_id)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
     def create(self, request, kindergarten_id):
         request.data['author'] = self.request.user.id
         serializer = self.get_serializer(data=request.data)
@@ -81,6 +93,12 @@ class ReviewSchoolViewSet(viewsets.ModelViewSet):
     queryset = ReviewSchool.objects.all()
     serializer_class = ReviewSchoolSerializer
     permission_classes = (IsAuthenticatedOrReadOnly,)
+
+    def list(self, request, school_id):
+        school_id = self.kwargs.get('school_id')
+        queryset = self.queryset.filter(review_post_id=school_id)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
     def create(self, request, school_id):
         request.data['author'] = self.request.user.id
