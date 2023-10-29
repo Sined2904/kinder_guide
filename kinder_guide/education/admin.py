@@ -41,6 +41,7 @@ class SchoolAdmin(admin.ModelAdmin):
     ordering = ['name', ]
     inlines = [SchoolAlbumInline]
 
+
 class Favourites_SchoolAdmin(admin.ModelAdmin):
     list_display = ('user', 'school')
     empty_value_display = '-пусто-'

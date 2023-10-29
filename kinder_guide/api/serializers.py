@@ -138,7 +138,7 @@ class CourseAlbumSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CourseAlbum
-        fields = ['image',]
+        fields = ['image', ]
 
 
 class CourseShortSerializer(serializers.ModelSerializer):
