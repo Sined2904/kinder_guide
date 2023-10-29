@@ -1,10 +1,10 @@
 from django.contrib import admin
 
-from .forms import MinOneForm
-from .models import (Language, Profile, School, Favourites_School, 
-                     Sport, Create, Intelligence, Music, Kindergartens, 
-                     Favourites_Kindergartens, Course, Favourites_Course, 
+from .models import (Language, Profile, School, Favourites_School,
+                     Sport, Create, Intelligence, Music, Kindergartens,
+                     Favourites_Kindergartens, Course, Favourites_Course,
                      Underground, Album, CourseAlbum)
+
 
 class UndergroundAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug')
@@ -12,13 +12,15 @@ class UndergroundAdmin(admin.ModelAdmin):
     search_fields = ('name', )
     ordering = ['name',]
 
+
 class AlbumdAdmin(admin.ModelAdmin):
     list_display = ('name', 'image')
     empty_value_display = '-пусто-'
     search_fields = ('name', )
     ordering = ['name',]
 
-#Школа
+
+# Школа
 class LanguageAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug')
     empty_value_display = '-пусто-'
@@ -34,9 +36,9 @@ class ProfileAdmin(admin.ModelAdmin):
 
 
 class SchoolAdmin(admin.ModelAdmin):
-    list_display = ('name', 'description', 'telephone', 
-                    'address', 'price', 'price_of_year', 'email', 
-                    'classes', 'name_author','area', 'age', 'working_hours')
+    list_display = ('name', 'description', 'telephone',
+                    'address', 'price', 'price_of_year', 'email',
+                    'classes', 'name_author', 'area', 'age', 'working_hours')
     search_fields = ('name',)
     empty_value_display = '-пусто-'
     ordering = ['name',]
@@ -49,7 +51,7 @@ class Favourites_SchoolAdmin(admin.ModelAdmin):
     ordering = ['user',]
 
 
-#Детский сад
+# Детский сад
 class SportAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug')
     empty_value_display = '-пусто-'
@@ -79,10 +81,9 @@ class MusicAdmin(admin.ModelAdmin):
 
 
 class KindergartensAdmin(admin.ModelAdmin):
-    list_display = ('name', 'description',
-                    'telephone', 'address', 'price', 
-                    'email',
-                    'area', 'age', 'price_of_year', 'working_hours', 'group_suze')
+    list_display = ('name', 'description', 'telephone', 'address', 'price',
+                    'email', 'area', 'age', 'price_of_year', 'working_hours',
+                    'group_suze')
     search_fields = ('name',)
     empty_value_display = '-пусто-'
     ordering = ['name',]
@@ -94,15 +95,16 @@ class Favourites_KindergartensAdmin(admin.ModelAdmin):
     search_fields = ('user', )
     ordering = ['user',]
 
-#Курсы
-class CourseAlbumInline(admin.TabularInline):  
+
+# Курсы
+class CourseAlbumInline(admin.TabularInline):
     model = CourseAlbum
 
 
 class CourseAdmin(admin.ModelAdmin):
     list_display = ('name', 'description',
-                    'telephone', 'address', 'price', 
-                    'email', 'underground', 
+                    'telephone', 'address', 'price',
+                    'email', 'underground',
                     'area', 'age')
     search_fields = ('name',)
     empty_value_display = '-пусто-'

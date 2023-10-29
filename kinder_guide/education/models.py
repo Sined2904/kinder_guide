@@ -1,17 +1,24 @@
 from django.db import models
 from user.models import MyUser
 
-#Абстрактные и общие модели
+
+# Абстрактные и общие модели
 class Model_For_Additions(models.Model):
     """Абстрактная модель для различных дополнений."""
+
     name = models.CharField(max_length=256, verbose_name='Название')
     slug = models.SlugField(max_length=50, unique=True, verbose_name='Slug')
 
     class Meta:
         abstract = True
 
+    def __str__(self):
+        return self.name
+
+
 class Underground(Model_For_Additions):
     """Модель метро."""
+
     class Meta:
         ordering = ('name', )
         verbose_name = 'Метро'
@@ -23,6 +30,7 @@ class Underground(Model_For_Additions):
 
 class Language(Model_For_Additions):
     """Модель языков."""
+
     class Meta:
         ordering = ('name', )
         verbose_name = 'Язык'
@@ -34,15 +42,18 @@ class Language(Model_For_Additions):
 
 class Album(models.Model):
     """Абстрактная модель для различных дополнений."""
+
     name = models.CharField(max_length=256, verbose_name='Название')
     image = models.ImageField(upload_to="education/", verbose_name='фото')
 
     def __str__(self):
         return self.name
 
-#Модели про школу
+
+# Модели про школу
 class Profile(Model_For_Additions):
     """Модель профилей (для модели School)."""
+
     class Meta:
         ordering = ('name', )
         verbose_name = 'Профиль'
@@ -54,11 +65,12 @@ class Profile(Model_For_Additions):
 
 class School(models.Model):
     """Модель школы."""
+
     name = models.CharField(
-            max_length=250,
-            null=False,
-            verbose_name='Название школы'
-        )
+        max_length=250,
+        null=False,
+        verbose_name='Название школы'
+    )
     description = models.TextField(
         blank=True,
         null=True,
@@ -69,7 +81,9 @@ class School(models.Model):
         related_name='school',
         verbose_name='фото'
     )
-    working_hours = models.CharField(max_length=250, verbose_name='Время работы')
+    working_hours = models.CharField(max_length=250,
+                                     verbose_name='Время работы'
+                                     )
     telephone = models.CharField(max_length=250, verbose_name='Телефон')
     address = models.CharField(max_length=250, verbose_name='Адрес')
     email = models.EmailField(max_length=250, verbose_name='Электронный адрес')
@@ -91,7 +105,7 @@ class School(models.Model):
     '''
     models.ManyToManyField(
         Language,
-        related_name='school', 
+        related_name='school',
         verbose_name='Языки'
     )
     '''
@@ -99,12 +113,13 @@ class School(models.Model):
     '''
     models.ManyToManyField(
         Profile,
-        related_name='school', 
+        related_name='school',
         verbose_name='Профиль'
     )
     '''
 
     class Meta:
+        ordering = ('name', )
         verbose_name = "Школа"
         verbose_name_plural = "Школы"
 
@@ -113,7 +128,8 @@ class School(models.Model):
 
 
 class Favourites_School(models.Model):
-    """Модель Избранного для школы"""
+    """Модель Избранного для школы."""
+
     user = models.ForeignKey(
         MyUser,
         on_delete=models.CASCADE,
@@ -135,9 +151,10 @@ class Favourites_School(models.Model):
         return f'Пользователь {self.user} добавил в избранное {self.school}'
 
 
-#Модели про детский сад
+# Модели про детский сад
 class Sport(Model_For_Additions):
     """Модель спортивных занятий (для модели Kindergartens)."""
+
     class Meta:
         ordering = ('name', )
         verbose_name = 'Спортивное занятие'
@@ -149,6 +166,7 @@ class Sport(Model_For_Additions):
 
 class Create(Model_For_Additions):
     """Модель творческих занятий (для модели Kindergartens)."""
+
     class Meta:
         ordering = ('name', )
         verbose_name = 'Творческое занятие'
@@ -160,6 +178,7 @@ class Create(Model_For_Additions):
 
 class Intelligence(Model_For_Additions):
     """Модель интеллектуальных занятий (для модели Kindergartens)."""
+
     class Meta:
         ordering = ('name', )
         verbose_name = 'Интеллектуальное занятие'
@@ -171,6 +190,7 @@ class Intelligence(Model_For_Additions):
 
 class Music(Model_For_Additions):
     """Модель музыкальных занятий (для модели Kindergartens)."""
+
     class Meta:
         ordering = ('name', )
         verbose_name = 'Музыкальное занятие'
@@ -182,17 +202,18 @@ class Music(Model_For_Additions):
 
 class Kindergartens(models.Model):
     """Модель детского сада."""
+
     name = models.CharField(
-            max_length=250,
-            null=False,
-            verbose_name='Название школы'
-        )
+        max_length=250,
+        null=False,
+        verbose_name='Название школы'
+    )
     description = models.TextField(
         blank=True,
         null=True,
         verbose_name='Описание'
     )
-    album =  models.ManyToManyField(
+    album = models.ManyToManyField(
         Album,
         related_name='kindergartens',
         verbose_name='фото'
@@ -213,45 +234,55 @@ class Kindergartens(models.Model):
     age = models.CharField(max_length=250, verbose_name='Возраст')
 
     price_of_year = models.PositiveSmallIntegerField(verbose_name='Цена в год')
-    working_hours = models.CharField(max_length=250, verbose_name='Время работы')
+    working_hours = models.CharField(max_length=250,
+                                     verbose_name='Время работы'
+                                     )
     group_suze = models.CharField(max_length=250, verbose_name='Размер группы')
     languages = models.CharField(max_length=250, verbose_name='Языки')
     '''
     models.ManyToManyField(
         Language,
-        related_name='kindergartens', 
+        related_name='kindergartens',
         verbose_name='Иностранные языки'
     )
     '''
-    sport_dev = models.CharField(max_length=250, verbose_name='Спортивное развитие')
+    sport_dev = models.CharField(max_length=250,
+                                 verbose_name='Спортивное развитие'
+                                 )
     '''
     models.ManyToManyField(
         Sport,
-        related_name='kindergartens', 
+        related_name='kindergartens',
         verbose_name='Спортивное развитие'
     )
     '''
-    create_dev = models.CharField(max_length=250, verbose_name='Творческое развитие')
+    create_dev = models.CharField(max_length=250,
+                                  verbose_name='Творческое развитие'
+                                  )
     '''
     models.ManyToManyField(
         Create,
-        related_name='kindergartens', 
+        related_name='kindergartens',
         verbose_name='Творческое развитие'
     )
     '''
-    music_dev = models.CharField(max_length=250, verbose_name='Музыкальное развитие')
+    music_dev = models.CharField(max_length=250,
+                                 verbose_name='Музыкальное развитие'
+                                 )
     '''
     models.ManyToManyField(
         Music,
-        related_name='kindergartens', 
+        related_name='kindergartens',
         verbose_name='Музыкальное развитие'
     )
     '''
-    intel_dev = models.CharField(max_length=250, verbose_name='Интеллектуальное развитие')
+    intel_dev = models.CharField(max_length=250,
+                                 verbose_name='Интеллектуальное развитие'
+                                 )
     '''
     models.ManyToManyField(
         Intelligence,
-        related_name='kindergartens', 
+        related_name='kindergartens',
         verbose_name='Интеллектуальное развитие'
     )
     '''
@@ -265,6 +296,7 @@ class Kindergartens(models.Model):
 
 class Favourites_Kindergartens(models.Model):
     """Модель Избранного для детского сада."""
+
     user = models.ForeignKey(
         MyUser,
         on_delete=models.CASCADE,
@@ -283,10 +315,12 @@ class Favourites_Kindergartens(models.Model):
         verbose_name_plural = 'Избранное - детские сады'
 
     def __str__(self):
-        return f'Пользователь {self.user} добавил в избранное {self.kindergartens}'
+        return f'{self.user} добавил в избранное {self.kindergartens}'
+
 
 class CourseAlbum(models.Model):
     """Модель альбома изображений для курсов."""
+
     name = models.CharField(max_length=256, verbose_name='Название')
     image = models.ImageField(upload_to="course/", verbose_name='фото')
     course = models.ForeignKey(
@@ -299,16 +333,17 @@ class CourseAlbum(models.Model):
 
     def __str__(self):
         return self.name
-    
 
-#Модели про курсы
+
+# Модели про курсы
 class Course(models.Model):
     """Модель курса."""
+
     name = models.CharField(
-            max_length=250,
-            null=False,
-            verbose_name='Название курсов'
-        )
+        max_length=250,
+        null=False,
+        verbose_name='Название курсов'
+    )
     description = models.TextField(
         blank=True,
         null=True,
@@ -328,7 +363,7 @@ class Course(models.Model):
     area = models.CharField(max_length=250, verbose_name='Округ')
     price = models.PositiveSmallIntegerField(verbose_name='Цена в месяц')
     age = models.CharField(max_length=250, verbose_name='Возраст')
-    
+
     class Meta:
         verbose_name = "Курс"
         verbose_name_plural = "Курсы"
@@ -339,6 +374,7 @@ class Course(models.Model):
 
 class Favourites_Course(models.Model):
     """Модель Избранного для курсов."""
+
     user = models.ForeignKey(
         MyUser,
         on_delete=models.CASCADE,

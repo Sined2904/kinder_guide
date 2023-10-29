@@ -6,29 +6,34 @@ from .utils import get_avg_rating
 
 
 class ReviewSerializer(serializers.ModelSerializer):
-    '''Сериализатор отзывов'''
+    """Сериализатор отзывов."""
+
     grade = serializers.IntegerField(source='rating')
 
 
 class ReviewSchoolSerializer(ReviewSerializer):
-    '''Сериализатор отзывов школы'''
+    """Сериализатор отзывов школы."""
+
     class Meta:
         model = ReviewSchool
         fields = ['id', 'content', 'grade', 'author', 'date_posted']
 
 
 class ReviewCourseSerializer(ReviewSerializer):
-    '''Сериализатор отзывов курса'''
+    """Сериализатор отзывов курса."""
+
     class Meta:
         model = ReviewCourse
         fields = ['id', 'content', 'grade', 'author', 'date_posted']
 
 
 class ReviewKindergartenSerializer(ReviewSerializer):
-    '''Сериализатор отзывов детского сада'''
+    """Сериализатор отзывов детского сада."""
+
     class Meta:
         model = ReviewKindergarten
         fields = ['id', 'content', 'grade', 'author', 'date_posted']
+
 
 '''
 class UndergroundSerializer(serializers.ModelSerializer):

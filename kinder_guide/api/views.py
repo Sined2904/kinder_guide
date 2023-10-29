@@ -3,7 +3,6 @@ from django.shortcuts import get_object_or_404
 from education.models import (Course, Favourites_Course,
                               Favourites_Kindergartens, Favourites_School,
                               Kindergartens, School)
-from requests import Response
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.pagination import PageNumberPagination
@@ -19,7 +18,8 @@ from .serializers import (CourseSerializer, CourseShortSerializer,
 
 
 class ReviewCoursesViewSet(viewsets.ModelViewSet):
-    '''Вьюсет для Отзывов курсов.'''
+    """Вьюсет для Отзывов курсов."""
+
     queryset = ReviewCourse.objects.all()
     serializer_class = ReviewCourseSerializer
     permission_classes = (IsAuthenticatedOrReadOnly,)
@@ -55,7 +55,8 @@ class ReviewCoursesViewSet(viewsets.ModelViewSet):
 
 
 class ReviewKindergartenViewSet(viewsets.ModelViewSet):
-    '''Вьюсет для Отзывов Десткого сада.'''
+    """Вьюсет для Отзывов Десткого сада."""
+
     queryset = ReviewKindergarten.objects.all()
     serializer_class = ReviewKindergartenSerializer
     permission_classes = (IsAuthenticatedOrReadOnly,)
@@ -89,7 +90,8 @@ class ReviewKindergartenViewSet(viewsets.ModelViewSet):
 
 
 class ReviewSchoolViewSet(viewsets.ModelViewSet):
-    '''Вьюсет для Отзывов школ.'''
+    """Вьюсет для Отзывов школ."""
+
     queryset = ReviewSchool.objects.all()
     serializer_class = ReviewSchoolSerializer
     permission_classes = (IsAuthenticatedOrReadOnly,)
@@ -123,7 +125,7 @@ class ReviewSchoolViewSet(viewsets.ModelViewSet):
 
 
 class SchoolViewSet(viewsets.ModelViewSet):
-    '''Вьюсет для Школы.'''
+    """Вьюсет для Школы."""
 
     queryset = School.objects.all()
     serializer_class = SchoolSerializer
@@ -149,9 +151,9 @@ class SchoolViewSet(viewsets.ModelViewSet):
     def favorite(self, request, pk):
         school = get_object_or_404(School, id=pk)
         school_in_favorite = Favourites_School.objects.filter(
-                user=request.user,
-                school=school
-            )
+            user=request.user,
+            school=school
+        )
         if request.method == 'DELETE':
             if school_in_favorite.exists():
                 school_in_favorite.delete()
@@ -168,7 +170,7 @@ class SchoolViewSet(viewsets.ModelViewSet):
 
 
 class KindergartensViewSet(viewsets.ModelViewSet):
-    '''Вьюсет для Десткого сада.'''
+    """Вьюсет для Десткого сада."""
 
     queryset = Kindergartens.objects.all()
     serializer_class = KindergartensSerializer
@@ -194,9 +196,9 @@ class KindergartensViewSet(viewsets.ModelViewSet):
     def favorite(self, request, pk):
         kindergarten = get_object_or_404(Kindergartens, id=pk)
         kindergarten_in_favorite = Favourites_Kindergartens.objects.filter(
-                user=request.user,
-                kindergarten=kindergarten
-            )
+            user=request.user,
+            kindergarten=kindergarten
+        )
         if request.method == 'DELETE':
             if kindergarten_in_favorite.exists():
                 kindergarten_in_favorite.delete()
@@ -208,12 +210,13 @@ class KindergartensViewSet(viewsets.ModelViewSet):
         else:
             if kindergarten_in_favorite.exists():
                 return Response({'errors': 'Вы уже подписались'})
-            Favourites_Kindergartens.objects.create(user=request.user, kindergartens=kindergarten)
+            Favourites_Kindergartens.objects.create(user=request.user,
+                                                    kindergartens=kindergarten)
             return Response(status=status.HTTP_201_CREATED)
 
 
 class CourseViewSet(viewsets.ModelViewSet):
-    '''Вьюсет для Курсов.'''
+    """Вьюсет для Курсов."""
 
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
@@ -239,9 +242,9 @@ class CourseViewSet(viewsets.ModelViewSet):
     def favorite(self, request, pk):
         course = get_object_or_404(Course, id=pk)
         course_in_favorite = Favourites_Course.objects.filter(
-                user=request.user,
-                course=course
-            )
+            user=request.user,
+            course=course
+        )
         if request.method == 'DELETE':
             if course_in_favorite.exists():
                 course_in_favorite.delete()
