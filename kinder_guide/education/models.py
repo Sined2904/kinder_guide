@@ -40,11 +40,18 @@ class Language(Model_For_Additions):
         return self.name
 
 
-class Album(models.Model):
-    """Абстрактная модель для различных дополнений."""
+class SchoolAlbum(models.Model):
+    """Модель альбома изображений для школ."""
 
     name = models.CharField(max_length=256, verbose_name='Название')
-    image = models.ImageField(upload_to="education/", verbose_name='фото')
+    image = models.ImageField(upload_to="school/", verbose_name='фото')
+    school = models.ForeignKey(
+        'School',
+        on_delete=models.CASCADE,
+        related_name='album',
+        verbose_name='Школы',
+        null=True
+    )
 
     def __str__(self):
         return self.name
@@ -75,11 +82,6 @@ class School(models.Model):
         blank=True,
         null=True,
         verbose_name='Описание'
-    )
-    album = models.ManyToManyField(
-        Album,
-        related_name='school',
-        verbose_name='фото'
     )
     working_hours = models.CharField(max_length=250,
                                      verbose_name='Время работы'
@@ -212,11 +214,6 @@ class Kindergartens(models.Model):
         blank=True,
         null=True,
         verbose_name='Описание'
-    )
-    album = models.ManyToManyField(
-        Album,
-        related_name='kindergartens',
-        verbose_name='фото'
     )
     telephone = models.CharField(max_length=250, verbose_name='Телефон')
     address = models.CharField(max_length=250, verbose_name='Адрес')

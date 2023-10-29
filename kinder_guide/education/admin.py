@@ -3,7 +3,7 @@ from django.contrib import admin
 from .models import (Language, Profile, School, Favourites_School,
                      Sport, Create, Intelligence, Music, Kindergartens,
                      Favourites_Kindergartens, Course, Favourites_Course,
-                     Underground, Album, CourseAlbum)
+                     Underground, CourseAlbum, SchoolAlbum)
 
 
 class UndergroundAdmin(admin.ModelAdmin):
@@ -13,14 +13,11 @@ class UndergroundAdmin(admin.ModelAdmin):
     ordering = ['name',]
 
 
-class AlbumdAdmin(admin.ModelAdmin):
-    list_display = ('name', 'image')
-    empty_value_display = '-пусто-'
-    search_fields = ('name', )
-    ordering = ['name',]
-
-
 # Школа
+class SchoolAlbumInline(admin.TabularInline):
+    model = SchoolAlbum
+
+
 class LanguageAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug')
     empty_value_display = '-пусто-'
@@ -42,7 +39,7 @@ class SchoolAdmin(admin.ModelAdmin):
     search_fields = ('name',)
     empty_value_display = '-пусто-'
     ordering = ['name',]
-
+    inlines = [SchoolAlbumInline]
 
 class Favourites_SchoolAdmin(admin.ModelAdmin):
     list_display = ('user', 'school')
@@ -119,7 +116,6 @@ class Favourites_CourseAdmin(admin.ModelAdmin):
     ordering = ['user',]
 
 
-admin.site.register(Album, AlbumdAdmin)
 admin.site.register(Underground, UndergroundAdmin)
 admin.site.register(Language, LanguageAdmin)
 admin.site.register(Profile, ProfileAdmin)

@@ -1,5 +1,5 @@
 from comments.models import ReviewCourse, ReviewKindergarten, ReviewSchool
-from education.models import Album, Course, CourseAlbum, Kindergartens, School
+from education.models import Course, CourseAlbum, Kindergartens, School
 from rest_framework import serializers
 
 from .utils import get_avg_rating
@@ -58,16 +58,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 '''
 
 
-class AlbumSerializer(serializers.ModelSerializer):
-    image = serializers.ImageField()
-
-    class Meta:
-        model = Album
-        fields = ['image',]
-
-
 class SchoolShortSerializer(serializers.ModelSerializer):
-    album = AlbumSerializer(many=True)
     rating = serializers.SerializerMethodField()
     reviews = serializers.SerializerMethodField()
 
@@ -87,7 +78,6 @@ class SchoolSerializer(serializers.ModelSerializer):
     # underground = UndergroundSerializer(many=True)
     # languages = LanguageSerializer(many=True)
     # profile = ProfileSerializer(many=True)
-    album = AlbumSerializer(many=True)
     rating = serializers.SerializerMethodField()
     reviews = serializers.SerializerMethodField()
 
@@ -126,7 +116,6 @@ class KindergartensShortSerializer(serializers.ModelSerializer):
 class KindergartensSerializer(serializers.ModelSerializer):
     rating = serializers.SerializerMethodField()
     reviews = serializers.SerializerMethodField()
-    album = AlbumSerializer(many=True)
 
     def get_rating(self, obj):
         return get_avg_rating(ReviewKindergarten, obj)
