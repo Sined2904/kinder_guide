@@ -79,7 +79,9 @@ class AgeCategory(models.Model):
     category = models.CharField(
         max_length=20,
         choices=CATEGORY_CHOICES,
-        verbose_name='Возрастная категория'
+        verbose_name='Возрастная категория',
+        blank=True,
+        null=True
     )
 
     def __str__(self):
@@ -94,50 +96,97 @@ class School(models.Model):
             verbose_name='Название школы'
         )
     description = models.TextField(
+        verbose_name='Описание',
         blank=True,
-        null=True,
-        verbose_name='Описание'
+        null=True
     )
     album = models.ManyToManyField(
         Album,
         related_name='school',
-        verbose_name='фото'
+        verbose_name='фото',
+        blank=True
     )
-    working_hours = models.CharField(max_length=250, verbose_name='Время работы')
-    telephone = models.CharField(max_length=250, verbose_name='Телефон')
-    address = models.CharField(max_length=250, verbose_name='Адрес')
-    email = models.EmailField(max_length=250, verbose_name='Электронный адрес')
+    working_hours = models.CharField(
+        max_length=250,
+        verbose_name='Время работы',
+        blank=True,
+        null=True
+    )
+    telephone = models.CharField(
+        max_length=250,
+        verbose_name='Телефон'
+    )
+    address = models.CharField(
+        max_length=250,
+        verbose_name='Адрес',
+        blank=True,
+        null=True
+    )
+    email = models.EmailField(
+        max_length=250,
+        verbose_name='Электронный адрес',
+        blank=True,
+        null=True
+    )
     underground = models.ManyToManyField(
         Underground,
         related_name='school',
-        verbose_name='Метро'
+        verbose_name='Метро',
+        blank=True
     )
     area = models.ForeignKey(
         Area,
         on_delete=models.SET_NULL,
-        null=True,
-        verbose_name='Округ'
+        verbose_name='Округ',
+        blank=True,
+        null=True
     )
-    price = models.PositiveSmallIntegerField(verbose_name='Цена в месяц')
-    age = models.CharField(max_length=250, verbose_name='Возраст')
+    price = models.PositiveSmallIntegerField(
+        verbose_name='Цена в месяц',
+        blank=True,
+        null=True
+    )
+    age = models.CharField(
+        max_length=250,
+        verbose_name='Возраст',
+        blank=True,
+        null=True
+    )
     age_category = models.ForeignKey(
         AgeCategory,
         on_delete=models.SET_NULL,
-        null=True,
-        verbose_name='Возрастная категория'
+        verbose_name='Возрастная категория',
+        blank=True,
+        null=True
     )
-    price_of_year = models.PositiveSmallIntegerField(verbose_name='Цена в год')
-    classes = models.CharField(max_length=250, verbose_name='Классы')
-    name_author = models.CharField(max_length=250, verbose_name='Имя автора')
+    price_of_year = models.PositiveSmallIntegerField(
+        verbose_name='Цена в год',
+        blank=True,
+        null=True
+    )
+    classes = models.CharField(
+        max_length=250,
+        verbose_name='Классы',
+        blank=True,
+        null=True
+    )
+    name_author = models.CharField(
+        max_length=250,
+        verbose_name='Имя автора',
+        blank=True,
+        null=True
+    )
     languages = models.ManyToManyField(
         Language,
         related_name='school',
-        verbose_name='Языки'
+        verbose_name='Языки',
+        blank=True
     )
     profile = models.ManyToManyField(
         Profile,
         related_name='school',
-        verbose_name='Профиль'
+        verbose_name='Профиль',
+        blank=True
     )
 
 
@@ -225,46 +274,92 @@ class Kindergartens(models.Model):
             verbose_name='Название школы'
         )
     description = models.TextField(
+        verbose_name='Описание',
         blank=True,
-        null=True,
-        verbose_name='Описание'
+        null=True
     )
     album =  models.ManyToManyField(
         Album,
         related_name='kindergartens',
-        verbose_name='фото'
+        verbose_name='фото',
+        blank=True
     )
-    telephone = models.CharField(max_length=250, verbose_name='Телефон')
-    address = models.CharField(max_length=250, verbose_name='Адрес')
-    email = models.EmailField(max_length=250, verbose_name='Электронный адрес')
+    telephone = models.CharField(
+        max_length=250,
+        verbose_name='Телефон'
+    )
+    address = models.CharField(
+        max_length=250,
+        verbose_name='Адрес',
+        blank=True,
+        null=True
+    )
+    email = models.EmailField(
+        max_length=250,
+        verbose_name='Электронный адрес',
+        blank=True,
+        null=True
+    )
     underground = models.ManyToManyField(
         Underground,
         related_name='kindergartens',
-        verbose_name='Метро'
+        verbose_name='Метро',
+        blank=True
     )
     area = models.ForeignKey(
         Area,
         on_delete=models.SET_NULL,
-        null=True,
-        verbose_name='Округ'
+        verbose_name='Округ',
+        blank=True,
+        null=True
     )
-    price = models.PositiveSmallIntegerField(verbose_name='Цена в месяц')
-    age = models.CharField(max_length=250, verbose_name='Возраст')
+    price = models.PositiveSmallIntegerField(
+        verbose_name='Цена в месяц',
+        blank=True,
+        null=True
+    )
+    age = models.CharField(
+        max_length=250,
+        verbose_name='Возраст',
+        blank=True,
+        null=True
+    )
     age_category = models.ForeignKey(
         AgeCategory,
         on_delete=models.SET_NULL,
-        null=True,
-        verbose_name='Возрастная категория'
+        verbose_name='Возрастная категория',
+        blank=True,
+        null=True
     )
-    price_of_year = models.PositiveSmallIntegerField(verbose_name='Цена в год')
-    working_hours = models.CharField(max_length=250, verbose_name='Время работы')
-    group_suze = models.CharField(max_length=250, verbose_name='Размер группы')
+    price_of_year = models.PositiveSmallIntegerField(
+        verbose_name='Цена в год',
+        blank=True,
+        null=True
+    )
+    working_hours = models.CharField(
+        max_length=250,
+        verbose_name='Время работы',
+        blank=True,
+        null=True
+    )
+    group_suze = models.CharField(
+        max_length=250,
+        verbose_name='Размер группы',
+        blank=True,
+        null=True
+    )
     languages = models.ManyToManyField(
         Language,
         related_name='kindergartens',
-        verbose_name='Языки'
+        verbose_name='Языки',
+        blank=True
     )
-    sport_dev = models.CharField(max_length=250, verbose_name='Спортивное развитие')
+    sport_dev = models.CharField(
+        max_length=250,
+        verbose_name='Спортивное развитие',
+        blank=True,
+        null=True
+    )
     '''
     models.ManyToManyField(
         Sport,
@@ -272,7 +367,12 @@ class Kindergartens(models.Model):
         verbose_name='Спортивное развитие'
     )
     '''
-    create_dev = models.CharField(max_length=250, verbose_name='Творческое развитие')
+    create_dev = models.CharField(
+        max_length=250,
+        verbose_name='Творческое развитие',
+        blank=True,
+        null=True
+    )
     '''
     models.ManyToManyField(
         Create,
@@ -280,7 +380,12 @@ class Kindergartens(models.Model):
         verbose_name='Творческое развитие'
     )
     '''
-    music_dev = models.CharField(max_length=250, verbose_name='Музыкальное развитие')
+    music_dev = models.CharField(
+        max_length=250,
+        verbose_name='Музыкальное развитие',
+        blank=True,
+        null=True
+    )
     '''
     models.ManyToManyField(
         Music,
@@ -288,7 +393,12 @@ class Kindergartens(models.Model):
         verbose_name='Музыкальное развитие'
     )
     '''
-    intel_dev = models.CharField(max_length=250, verbose_name='Интеллектуальное развитие')
+    intel_dev = models.CharField(
+        max_length=250,
+        verbose_name='Интеллектуальное развитие',
+        blank=True,
+        null=True
+    )
     '''
     models.ManyToManyField(
         Intelligence,
