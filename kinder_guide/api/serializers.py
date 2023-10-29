@@ -1,5 +1,5 @@
 from comments.models import ReviewCourse, ReviewKindergarten, ReviewSchool
-from education.models import Album, Course, CourseAlbum, Kindergartens, School
+from education.models import Album, Course, CourseAlbum, Kindergartens, School, AgeCategory, Profile, Language, Underground, Area
 from rest_framework import serializers
 
 from .utils import get_avg_rating
@@ -30,7 +30,14 @@ class ReviewKindergartenSerializer(ReviewSerializer):
         model = ReviewKindergarten
         fields = ['id', 'content', 'grade', 'author', 'date_posted']
 
-'''
+
+class AreaSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Area
+        fields = ['name', 'slug']
+
+
 class UndergroundSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -50,7 +57,6 @@ class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = ['name', 'slug']
-'''
 
 
 class AlbumSerializer(serializers.ModelSerializer):
@@ -59,6 +65,13 @@ class AlbumSerializer(serializers.ModelSerializer):
     class Meta:
         model = Album
         fields = ['image',]
+
+
+class AgeCategorySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = AgeCategory
+        fields = ['category',]
 
 
 class SchoolShortSerializer(serializers.ModelSerializer):
@@ -79,12 +92,14 @@ class SchoolShortSerializer(serializers.ModelSerializer):
 
 
 class SchoolSerializer(serializers.ModelSerializer):
-    # underground = UndergroundSerializer(many=True)
-    # languages = LanguageSerializer(many=True)
-    # profile = ProfileSerializer(many=True)
+    area = AreaSerializer()
+    underground = UndergroundSerializer(many=True)
+    languages = LanguageSerializer(many=True)
+    profile = ProfileSerializer(many=True)
     album = AlbumSerializer(many=True)
     rating = serializers.SerializerMethodField()
     reviews = serializers.SerializerMethodField()
+    age_category = AgeCategorySerializer()
 
     def get_rating(self, obj):
         return get_avg_rating(ReviewSchool, obj)
@@ -99,7 +114,7 @@ class SchoolSerializer(serializers.ModelSerializer):
                   'underground', 'area', 'email',
                   'album', 'price', 'price_of_year', 'age',
                   'classes', 'languages', 'profile',
-                  'name_author', 'working_hours']
+                  'name_author', 'working_hours', 'age_category']
 
 
 class KindergartensShortSerializer(serializers.ModelSerializer):
@@ -119,9 +134,13 @@ class KindergartensShortSerializer(serializers.ModelSerializer):
 
 
 class KindergartensSerializer(serializers.ModelSerializer):
+    area = AreaSerializer()
+    underground = UndergroundSerializer(many=True)
+    languages = LanguageSerializer(many=True)
+    album = AlbumSerializer(many=True)
     rating = serializers.SerializerMethodField()
     reviews = serializers.SerializerMethodField()
-    album = AlbumSerializer(many=True)
+    age_category = AgeCategorySerializer()
 
     def get_rating(self, obj):
         return get_avg_rating(ReviewKindergarten, obj)
@@ -137,7 +156,7 @@ class KindergartensSerializer(serializers.ModelSerializer):
                   'email', 'underground', 'area',
                   'languages', 'age', 'working_hours',
                   'group_suze', 'sport_dev', 'create_dev',
-                  'music_dev', 'intel_dev']
+                  'music_dev', 'intel_dev', 'age_category']
 
 
 class CourseAlbumSerializer(serializers.ModelSerializer):

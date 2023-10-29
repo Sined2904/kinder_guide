@@ -107,21 +107,11 @@ class School(models.Model):
     telephone = models.CharField(max_length=250, verbose_name='Телефон')
     address = models.CharField(max_length=250, verbose_name='Адрес')
     email = models.EmailField(max_length=250, verbose_name='Электронный адрес')
-    # underground = models.CharField(max_length=250, verbose_name='Метро')
-    underground = models.ForeignKey(
-        Underground,
-        on_delete=models.SET_NULL,
-        null=True,
-        verbose_name='Метро'
-    )
-    '''
-    models.ManyToManyField(
+    underground = models.ManyToManyField(
         Underground,
         related_name='school',
         verbose_name='Метро'
     )
-    '''
-    # area = models.CharField(max_length=250, verbose_name='Округ')
     area = models.ForeignKey(
         Area,
         on_delete=models.SET_NULL,
@@ -139,26 +129,17 @@ class School(models.Model):
     price_of_year = models.PositiveSmallIntegerField(verbose_name='Цена в год')
     classes = models.CharField(max_length=250, verbose_name='Классы')
     name_author = models.CharField(max_length=250, verbose_name='Имя автора')
-    # languages = models.CharField(max_length=250, verbose_name='Языки')
     languages = models.ManyToManyField(
         Language,
         related_name='school',
         verbose_name='Языки'
     )
-    profile = models.ForeignKey(
-        Profile,
-        on_delete=models.SET_NULL,
-        null=True,
-        verbose_name='Профиль'
-    )
-    # profile = models.CharField(max_length=250, verbose_name='Профиль')
-    '''
-    models.ManyToManyField(
+    profile = models.ManyToManyField(
         Profile,
         related_name='school',
         verbose_name='Профиль'
     )
-    '''
+
 
     class Meta:
         verbose_name = "Школа"
@@ -256,21 +237,11 @@ class Kindergartens(models.Model):
     telephone = models.CharField(max_length=250, verbose_name='Телефон')
     address = models.CharField(max_length=250, verbose_name='Адрес')
     email = models.EmailField(max_length=250, verbose_name='Электронный адрес')
-    # underground = models.CharField(max_length=250, verbose_name='Метро')
-    underground = models.ForeignKey(
-        Underground,
-        on_delete=models.SET_NULL,
-        null=True,
-        verbose_name='Метро'
-    )
-    '''
-    models.ManyToManyField(
+    underground = models.ManyToManyField(
         Underground,
         related_name='kindergartens',
         verbose_name='Метро'
     )
-    '''
-    # area = models.CharField(max_length=250, verbose_name='Округ')
     area = models.ForeignKey(
         Area,
         on_delete=models.SET_NULL,
@@ -288,17 +259,10 @@ class Kindergartens(models.Model):
     price_of_year = models.PositiveSmallIntegerField(verbose_name='Цена в год')
     working_hours = models.CharField(max_length=250, verbose_name='Время работы')
     group_suze = models.CharField(max_length=250, verbose_name='Размер группы')
-    # languages = models.CharField(max_length=250, verbose_name='Языки')
     languages = models.ManyToManyField(
         Language,
         related_name='kindergartens',
         verbose_name='Языки'
-    )
-    profile = models.ForeignKey(
-        Profile,
-        on_delete=models.SET_NULL,
-        null=True,
-        verbose_name='Профиль'
     )
     sport_dev = models.CharField(max_length=250, verbose_name='Спортивное развитие')
     '''
