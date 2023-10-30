@@ -8,6 +8,7 @@ from .utils import get_avg_rating
 
 class ReviewSerializer(serializers.ModelSerializer):
     """Сериализатор отзывов."""
+
     grade = serializers.IntegerField(source='rating')
 
 
@@ -69,11 +70,12 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 class AlbumSerializer(serializers.ModelSerializer):
     """Сериализатор модели альбома."""
+
     image = serializers.ImageField()
 
     class Meta:
         model = Album
-        fields = ['image',]
+        fields = ['image', ]
 
 
 class AgeCategorySerializer(serializers.ModelSerializer):
@@ -81,11 +83,12 @@ class AgeCategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AgeCategory
-        fields = ['category',]
+        fields = ['category', ]
 
 
 class SchoolShortSerializer(serializers.ModelSerializer):
     """Сериализатор модели школы (кратко)."""
+
     rating = serializers.SerializerMethodField()
     reviews = serializers.SerializerMethodField()
 
@@ -103,6 +106,7 @@ class SchoolShortSerializer(serializers.ModelSerializer):
 
 class SchoolSerializer(serializers.ModelSerializer):
     """Сериализатор модели школы."""
+
     area = AreaSerializer()
     underground = UndergroundSerializer(many=True)
     languages = LanguageSerializer(many=True)
@@ -134,11 +138,12 @@ class FilterSchoolSerializer(serializers.ModelSerializer):
     class Meta:
         model = School
         fields = ['profile', 'age_category', 'languages',
-                  'underground', 'area', 'price',]
+                  'underground', 'area', 'price']
 
 
 class KindergartensShortSerializer(serializers.ModelSerializer):
     """Сериализатор модели детского сада (кратко)."""
+
     rating = serializers.SerializerMethodField()
     reviews = serializers.SerializerMethodField()
 
@@ -156,6 +161,7 @@ class KindergartensShortSerializer(serializers.ModelSerializer):
 
 class KindergartensSerializer(serializers.ModelSerializer):
     """Сериализатор модели детского сада."""
+
     area = AreaSerializer()
     underground = UndergroundSerializer(many=True)
     languages = LanguageSerializer(many=True)
@@ -187,11 +193,12 @@ class FilterKindergartenSerializer(serializers.ModelSerializer):
     class Meta:
         model = Kindergartens
         fields = ['age_category', 'languages',
-                  'underground', 'area', 'price',]
+                  'underground', 'area', 'price']
 
 
 class CourseShortSerializer(serializers.ModelSerializer):
     """Сериализатор модели курсов (кратко)."""
+
     rating = serializers.SerializerMethodField()
     reviews = serializers.SerializerMethodField()
 
@@ -209,6 +216,7 @@ class CourseShortSerializer(serializers.ModelSerializer):
 
 class CourseSerializer(serializers.ModelSerializer):
     """Сериализатор модели курсов."""
+
     rating = serializers.SerializerMethodField()
     reviews = serializers.SerializerMethodField()
     album = AlbumSerializer(many=True)
