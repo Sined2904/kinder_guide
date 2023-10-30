@@ -34,12 +34,12 @@ class MyUser(AbstractUser):
         ]
     )
     # child = models.TextField('Имя', max_length=150, blank=True,)
-    child_first_name = models.TextField('Имя ребенка',
-                                        max_length=150,
-                                        blank=True,)
-    child_last_name = models.TextField('Фамилия ребенка',
-                                       max_length=150,
-                                       blank=True,)
+    # child_first_name = models.TextField('Имя ребенка',
+    #                                     max_length=150,
+    #                                     blank=True,)
+    # child_last_name = models.TextField('Фамилия ребенка',
+    #                                    max_length=150,
+    #                                    blank=True,)
 
     objects = MyUserManager()
 
