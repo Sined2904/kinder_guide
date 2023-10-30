@@ -8,11 +8,13 @@ from .utils import get_avg_rating
 
 class ReviewSerializer(serializers.ModelSerializer):
     '''Сериализатор отзывов.'''
+
     grade = serializers.IntegerField(source='rating')
 
 
 class ReviewSchoolSerializer(ReviewSerializer):
     '''Сериализатор отзывов школы.'''
+
 
     class Meta:
         model = ReviewSchool
@@ -72,8 +74,8 @@ class AlbumSerializer(serializers.ModelSerializer):
     image = serializers.ImageField()
 
     class Meta:
-        model = Album
-        fields = ['image',]
+        model = SchoolAlbum
+        fields = ['image', ]
 
 
 class AgeCategorySerializer(serializers.ModelSerializer):
@@ -88,6 +90,7 @@ class SchoolShortSerializer(serializers.ModelSerializer):
     '''Сериализатор модели школы (кратко).'''
     rating = serializers.SerializerMethodField()
     reviews = serializers.SerializerMethodField()
+    album = SchoolAlbumSerializer(many=True)
 
     def get_rating(self, obj):
         return get_avg_rating(ReviewSchool, obj)
@@ -117,6 +120,7 @@ class SchoolSerializer(serializers.ModelSerializer):
 
     def get_reviews(self, obj):
         return obj.reviews.count()
+    album = SchoolAlbumSerializer(many=True)
 
     class Meta:
         model = School

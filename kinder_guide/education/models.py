@@ -11,6 +11,9 @@ class Model_For_Additions(models.Model):
     class Meta:
         abstract = True
 
+    def __str__(self):
+        return self.name
+
 
 class Underground(Model_For_Additions):
     """Модель метро."""
@@ -201,7 +204,7 @@ class School(models.Model):
 
 
 class Favourites_School(models.Model):
-    """Модель избранного для школы."""
+    """Модель Избранного для школы."""
     user = models.ForeignKey(
         MyUser,
         on_delete=models.CASCADE,
@@ -425,7 +428,7 @@ class Kindergartens(models.Model):
 
 
 class Favourites_Kindergartens(models.Model):
-    """Модель избранного для детского сада."""
+    """Модель Избранного для детского сада."""
     user = models.ForeignKey(
         MyUser,
         on_delete=models.CASCADE,

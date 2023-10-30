@@ -29,17 +29,17 @@ class MyUser(AbstractUser):
                 # regex=r'^\+?1?\d{9,15}$',
                 # message='Номер должен быть набран в формате "+999999999".'
                 regex=r'^\+\d{1,3}[\d()-]{6,14}\d$',
-                message='Номер должен быть набран в формате "+9(999)999-99-99".'
+                message='Номер должен быть в формате "+9(999)999-99-99".'
             )
         ]
     )
     # child = models.TextField('Имя', max_length=150, blank=True,)
-    child_first_name = models.TextField('Имя ребенка',
-                                        max_length=150,
-                                        blank=True,)
-    child_last_name = models.TextField('Фамилия ребенка',
-                                       max_length=150,
-                                       blank=True,)
+    # child_first_name = models.TextField('Имя ребенка',
+    #                                     max_length=150,
+    #                                     blank=True,)
+    # child_last_name = models.TextField('Фамилия ребенка',
+    #                                    max_length=150,
+    #                                    blank=True,)
 
     objects = MyUserManager()
 
