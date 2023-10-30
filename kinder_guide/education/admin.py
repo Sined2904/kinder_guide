@@ -11,7 +11,7 @@ class UndergroundAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug')
     empty_value_display = '-пусто-'
     search_fields = ('name', )
-    ordering = ['name',]
+    ordering = ['name', ]
 
 
 class AreaAdmin(admin.ModelAdmin):
