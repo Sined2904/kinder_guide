@@ -16,8 +16,8 @@ class Review(models.Model):
         validators=[
             MaxValueValidator(5),
             MinValueValidator(0),
-            ]
-        )
+        ]
+    )
 
     class Meta:
         ordering = ['-date_posted']

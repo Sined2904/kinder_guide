@@ -7,7 +7,7 @@ User = get_user_model()
 
 
 class CustomUserSerializer(UserSerializer):
-    """ Сериализатор показа пользователя. """
+    """Сериализатор показа пользователя."""
 
     class Meta:
         model = User
@@ -16,11 +16,12 @@ class CustomUserSerializer(UserSerializer):
             'phone',
             'first_name',
             'last_name',
-            'child_first_name',
-            'child_last_name',
+            # 'child_first_name',
+            # 'child_last_name',
         ]
 
 
 class CusstomUserDeleteSerializer(serializers.Serializer):
-    """ Сериализатор удаления пользователя БЕЗ запроса пароля. """
+    """Сериализатор удаления пользователя БЕЗ запроса пароля."""
+
     pass

@@ -5,11 +5,15 @@ from user.models import MyUser
 # Абстрактные и общие модели
 class Model_For_Additions(models.Model):
     """Абстрактная модель для различных дополнений."""
+
     name = models.CharField(max_length=256, verbose_name='Название')
     slug = models.SlugField(max_length=50, unique=True, verbose_name='Slug')
 
     class Meta:
         abstract = True
+
+    def __str__(self):
+        return self.name
 
 
 class Underground(Model_For_Additions):
@@ -50,6 +54,7 @@ class Language(Model_For_Additions):
 
 class Album(models.Model):
     """Модель для фото."""
+
     name = models.CharField(max_length=256, verbose_name='Название')
     image = models.ImageField(upload_to="education/", verbose_name='фото')
 
@@ -71,6 +76,7 @@ class Profile(Model_For_Additions):
 
 class AgeCategory(models.Model):
     """Модель возрастной категории."""
+
     CATEGORY_CHOICES = (
         ('Дошкольное обучение', 'Дошкольное обучение'),
         ('Начальная школа', 'Начальная школа'),
@@ -93,11 +99,12 @@ class AgeCategory(models.Model):
 # Модели школы
 class School(models.Model):
     """Модель школы."""
+
     name = models.CharField(
-            max_length=250,
-            null=False,
-            verbose_name='Название школы'
-        )
+        max_length=250,
+        null=False,
+        verbose_name='Название школы'
+    )
     description = models.TextField(
         verbose_name='Описание',
         blank=True,
@@ -201,7 +208,8 @@ class School(models.Model):
 
 
 class Favourites_School(models.Model):
-    """Модель избранного для школы."""
+    """Модель Избранного для школы."""
+
     user = models.ForeignKey(
         MyUser,
         on_delete=models.CASCADE,
@@ -274,11 +282,12 @@ class Music(Model_For_Additions):
 
 class Kindergartens(models.Model):
     """Модель детского сада."""
+
     name = models.CharField(
-            max_length=250,
-            null=False,
-            verbose_name='Название школы'
-        )
+        max_length=250,
+        null=False,
+        verbose_name='Название школы'
+    )
     description = models.TextField(
         verbose_name='Описание',
         blank=True,
@@ -425,7 +434,8 @@ class Kindergartens(models.Model):
 
 
 class Favourites_Kindergartens(models.Model):
-    """Модель избранного для детского сада."""
+    """Модель Избранного для детского сада."""
+
     user = models.ForeignKey(
         MyUser,
         on_delete=models.CASCADE,
@@ -453,6 +463,7 @@ class Favourites_Kindergartens(models.Model):
 # Модели курсов
 class Course(models.Model):
     """Модель курса."""
+
     name = models.CharField(
         max_length=250,
         verbose_name='Название курсов'
@@ -519,6 +530,7 @@ class Course(models.Model):
 
 class Favourites_Course(models.Model):
     """Модель избранного для курсов."""
+
     user = models.ForeignKey(
         MyUser,
         on_delete=models.CASCADE,

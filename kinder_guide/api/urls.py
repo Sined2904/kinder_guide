@@ -13,21 +13,12 @@ app_name = 'api'
 
 router = DefaultRouter()
 
-router.register(
-    'schools',
-    SchoolViewSet,
-    basename='schools'
-)
-router.register(
-    'kindergartens',
-    KindergartensViewSet,
-    basename='kindergartens'
-)
-router.register(
-    'courses',
-    CourseViewSet,
-    basename='courses'
-)
+router.register('schools', SchoolViewSet, basename='schools')
+router.register('kindergartens',
+                KindergartensViewSet,
+                basename='kindergartens'
+                )
+router.register('courses', CourseViewSet, basename='courses')
 
 urlpatterns = [
     path(
@@ -62,17 +53,18 @@ urlpatterns = [
         name='reset_password',
     ),
     path(
-        'me/',
-        views.UserViewSet.as_view(
-            {'get': 'me', 'put': 'me', 'patch': 'me', 'delete': 'me'}
-        ),
-        name='me',
+        "me/",
+        views.UserViewSet.as_view({"get": "me",
+                                   "put": "me",
+                                   "patch": "me",
+                                   "delete": "me"}),
+        name="me",
     ),
     path(
         'v1/courses/<int:courses_id>/reviews/',
-        ReviewCoursesViewSet.as_view(
-            {'get': 'list', 'post': 'create', 'delete': 'delete'}
-        ),
+        ReviewCoursesViewSet.as_view({'get': 'list',
+                                      'post': 'create',
+                                      'delete': 'delete'}),
         name='courses_reviews'
     ),
     path(
@@ -91,16 +83,14 @@ urlpatterns = [
     ),
     path(
         'v1/courses/<int:courses_id>/reviews/<int:review_id>/',
-        ReviewCoursesViewSet.as_view(
-            {'delete': 'delete', 'update': 'update'}
-        ),
+        ReviewCoursesViewSet.as_view({'delete': 'delete',
+                                      'update': 'update'}),
         name='courses_review_delete',
     ),
     path(
         'v1/kindergartens/<int:kindergarten_id>/reviews/<int:review_id>/',
-        ReviewCoursesViewSet.as_view(
-            {'delete': 'delete', 'update': 'update'}
-        ),
+        ReviewCoursesViewSet.as_view({'delete': 'delete',
+                                      'update': 'update'}),
         name='kindergartens_review_delete',
     ),
     path(

@@ -3,6 +3,7 @@ from django.contrib.auth.base_user import BaseUserManager
 
 class MyUserManager(BaseUserManager):
     """Менеджер регистрации пользователя. Username не запрашивается."""
+
     use_in_migrations = True
 
     def _create_user(self, email, password, **extra_fields):
