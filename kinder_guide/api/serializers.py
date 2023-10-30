@@ -128,6 +128,15 @@ class SchoolSerializer(serializers.ModelSerializer):
                   'name_author', 'working_hours', 'age_category']
 
 
+class FilterSchoolSerializer(serializers.ModelSerializer):
+    '''Сериализатор фильтров модели школы.'''
+
+    class Meta:
+        model = School
+        fields = ['profile', 'age_category', 'languages',
+                  'underground', 'area', 'price',]
+
+
 class KindergartensShortSerializer(serializers.ModelSerializer):
     '''Сериализатор модели детского сада (кратко).'''
     rating = serializers.SerializerMethodField()
@@ -170,6 +179,15 @@ class KindergartensSerializer(serializers.ModelSerializer):
                   'languages', 'age', 'working_hours',
                   'group_suze', 'sport_dev', 'create_dev',
                   'music_dev', 'intel_dev', 'age_category']
+
+
+class FilterKindergartenSerializer(serializers.ModelSerializer):
+    '''Сериализатор фильтров модели детского сада.'''
+
+    class Meta:
+        model = Kindergartens
+        fields = ['age_category', 'languages',
+                  'underground', 'area', 'price',]
 
 
 class CourseShortSerializer(serializers.ModelSerializer):
