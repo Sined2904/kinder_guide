@@ -1,5 +1,5 @@
-from comments.models import ReviewCourse, ReviewKindergarten, ReviewSchool
-from education.models import (AgeCategory, Album, Area, Course, Kindergartens,
+from comments.models import ReviewKindergarten, ReviewSchool
+from education.models import (AgeCategory, Album, Area, Kindergartens,
                               Language, Profile, School, Underground)
 from rest_framework import serializers
 
@@ -17,14 +17,6 @@ class ReviewSchoolSerializer(ReviewSerializer):
 
     class Meta:
         model = ReviewSchool
-        fields = ['id', 'content', 'grade', 'author', 'date_posted']
-
-
-class ReviewCourseSerializer(ReviewSerializer):
-    """Сериализатор отзывов курса."""
-
-    class Meta:
-        model = ReviewCourse
         fields = ['id', 'content', 'grade', 'author', 'date_posted']
 
 
@@ -194,44 +186,3 @@ class FilterKindergartenSerializer(serializers.ModelSerializer):
         model = Kindergartens
         fields = ['age_category', 'languages',
                   'underground', 'area', 'price']
-
-
-class CourseShortSerializer(serializers.ModelSerializer):
-    """Сериализатор модели курсов (кратко)."""
-
-    rating = serializers.SerializerMethodField()
-    reviews = serializers.SerializerMethodField()
-
-    def get_rating(self, obj):
-        return get_avg_rating(ReviewCourse, obj)
-
-    def get_reviews(self, obj):
-        return obj.reviews.count()
-
-    class Meta:
-        model = Course
-        fields = ['id', 'name', 'rating', 'reviews',
-                  'description', 'album', 'price']
-
-
-class CourseSerializer(serializers.ModelSerializer):
-    """Сериализатор модели курсов."""
-
-    rating = serializers.SerializerMethodField()
-    reviews = serializers.SerializerMethodField()
-    album = AlbumSerializer(many=True)
-    area = AreaSerializer()
-    underground = UndergroundSerializer(many=True)
-
-    def get_rating(self, obj):
-        return get_avg_rating(ReviewCourse, obj)
-
-    def get_reviews(self, obj):
-        return obj.reviews.count()
-
-    class Meta:
-        model = Course
-        fields = ['id', 'name', 'rating', 'reviews',
-                  'album', 'description', 'telephone',
-                  'address', 'price', 'email',
-                  'underground', 'area', 'age']

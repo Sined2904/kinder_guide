@@ -151,7 +151,7 @@ class School(models.Model):
         blank=True,
         null=True
     )
-    price = models.PositiveSmallIntegerField(
+    price = models.PositiveIntegerField(
         verbose_name='Цена в месяц',
         blank=True,
         null=True
@@ -169,7 +169,7 @@ class School(models.Model):
         blank=True,
         null=True
     )
-    price_of_year = models.PositiveSmallIntegerField(
+    price_of_year = models.PositiveIntegerField(
         verbose_name='Цена в год',
         blank=True,
         null=True
@@ -458,95 +458,3 @@ class Favourites_Kindergartens(models.Model):
             f'Пользователь {self.user} '
             f'добавил в избранное {self.kindergartens}'
         )
-
-
-# Модели курсов
-class Course(models.Model):
-    """Модель курса."""
-
-    name = models.CharField(
-        max_length=250,
-        verbose_name='Название курсов'
-    )
-    description = models.TextField(
-        verbose_name='Описание',
-        blank=True,
-        null=True
-    )
-    album = models.ManyToManyField(
-        Album,
-        related_name='course',
-        verbose_name='фото',
-        blank=True
-    )
-    telephone = models.CharField(
-        max_length=250,
-        verbose_name='Телефон'
-    )
-    address = models.CharField(
-        max_length=250,
-        verbose_name='Адрес',
-        blank=True,
-        null=True
-    )
-    email = models.EmailField(
-        max_length=250,
-        verbose_name='Электронный адрес',
-        blank=True,
-        null=True
-    )
-    underground = models.ManyToManyField(
-        Underground,
-        related_name='courses',
-        verbose_name='Метро',
-        blank=True
-    )
-    area = models.ForeignKey(
-        Area,
-        on_delete=models.SET_NULL,
-        verbose_name='Округ',
-        blank=True,
-        null=True
-    )
-    price = models.PositiveSmallIntegerField(
-        verbose_name='Цена в месяц',
-        blank=True,
-        null=True
-    )
-    age = models.CharField(
-        max_length=250,
-        verbose_name='Возраст',
-        blank=True,
-        null=True
-    )
-
-    class Meta:
-        verbose_name = "Курс"
-        verbose_name_plural = "Курсы"
-
-    def __str__(self):
-        return self.name
-
-
-class Favourites_Course(models.Model):
-    """Модель избранного для курсов."""
-
-    user = models.ForeignKey(
-        MyUser,
-        on_delete=models.CASCADE,
-        verbose_name='Пользователь',
-        related_name='favourites_course'
-    )
-    course = models.ForeignKey(
-        Course,
-        on_delete=models.CASCADE,
-        verbose_name='Курс в избранном',
-        related_name='favourites_users'
-    )
-
-    class Meta:
-        verbose_name = 'Избранное - курс'
-        verbose_name_plural = 'Избранное - курсы'
-
-    def __str__(self):
-        return f'Пользователь {self.user} добавил в избранное {self.course}'

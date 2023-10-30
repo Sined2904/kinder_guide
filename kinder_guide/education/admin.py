@@ -1,8 +1,8 @@
 from django.contrib import admin
 
 # from .forms import MinOneForm
-from .models import (AgeCategory, Album, Area, Course, Create,
-                     Favourites_Course, Favourites_Kindergartens,
+from .models import (AgeCategory, Album, Area, Create,
+                     Favourites_Kindergartens,
                      Favourites_School, Intelligence, Kindergartens, Language,
                      Music, Profile, School, Sport, Underground)
 
@@ -139,7 +139,5 @@ admin.site.register(Create, CreateAdmin)
 admin.site.register(Intelligence, IntelligenceAdmin)
 admin.site.register(Music, MusicAdmin)
 admin.site.register(Kindergartens, KindergartensAdmin)
-admin.site.register(Course, CourseAdmin)
 admin.site.register(Favourites_School, Favourites_SchoolAdmin)
 admin.site.register(Favourites_Kindergartens, Favourites_KindergartensAdmin)
-admin.site.register(Favourites_Course, Favourites_CourseAdmin)
