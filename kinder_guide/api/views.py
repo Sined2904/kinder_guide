@@ -1,7 +1,6 @@
-from comments.models import ReviewCourse, ReviewKindergarten, ReviewSchool
+from comments.models import ReviewKindergarten, ReviewSchool
 from django.shortcuts import get_object_or_404
-from education.models import (Course, Favourites_Course,
-                              Favourites_Kindergartens, Favourites_School,
+from education.models import (Favourites_Kindergartens, Favourites_School,
                               Kindergartens, School)
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
@@ -11,49 +10,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .permissions import IsAdminOrReadOnly
-from .serializers import (CourseSerializer, CourseShortSerializer,
-                          FilterKindergartenSerializer, FilterSchoolSerializer,
+from .serializers import (FilterKindergartenSerializer, FilterSchoolSerializer,
                           KindergartensSerializer,
-                          KindergartensShortSerializer, ReviewCourseSerializer,
+                          KindergartensShortSerializer,
                           ReviewKindergartenSerializer, ReviewSchoolSerializer,
                           SchoolSerializer, SchoolShortSerializer)
-
-
-class ReviewCoursesViewSet(viewsets.ModelViewSet):
-    """Вьюсет для Отзывов курсов."""
-
-    queryset = ReviewCourse.objects.all()
-    serializer_class = ReviewCourseSerializer
-    permission_classes = (IsAuthenticatedOrReadOnly,)
-
-    def list(self, request, courses_id):
-        course_id = self.kwargs.get('courses_id')
-        queryset = self.queryset.filter(review_post_id=course_id)
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
-
-    def create(self, request, courses_id):
-        request.data['author'] = self.request.user.id
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save(review_post_id=courses_id)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-    def delete(self, request, courses_id, review_id):
-        try:
-            review = ReviewCourse.objects.get(
-                id=review_id,
-                review_post_id=courses_id
-            )
-        except ReviewCourse.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-
-        self.check_object_permissions(request, review)
-        review.delete()
-        return Response(
-            'Удачное выполнение запроса',
-            status=status.HTTP_204_NO_CONTENT
-        )
 
 
 class ReviewKindergartenViewSet(viewsets.ModelViewSet):
@@ -233,48 +194,3 @@ class FilterKindergartenView(APIView):
         kindergartens = Kindergartens.objects.all()
         serializer = FilterKindergartenSerializer(kindergartens, many=True)
         return Response(serializer.data)
-
-
-class CourseViewSet(viewsets.ModelViewSet):
-    """Вьюсет для Курсов."""
-
-    queryset = Course.objects.all()
-    serializer_class = CourseSerializer
-    permission_classes = (IsAdminOrReadOnly,)
-    pagination_class = PageNumberPagination
-
-    # def get_object(self):
-    #     return get_object_or_404(Course, id=self.kwargs['id'])
-
-    def list(self, request):
-        queryset = Course.objects.all()
-        paginate_queryset = self.paginate_queryset(queryset)
-        serializer = CourseShortSerializer(paginate_queryset, many=True)
-        return self.get_paginated_response(serializer.data)
-
-    def retrieve(self, request, pk=None):
-        queryset = Course.objects.all()
-        course = get_object_or_404(queryset, pk=pk)
-        serializer = CourseSerializer(course)
-        return Response(serializer.data)
-
-    @action(methods=['post', 'delete'], detail=True)
-    def favorite(self, request, pk):
-        course = get_object_or_404(Course, id=pk)
-        course_in_favorite = Favourites_Course.objects.filter(
-            user=request.user,
-            course=course
-        )
-        if request.method == 'DELETE':
-            if course_in_favorite.exists():
-                course_in_favorite.delete()
-                return Response(status=status.HTTP_204_NO_CONTENT)
-            return Response(
-                {'errors': 'Вы уже отписались или не были подписаны'},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        else:
-            if course_in_favorite.exists():
-                return Response({'errors': 'Вы уже подписались'})
-            Favourites_Course.objects.create(user=request.user, course=course)
-            return Response(status=status.HTTP_201_CREATED)

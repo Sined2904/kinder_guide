@@ -4,8 +4,8 @@ from news.feeds import LatestNewsFeed
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt import views as token_views
 
-from .views import (CourseViewSet, FilterKindergartenView, FilterSchoolView,
-                    KindergartensViewSet, ReviewCoursesViewSet,
+from .views import (FilterKindergartenView, FilterSchoolView,
+                    KindergartensViewSet,
                     ReviewKindergartenViewSet, ReviewSchoolViewSet,
                     SchoolViewSet)
 
@@ -18,7 +18,6 @@ router.register('kindergartens',
                 KindergartensViewSet,
                 basename='kindergartens'
                 )
-router.register('courses', CourseViewSet, basename='courses')
 
 urlpatterns = [
     path(
@@ -61,13 +60,6 @@ urlpatterns = [
         name="me",
     ),
     path(
-        'v1/courses/<int:courses_id>/reviews/',
-        ReviewCoursesViewSet.as_view({'get': 'list',
-                                      'post': 'create',
-                                      'delete': 'delete'}),
-        name='courses_reviews'
-    ),
-    path(
         'v1/kindergartens/<int:kindergarten_id>/reviews/',
         ReviewKindergartenViewSet.as_view(
             {'get': 'list', 'post': 'create'}
@@ -80,18 +72,6 @@ urlpatterns = [
             {'get': 'list', 'post': 'create'}
         ),
         name='schools_reviews',
-    ),
-    path(
-        'v1/courses/<int:courses_id>/reviews/<int:review_id>/',
-        ReviewCoursesViewSet.as_view({'delete': 'delete',
-                                      'update': 'update'}),
-        name='courses_review_delete',
-    ),
-    path(
-        'v1/kindergartens/<int:kindergarten_id>/reviews/<int:review_id>/',
-        ReviewCoursesViewSet.as_view({'delete': 'delete',
-                                      'update': 'update'}),
-        name='kindergartens_review_delete',
     ),
     path(
         'v1/schools/<int:school_id>/reviews/<int:review_id>/',
