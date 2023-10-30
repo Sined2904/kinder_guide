@@ -1,6 +1,6 @@
 from comments.models import ReviewKindergarten, ReviewSchool
-from education.models import (AgeCategory, Album, Area, Kindergartens,
-                              Language, Profile, School, Underground)
+from education.models import (AgeCategory, SchoolAlbum, KindergartenAlbum, Area,
+                              Kindergartens, Language, Profile, School, Underground)
 from rest_framework import serializers
 
 from .utils import get_avg_rating
@@ -60,14 +60,14 @@ class ProfileSerializer(serializers.ModelSerializer):
         fields = ['name', 'slug']
 
 
-class AlbumSerializer(serializers.ModelSerializer):
-    """Сериализатор модели альбома."""
+# class AlbumSerializer(serializers.ModelSerializer):
+#     """Сериализатор модели альбома."""
 
-    image = serializers.ImageField()
+#     image = serializers.ImageField()
 
-    class Meta:
-        model = Album
-        fields = ['image', ]
+#     class Meta:
+#         model = Album
+#         fields = ['image', ]
 
 
 class AgeCategorySerializer(serializers.ModelSerializer):
@@ -76,6 +76,16 @@ class AgeCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = AgeCategory
         fields = ['category', ]
+
+
+class SchoolAlbumSerializer(serializers.ModelSerializer):
+    """Сериализатор модели альбома для школы."""
+
+    image = serializers.ImageField()
+
+    class Meta:
+        model = SchoolAlbum
+        fields = ['image', ]
 
 
 class SchoolShortSerializer(serializers.ModelSerializer):
@@ -103,7 +113,7 @@ class SchoolSerializer(serializers.ModelSerializer):
     underground = UndergroundSerializer(many=True)
     languages = LanguageSerializer(many=True)
     profile = ProfileSerializer(many=True)
-    album = AlbumSerializer(many=True)
+    album = SchoolAlbumSerializer(many=True)
     rating = serializers.SerializerMethodField()
     reviews = serializers.SerializerMethodField()
     age_category = AgeCategorySerializer()
@@ -118,7 +128,7 @@ class SchoolSerializer(serializers.ModelSerializer):
         model = School
         fields = ['id', 'name', 'rating', 'reviews',
                   'description', 'telephone', 'address',
-                  'underground', 'area', 'email',
+                  'underground', 'area', 'email', 'website',
                   'album', 'price', 'price_of_year', 'age',
                   'classes', 'languages', 'profile',
                   'name_author', 'working_hours', 'age_category']
@@ -131,6 +141,17 @@ class FilterSchoolSerializer(serializers.ModelSerializer):
         model = School
         fields = ['profile', 'age_category', 'languages',
                   'underground', 'area', 'price']
+
+
+
+class KindergartenAlbumSerializer(serializers.ModelSerializer):
+    """Сериализатор модели альбома для детского сада."""
+
+    image = serializers.ImageField()
+
+    class Meta:
+        model = KindergartenAlbum
+        fields = ['image', ]
 
 
 class KindergartensShortSerializer(serializers.ModelSerializer):
@@ -157,7 +178,7 @@ class KindergartensSerializer(serializers.ModelSerializer):
     area = AreaSerializer()
     underground = UndergroundSerializer(many=True)
     languages = LanguageSerializer(many=True)
-    album = AlbumSerializer(many=True)
+    album = KindergartenAlbumSerializer(many=True)
     rating = serializers.SerializerMethodField()
     reviews = serializers.SerializerMethodField()
     age_category = AgeCategorySerializer()
@@ -173,7 +194,7 @@ class KindergartensSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'rating', 'reviews',
                   'album', 'description', 'telephone',
                   'address', 'price', 'price_of_year',
-                  'email', 'underground', 'area',
+                  'email', 'website', 'underground', 'area',
                   'languages', 'age', 'working_hours',
                   'group_suze', 'sport_dev', 'create_dev',
                   'music_dev', 'intel_dev', 'age_category']

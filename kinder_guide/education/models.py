@@ -52,14 +52,14 @@ class Language(Model_For_Additions):
         return self.name
 
 
-class Album(models.Model):
-    """Модель для фото."""
+# class Album(models.Model):
+#     """Модель для фото."""
 
-    name = models.CharField(max_length=256, verbose_name='Название')
-    image = models.ImageField(upload_to="education/", verbose_name='фото')
+#     name = models.CharField(max_length=256, verbose_name='Название')
+#     image = models.ImageField(upload_to="education/", verbose_name='фото')
 
-    def __str__(self):
-        return self.name
+#     def __str__(self):
+#         return self.name
 
 
 class Profile(Model_For_Additions):
@@ -77,19 +77,9 @@ class Profile(Model_For_Additions):
 class AgeCategory(models.Model):
     """Модель возрастной категории."""
 
-    CATEGORY_CHOICES = (
-        ('Дошкольное обучение', 'Дошкольное обучение'),
-        ('Начальная школа', 'Начальная школа'),
-        ('Основная школа', 'Основная школа'),
-        ('Старшая школа', 'Старшая школа'),
-    )
-
     category = models.CharField(
-        max_length=20,
-        choices=CATEGORY_CHOICES,
-        verbose_name='Возрастная категория',
-        blank=True,
-        null=True
+        max_length=256,
+        verbose_name='Возрастная категория'
     )
 
     def __str__(self):
@@ -97,6 +87,23 @@ class AgeCategory(models.Model):
 
 
 # Модели школы
+class SchoolAlbum(models.Model):
+    """Модель альбома изображений для школы."""
+    name = models.CharField(max_length=256, verbose_name='Название')
+    image = models.ImageField(upload_to="school/", verbose_name='фото')
+    school = models.ForeignKey(
+        'School',
+        on_delete=models.CASCADE,
+        related_name='album',
+        verbose_name='Школа',
+        blank=True,
+        null=True
+    )
+
+    def __str__(self):
+        return self.name
+    
+
 class School(models.Model):
     """Модель школы."""
 
@@ -110,12 +117,12 @@ class School(models.Model):
         blank=True,
         null=True
     )
-    album = models.ManyToManyField(
-        Album,
-        related_name='school',
-        verbose_name='фото',
-        blank=True
-    )
+    # album = models.ManyToManyField(
+    #     Album,
+    #     related_name='school',
+    #     verbose_name='фото',
+    #     blank=True
+    # )
     working_hours = models.CharField(
         max_length=250,
         verbose_name='Время работы',
@@ -124,7 +131,8 @@ class School(models.Model):
     )
     telephone = models.CharField(
         max_length=250,
-        verbose_name='Телефон'
+        verbose_name='Телефон',
+        unique=True
     )
     address = models.CharField(
         max_length=250,
@@ -135,6 +143,14 @@ class School(models.Model):
     email = models.EmailField(
         max_length=250,
         verbose_name='Электронный адрес',
+        unique=True,
+        blank=True,
+        null=True
+    )
+    website = models.URLField(
+        max_length=200,
+        verbose_name='Веб-сайт',
+        unique=True,
         blank=True,
         null=True
     )
@@ -146,7 +162,7 @@ class School(models.Model):
     )
     area = models.ForeignKey(
         Area,
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         verbose_name='Округ',
         blank=True,
         null=True
@@ -164,10 +180,8 @@ class School(models.Model):
     )
     age_category = models.ForeignKey(
         AgeCategory,
-        on_delete=models.SET_NULL,
-        verbose_name='Возрастная категория',
-        blank=True,
-        null=True
+        on_delete=models.CASCADE,
+        verbose_name='Возрастная категория'
     )
     price_of_year = models.PositiveIntegerField(
         verbose_name='Цена в год',
@@ -280,6 +294,23 @@ class Music(Model_For_Additions):
         return self.name
 
 
+class KindergartenAlbum(models.Model):
+    """Модель альбома изображений для детского сада."""
+    name = models.CharField(max_length=256, verbose_name='Название')
+    image = models.ImageField(upload_to="kindergartens/", verbose_name='фото')
+    kindergarten = models.ForeignKey(
+        'Kindergartens',
+        on_delete=models.CASCADE,
+        related_name='album',
+        verbose_name='Сад',
+        blank=True,
+        null=True
+    )
+
+    def __str__(self):
+        return self.name
+
+
 class Kindergartens(models.Model):
     """Модель детского сада."""
 
@@ -293,15 +324,16 @@ class Kindergartens(models.Model):
         blank=True,
         null=True
     )
-    album = models.ManyToManyField(
-        Album,
-        related_name='kindergartens',
-        verbose_name='фото',
-        blank=True
-    )
+    # album = models.ManyToManyField(
+    #     Album,
+    #     related_name='kindergartens',
+    #     verbose_name='фото',
+    #     blank=True
+    # )
     telephone = models.CharField(
         max_length=250,
-        verbose_name='Телефон'
+        verbose_name='Телефон',
+        unique=True
     )
     address = models.CharField(
         max_length=250,
@@ -312,6 +344,14 @@ class Kindergartens(models.Model):
     email = models.EmailField(
         max_length=250,
         verbose_name='Электронный адрес',
+        unique=True,
+        blank=True,
+        null=True
+    )
+    website = models.URLField(
+        max_length=200,
+        verbose_name='Веб-сайт',
+        unique=True,
         blank=True,
         null=True
     )
@@ -323,7 +363,7 @@ class Kindergartens(models.Model):
     )
     area = models.ForeignKey(
         Area,
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         verbose_name='Округ',
         blank=True,
         null=True
@@ -341,7 +381,7 @@ class Kindergartens(models.Model):
     )
     age_category = models.ForeignKey(
         AgeCategory,
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         verbose_name='Возрастная категория',
         blank=True,
         null=True
