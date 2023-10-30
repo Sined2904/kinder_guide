@@ -172,7 +172,7 @@ class SchoolViewSet(viewsets.ModelViewSet):
 
 
 class FilterSchoolView(APIView):
-    '''Вьюсет фильтров модели школы.'''
+    """Вьюсет фильтров модели школы."""
 
     def get(self, request):
         schools = School.objects.all()
@@ -227,7 +227,7 @@ class KindergartensViewSet(viewsets.ModelViewSet):
 
 
 class FilterKindergartenView(APIView):
-    '''Вьюсет фильтров модели детского сада.'''
+    """Вьюсет фильтров модели детского сада."""
 
     def get(self, request):
         kindergartens = Kindergartens.objects.all()
