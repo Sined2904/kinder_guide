@@ -16,8 +16,8 @@ class CustomUserSerializer(UserSerializer):
             'phone',
             'first_name',
             'last_name',
-            'child_first_name',
-            'child_last_name',
+            # 'child_first_name',
+            # 'child_last_name',
         ]
 
 
