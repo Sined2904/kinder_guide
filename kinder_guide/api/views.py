@@ -3,15 +3,16 @@ from django.shortcuts import get_object_or_404
 from education.models import (Course, Favourites_Course,
                               Favourites_Kindergartens, Favourites_School,
                               Kindergartens, School)
-from requests import Response
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from .permissions import IsAdminOrReadOnly
 from .serializers import (CourseSerializer, CourseShortSerializer,
+                          FilterKindergartenSerializer, FilterSchoolSerializer,
                           KindergartensSerializer,
                           KindergartensShortSerializer, ReviewCourseSerializer,
                           ReviewKindergartenSerializer, ReviewSchoolSerializer,
@@ -167,6 +168,15 @@ class SchoolViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_201_CREATED)
 
 
+class FilterSchoolView(APIView):
+    '''Вьюсет фильтров модели школы.'''
+
+    def get(self, request):
+        schools = School.objects.all()
+        serializer = FilterSchoolSerializer(schools, many=True)
+        return Response(serializer.data)
+
+
 class KindergartensViewSet(viewsets.ModelViewSet):
     '''Вьюсет для Десткого сада.'''
 
@@ -208,8 +218,20 @@ class KindergartensViewSet(viewsets.ModelViewSet):
         else:
             if kindergarten_in_favorite.exists():
                 return Response({'errors': 'Вы уже подписались'})
-            Favourites_Kindergartens.objects.create(user=request.user, kindergartens=kindergarten)
+            Favourites_Kindergartens.objects.create(
+                user=request.user,
+                kindergartens=kindergarten
+            )
             return Response(status=status.HTTP_201_CREATED)
+
+
+class FilterKindergartenView(APIView):
+    '''Вьюсет фильтров модели детского сада.'''
+
+    def get(self, request):
+        kindergartens = Kindergartens.objects.all()
+        serializer = FilterKindergartenSerializer(kindergartens, many=True)
+        return Response(serializer.data)
 
 
 class CourseViewSet(viewsets.ModelViewSet):
