@@ -34,14 +34,6 @@ class ReviewSchool(Review):
     )
 
 
-class ReviewCourse(Review):
-    review_post = models.ForeignKey(
-        'education.Course',
-        on_delete=models.CASCADE,
-        related_name='reviews'
-    )
-
-
 class ReviewKindergarten(Review):
     review_post = models.ForeignKey(
         'education.Kindergartens',
