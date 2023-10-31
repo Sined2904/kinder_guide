@@ -110,7 +110,6 @@ class SchoolViewSet(viewsets.ModelViewSet):
             return SchoolShortSerializer
         return SchoolSerializer
 
-
     # @action(methods=['post', 'delete'], detail=True)
     # def favorite(self, request, pk):
     #     """Добавляет школу в избранное"""
@@ -142,7 +141,6 @@ class SchoolViewSet(viewsets.ModelViewSet):
         """Добавляет школу в избранное."""
         user = request.user
         school = get_object_or_404(School, pk=pk)
-
         if request.method == 'POST':
             favorite, created = Favourites_School.objects.get_or_create(
                 user=user,
