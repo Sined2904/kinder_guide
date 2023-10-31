@@ -1,8 +1,8 @@
 from comments.models import ReviewKindergarten, ReviewSchool
 from django.shortcuts import get_object_or_404
-from education.models import (Favourites_Kindergartens, Favourites_School,
+from education.models import (Favourites_School,
                               Kindergartens, School)
-from rest_framework import status, viewsets, serializers
+from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
@@ -130,35 +130,56 @@ class SchoolViewSet(viewsets.ModelViewSet):
     #     else:
     #         if school_in_favorite.exists():
     #             return Response({'errors': 'Вы уже подписались'})
-    #         Favourites_School.objects.create(user=request.user, school=school)
+    #         Favourites_School.objects.create(
+    #             user=request.user,
+    #             school=school
+    #         )
     #         return Response(status=status.HTTP_201_CREATED)
 
     @action(detail=True, methods=['POST', 'DELETE'])
     def favorite(self, request, pk=None):
         """Добавляет школу в избранное"""
-    
+
         user = request.user
         school = get_object_or_404(School, pk=pk)
 
         if request.method == 'POST':
-            favorite, created = Favourites_School.objects.get_or_create(user=user, school=school)
+            favorite, created = Favourites_School.objects.get_or_create(
+                user=user,
+                school=school
+            )
             if created:
                 school.is_favorited = True
                 school.save()
-                return Response({'detail': 'Школа успешно добавлена в избранное'}, status=status.HTTP_201_CREATED)
+                return Response(
+                    {'detail': 'Школа успешно добавлена в избранное'},
+                    status=status.HTTP_201_CREATED
+                )
             else:
-                return Response({'detail': 'Школа уже в избранном'}, status=status.HTTP_200_OK)
+                return Response(
+                    {'detail': 'Школа уже в избранном'},
+                    status=status.HTTP_200_OK
+                )
 
         if request.method == 'DELETE':
             try:
-                favorite = Favourites_School.objects.get(user=user, school=school)
+                favorite = Favourites_School.objects.get(
+                    user=user,
+                    school=school
+                )
             except Favourites_School.DoesNotExist:
-                return Response({'detail': 'Школа не в избранном'}, status=status.HTTP_400_BAD_REQUEST)
+                return Response(
+                    {'detail': 'Школа не в избранном'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
 
             favorite.delete()
             school.is_favorited = False
             school.save()
-            return Response({'detail': 'Школа успешно удалена из избранного'}, status=status.HTTP_204_NO_CONTENT)
+            return Response(
+                {'detail': 'Школа успешно удалена из избранного'},
+                status=status.HTTP_204_NO_CONTENT
+            )
 
 
 class FilterSchoolView(APIView):
@@ -203,18 +224,30 @@ class KindergartensViewSet(viewsets.ModelViewSet):
             Favourites_School.create(user=user, school=school)
             school.is_favorited = True
             school.save()
-            return Response({'detail': 'Школа успешно добавлена в избранное'}, status=status.HTTP_201_CREATED)
+            return Response(
+                {'detail': 'Школа успешно добавлена в избранное'},
+                status=status.HTTP_201_CREATED
+            )
 
         if request.method == 'DELETE':
             try:
-                favorite = Favourites_School.objects.get(user=user, school=school)
+                favorite = Favourites_School.objects.get(
+                    user=user,
+                    school=school
+                )
             except Favourites_School.DoesNotExist:
-                return Response({'detail': 'Школа не найдена в избранном'}, status=status.HTTP_400_BAD_REQUEST)
+                return Response(
+                    {'detail': 'Школа не найдена в избранном'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
 
             favorite.delete()
             school.is_favorited = False
             school.save()
-            return Response({'detail': 'Школа успешно удалена из избранного'}, status=status.HTTP_204_NO_CONTENT)
+            return Response(
+                {'detail': 'Школа успешно удалена из избранного'},
+                status=status.HTTP_204_NO_CONTENT
+            )
 
 
 class FilterKindergartenView(APIView):

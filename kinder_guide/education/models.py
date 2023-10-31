@@ -89,6 +89,7 @@ class AgeCategory(models.Model):
 # Модели школы
 class SchoolAlbum(models.Model):
     """Модель альбома изображений для школы."""
+
     name = models.CharField(max_length=256, verbose_name='Название')
     image = models.ImageField(upload_to="school/", verbose_name='фото')
     school = models.ForeignKey(
@@ -102,7 +103,7 @@ class SchoolAlbum(models.Model):
 
     def __str__(self):
         return self.name
-    
+
 
 class School(models.Model):
     """Модель школы."""
