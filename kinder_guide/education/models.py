@@ -182,7 +182,9 @@ class School(models.Model):
     age_category = models.ForeignKey(
         AgeCategory,
         on_delete=models.CASCADE,
-        verbose_name='Возрастная категория'
+        verbose_name='Возрастная категория',
+        blank=True,
+        null=True
     )
     price_of_year = models.PositiveIntegerField(
         verbose_name='Цена в год',
@@ -192,12 +194,6 @@ class School(models.Model):
     classes = models.CharField(
         max_length=250,
         verbose_name='Классы',
-        blank=True,
-        null=True
-    )
-    name_author = models.CharField(
-        max_length=250,
-        verbose_name='Имя автора',
         blank=True,
         null=True
     )
@@ -215,7 +211,9 @@ class School(models.Model):
     )
     is_favorited = models.BooleanField(
         verbose_name='В избранном',
-        default=False
+        default=False,
+        blank=True,
+        null=True
     )
 
     class Meta:
