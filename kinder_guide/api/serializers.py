@@ -92,6 +92,7 @@ class SchoolAlbumSerializer(serializers.ModelSerializer):
 class SchoolShortSerializer(serializers.ModelSerializer):
     """Сериализатор модели школы (кратко)."""
 
+    album = SchoolAlbumSerializer(many=True)
     rating = serializers.SerializerMethodField()
     reviews = serializers.SerializerMethodField()
 
