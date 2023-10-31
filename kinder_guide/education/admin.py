@@ -120,23 +120,6 @@ class Favourites_KindergartensAdmin(admin.ModelAdmin):
     ordering = ['user', ]
 
 
-# Курсы
-class CourseAdmin(admin.ModelAdmin):
-    list_display = ('name', 'description',
-                    'telephone', 'address', 'price',
-                    'email', 'area', 'age')
-    search_fields = ('name',)
-    empty_value_display = '-пусто-'
-    ordering = ['name', ]
-
-
-class Favourites_CourseAdmin(admin.ModelAdmin):
-    list_display = ('user', 'course')
-    empty_value_display = '-пусто-'
-    search_fields = ('user', )
-    ordering = ['user', ]
-
-
 admin.site.register(Underground, UndergroundAdmin)
 admin.site.register(Area, AreaAdmin)
 admin.site.register(Language, LanguageAdmin)
