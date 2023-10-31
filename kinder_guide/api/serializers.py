@@ -141,7 +141,7 @@ class SchoolSerializer(serializers.ModelSerializer):
                   'underground', 'area', 'email', 'website',
                   'album', 'price', 'price_of_year', 'age',
                   'classes', 'languages', 'profile',
-                  'name_author', 'working_hours', 'age_category',
+                  'working_hours', 'age_category',
                   'is_favorited']
 
 

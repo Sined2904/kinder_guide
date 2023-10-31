@@ -107,7 +107,7 @@ class SchoolViewSet(viewsets.ModelViewSet):
     def retrieve(self, request, pk=None):
         queryset = School.objects.all()
         school = get_object_or_404(queryset, pk=pk)
-        serializer = SchoolSerializer(school)
+        serializer = SchoolSerializer(school, context={'request': request})
         return Response(serializer.data)
 
     # @action(methods=['post', 'delete'], detail=True)

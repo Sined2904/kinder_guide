@@ -55,7 +55,7 @@ class SchoolAlbumInline(admin.TabularInline):
 class SchoolAdmin(admin.ModelAdmin):
     list_display = ('name', 'description', 'telephone',
                     'address', 'price', 'price_of_year', 'email',
-                    'classes', 'name_author', 'area', 'age', 'working_hours')
+                    'classes', 'area', 'age', 'working_hours')
     search_fields = ('name',)
     empty_value_display = '-пусто-'
     ordering = ['name', ]
