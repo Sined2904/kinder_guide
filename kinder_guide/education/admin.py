@@ -1,10 +1,11 @@
 from django.contrib import admin
 
 # from .forms import MinOneForm
-from .models import (AgeCategory, Album, Area, Create,
+from .models import (AgeCategory, Area, Create,
                      Favourites_Kindergartens,
                      Favourites_School, Intelligence, Kindergartens, Language,
-                     Music, Profile, School, Sport, Underground)
+                     Music, Profile, School, Sport, Underground,
+                     SchoolAlbum, KindergartenAlbum)
 
 
 class UndergroundAdmin(admin.ModelAdmin):
@@ -21,14 +22,13 @@ class AreaAdmin(admin.ModelAdmin):
     ordering = ['name', ]
 
 
-class AlbumAdmin(admin.ModelAdmin):
-    list_display = ('name', 'image')
-    empty_value_display = '-пусто-'
-    search_fields = ('name', )
-    ordering = ['name', ]
+# class AlbumAdmin(admin.ModelAdmin):
+#     list_display = ('name', 'image')
+#     empty_value_display = '-пусто-'
+#     search_fields = ('name', )
+#     ordering = ['name', ]
 
 
-# Школа
 class LanguageAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug')
     empty_value_display = '-пусто-'
@@ -48,6 +48,11 @@ class AgeCategoryAdmin(admin.ModelAdmin):
     search_fields = ('category', )
 
 
+# школа
+class SchoolAlbumInline(admin.TabularInline):  
+    model = SchoolAlbum
+
+
 class SchoolAdmin(admin.ModelAdmin):
     list_display = ('name', 'description', 'telephone',
                     'address', 'price', 'price_of_year', 'email',
@@ -55,6 +60,7 @@ class SchoolAdmin(admin.ModelAdmin):
     search_fields = ('name',)
     empty_value_display = '-пусто-'
     ordering = ['name', ]
+    inlines = [SchoolAlbumInline, ]
 
 
 class Favourites_SchoolAdmin(admin.ModelAdmin):
@@ -93,6 +99,10 @@ class MusicAdmin(admin.ModelAdmin):
     ordering = ['name', ]
 
 
+class KindergartenAlbumInline(admin.TabularInline):  
+    model = KindergartenAlbum
+
+
 class KindergartensAdmin(admin.ModelAdmin):
     list_display = ('name', 'description',
                     'telephone', 'address', 'price',
@@ -101,6 +111,7 @@ class KindergartensAdmin(admin.ModelAdmin):
     search_fields = ('name',)
     empty_value_display = '-пусто-'
     ordering = ['name', ]
+    inlines = [KindergartenAlbumInline, ]
 
 
 class Favourites_KindergartensAdmin(admin.ModelAdmin):
@@ -127,7 +138,6 @@ class Favourites_CourseAdmin(admin.ModelAdmin):
     ordering = ['user', ]
 
 
-admin.site.register(Album, AlbumAdmin)
 admin.site.register(Underground, UndergroundAdmin)
 admin.site.register(Area, AreaAdmin)
 admin.site.register(Language, LanguageAdmin)

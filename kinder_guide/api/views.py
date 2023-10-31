@@ -2,7 +2,7 @@ from comments.models import ReviewKindergarten, ReviewSchool
 from django.shortcuts import get_object_or_404
 from education.models import (Favourites_Kindergartens, Favourites_School,
                               Kindergartens, School)
-from rest_framework import status, viewsets
+from rest_framework import status, viewsets, serializers
 from rest_framework.decorators import action
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
@@ -110,26 +110,55 @@ class SchoolViewSet(viewsets.ModelViewSet):
         serializer = SchoolSerializer(school)
         return Response(serializer.data)
 
-    @action(methods=['post', 'delete'], detail=True)
-    def favorite(self, request, pk):
-        school = get_object_or_404(School, id=pk)
-        school_in_favorite = Favourites_School.objects.filter(
-            user=request.user,
-            school=school
-        )
+    # @action(methods=['post', 'delete'], detail=True)
+    # def favorite(self, request, pk):
+    #     """Добавляет школу в избранное"""
+
+    #     school = get_object_or_404(School, id=pk)
+    #     school_in_favorite = Favourites_School.objects.filter(
+    #         user=request.user,
+    #         school=school
+    #     )
+    #     if request.method == 'DELETE':
+    #         if school_in_favorite.exists():
+    #             school_in_favorite.delete()
+    #             return Response(status=status.HTTP_204_NO_CONTENT)
+    #         return Response(
+    #             {'errors': 'Вы уже отписались или не были подписаны'},
+    #             status=status.HTTP_400_BAD_REQUEST
+    #         )
+    #     else:
+    #         if school_in_favorite.exists():
+    #             return Response({'errors': 'Вы уже подписались'})
+    #         Favourites_School.objects.create(user=request.user, school=school)
+    #         return Response(status=status.HTTP_201_CREATED)
+
+    @action(detail=True, methods=['POST', 'DELETE'])
+    def favorite(self, request, pk=None):
+        """Добавляет школу в избранное"""
+    
+        user = request.user
+        school = get_object_or_404(School, pk=pk)
+
+        if request.method == 'POST':
+            favorite, created = Favourites_School.objects.get_or_create(user=user, school=school)
+            if created:
+                school.is_favorited = True
+                school.save()
+                return Response({'detail': 'Школа успешно добавлена в избранное'}, status=status.HTTP_201_CREATED)
+            else:
+                return Response({'detail': 'Школа уже в избранном'}, status=status.HTTP_200_OK)
+
         if request.method == 'DELETE':
-            if school_in_favorite.exists():
-                school_in_favorite.delete()
-                return Response(status=status.HTTP_204_NO_CONTENT)
-            return Response(
-                {'errors': 'Вы уже отписались или не были подписаны'},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        else:
-            if school_in_favorite.exists():
-                return Response({'errors': 'Вы уже подписались'})
-            Favourites_School.objects.create(user=request.user, school=school)
-            return Response(status=status.HTTP_201_CREATED)
+            try:
+                favorite = Favourites_School.objects.get(user=user, school=school)
+            except Favourites_School.DoesNotExist:
+                return Response({'detail': 'Школа не в избранном'}, status=status.HTTP_400_BAD_REQUEST)
+
+            favorite.delete()
+            school.is_favorited = False
+            school.save()
+            return Response({'detail': 'Школа успешно удалена из избранного'}, status=status.HTTP_204_NO_CONTENT)
 
 
 class FilterSchoolView(APIView):
@@ -164,27 +193,28 @@ class KindergartensViewSet(viewsets.ModelViewSet):
         serializer = KindergartensSerializer(kindergarten)
         return Response(serializer.data)
 
-    @action(methods=['post', 'delete'], detail=True)
-    def favorite(self, request, pk):
-        kindergarten = get_object_or_404(Kindergartens, id=pk)
-        kindergarten_in_favorite = Favourites_Kindergartens.objects.filter(
-            user=request.user,
-            kindergarten=kindergarten
-        )
+    @action(detail=True, methods=['POST', 'DELETE'])
+    def favorite(self, request, pk=None):
+        user = request.user
+        school = get_object_or_404(School, pk=pk)
+
+        if request.method == 'POST':
+            # Добавить школу в избранное и установить is_favorited в True
+            Favourites_School.create(user=user, school=school)
+            school.is_favorited = True
+            school.save()
+            return Response({'detail': 'Школа успешно добавлена в избранное'}, status=status.HTTP_201_CREATED)
+
         if request.method == 'DELETE':
-            if kindergarten_in_favorite.exists():
-                kindergarten_in_favorite.delete()
-                return Response(status=status.HTTP_204_NO_CONTENT)
-            return Response(
-                {'errors': 'Вы уже отписались или не были подписаны'},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        else:
-            if kindergarten_in_favorite.exists():
-                return Response({'errors': 'Вы уже подписались'})
-            Favourites_Kindergartens.objects.create(user=request.user,
-                                                    kindergartens=kindergarten)
-            return Response(status=status.HTTP_201_CREATED)
+            try:
+                favorite = Favourites_School.objects.get(user=user, school=school)
+            except Favourites_School.DoesNotExist:
+                return Response({'detail': 'Школа не найдена в избранном'}, status=status.HTTP_400_BAD_REQUEST)
+
+            favorite.delete()
+            school.is_favorited = False
+            school.save()
+            return Response({'detail': 'Школа успешно удалена из избранного'}, status=status.HTTP_204_NO_CONTENT)
 
 
 class FilterKindergartenView(APIView):
