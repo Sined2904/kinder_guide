@@ -1,4 +1,6 @@
 from comments.models import ReviewKindergarten, ReviewSchool
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
 from django.shortcuts import get_object_or_404
 from education.models import (Favourites_School,
                               Kindergartens, School)
@@ -8,6 +10,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
 
 from .permissions import IsAdminOrReadOnly
 from .serializers import (FilterKindergartenSerializer, FilterSchoolSerializer,
@@ -94,21 +97,18 @@ class SchoolViewSet(viewsets.ModelViewSet):
     serializer_class = SchoolSerializer
     permission_classes = (IsAdminOrReadOnly,)
     pagination_class = PageNumberPagination
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    filterset_fields = ('id', 'name', 'price', 'price_of_year')
+    search_fields = ('name', 'description',
+                     'telephone', 'address',
+                     'email', 'website'
+                     )
 
-    def get_object(self):
-        return get_object_or_404(School, id=self.kwargs['id'])
-
-    def list(self, request):
-        queryset = School.objects.all()
-        paginate_queryset = self.paginate_queryset(queryset)
-        serializer = SchoolShortSerializer(paginate_queryset, many=True)
-        return self.get_paginated_response(serializer.data)
-
-    def retrieve(self, request, pk=None):
-        queryset = School.objects.all()
-        school = get_object_or_404(queryset, pk=pk)
-        serializer = SchoolSerializer(school, context={'request': request})
-        return Response(serializer.data)
+    def get_serializer_class(self):
+        """Переопределение сериализатора для POST запроса."""
+        if bool(self.kwargs) is False:
+            return SchoolShortSerializer
+        return SchoolSerializer
 
 
     # @action(methods=['post', 'delete'], detail=True)
