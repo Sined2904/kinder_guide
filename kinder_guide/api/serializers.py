@@ -136,7 +136,6 @@ class SchoolSerializer(serializers.ModelSerializer):
                 school=obj, user=user).exists()
         return False
 
-
     class Meta:
         model = School
         fields = ['id', 'name', 'rating', 'reviews',
