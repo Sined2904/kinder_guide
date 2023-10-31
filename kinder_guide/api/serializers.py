@@ -104,7 +104,8 @@ class SchoolShortSerializer(serializers.ModelSerializer):
     class Meta:
         model = School
         fields = ['id', 'name', 'rating', 'reviews',
-                  'description', 'address', 'album', 'price']
+                  'description', 'address', 'album',
+                  'price', 'is_favorited']
 
 
 class SchoolSerializer(serializers.ModelSerializer):
