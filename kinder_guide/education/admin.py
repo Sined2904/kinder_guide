@@ -1,11 +1,10 @@
 from django.contrib import admin
 
 # from .forms import MinOneForm
-from .models import (AgeCategory, Area, Create,
-                     Favourites_Kindergartens,
-                     Favourites_School, Intelligence, Kindergartens, Language,
-                     Music, Profile, School, Sport, Underground,
-                     SchoolAlbum, KindergartenAlbum)
+from .models import (AgeCategory, Area, Create, Favourites_Kindergartens,
+                     Favourites_School, Intelligence, KindergartenAlbum,
+                     Kindergartens, Language, Music, Profile, School,
+                     SchoolAlbum, Sport, Underground)
 
 
 class UndergroundAdmin(admin.ModelAdmin):
@@ -49,14 +48,14 @@ class AgeCategoryAdmin(admin.ModelAdmin):
 
 
 # школа
-class SchoolAlbumInline(admin.TabularInline):  
+class SchoolAlbumInline(admin.TabularInline):
     model = SchoolAlbum
 
 
 class SchoolAdmin(admin.ModelAdmin):
     list_display = ('name', 'description', 'telephone',
                     'address', 'price', 'price_of_year', 'email',
-                    'classes', 'name_author', 'area', 'age', 'working_hours')
+                    'classes', 'area', 'age', 'working_hours')
     search_fields = ('name',)
     empty_value_display = '-пусто-'
     ordering = ['name', ]
@@ -99,7 +98,7 @@ class MusicAdmin(admin.ModelAdmin):
     ordering = ['name', ]
 
 
-class KindergartenAlbumInline(admin.TabularInline):  
+class KindergartenAlbumInline(admin.TabularInline):
     model = KindergartenAlbum
 
 

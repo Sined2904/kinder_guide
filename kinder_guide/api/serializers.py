@@ -1,7 +1,7 @@
 from comments.models import ReviewKindergarten, ReviewSchool
-from education.models import (AgeCategory, SchoolAlbum, KindergartenAlbum, Area,
-                              Kindergartens, Language, Profile, School, Underground,
-                              Favourites_School)
+from education.models import (AgeCategory, Area, Favourites_School,
+                              KindergartenAlbum, Kindergartens, Language,
+                              Profile, School, SchoolAlbum, Underground)
 from rest_framework import serializers
 
 from .utils import get_avg_rating
@@ -104,7 +104,8 @@ class SchoolShortSerializer(serializers.ModelSerializer):
     class Meta:
         model = School
         fields = ['id', 'name', 'rating', 'reviews',
-                  'description', 'address', 'album', 'price']
+                  'description', 'address', 'album',
+                  'price', 'is_favorited']
 
 
 class SchoolSerializer(serializers.ModelSerializer):
@@ -125,13 +126,16 @@ class SchoolSerializer(serializers.ModelSerializer):
 
     def get_reviews(self, obj):
         return obj.reviews.count()
-    
+
     def get_is_favorited(self, obj):
         request = self.context.get('request')
-        if request.user.is_anonymous:
-            return False
-        return Favourites_School.objects.filter(
-            recipe=obj, user=request.user).exists()
+
+        if request and request.user.is_authenticated:
+            user = request.user
+            return Favourites_School.objects.filter(
+                school=obj, user=user).exists()
+        return False
+
 
     class Meta:
         model = School
@@ -140,7 +144,7 @@ class SchoolSerializer(serializers.ModelSerializer):
                   'underground', 'area', 'email', 'website',
                   'album', 'price', 'price_of_year', 'age',
                   'classes', 'languages', 'profile',
-                  'name_author', 'working_hours', 'age_category',
+                  'working_hours', 'age_category',
                   'is_favorited']
 
 
@@ -151,7 +155,6 @@ class FilterSchoolSerializer(serializers.ModelSerializer):
         model = School
         fields = ['profile', 'age_category', 'languages',
                   'underground', 'area', 'price']
-
 
 
 class KindergartenAlbumSerializer(serializers.ModelSerializer):
