@@ -138,8 +138,7 @@ class SchoolViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['POST', 'DELETE'])
     def favorite(self, request, pk=None):
-        """Добавляет школу в избранное"""
-
+        """Добавляет школу в избранное."""
         user = request.user
         school = get_object_or_404(School, pk=pk)
 
