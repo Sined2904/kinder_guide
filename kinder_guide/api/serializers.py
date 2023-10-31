@@ -128,11 +128,10 @@ class SchoolSerializer(serializers.ModelSerializer):
     
     def get_is_favorited(self, obj):
         request = self.context.get('request')
-        if request:
-            user = request.user
-            return Favourites_School.objects.filter(
-                school=obj, user=user).exists()
-        return False
+        if request.user.is_anonymous:
+            return False
+        return Favourites_School.objects.filter(
+            recipe=obj, user=request.user).exists()
 
     class Meta:
         model = School

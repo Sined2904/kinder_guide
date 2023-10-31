@@ -95,20 +95,11 @@ class SchoolViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAdminOrReadOnly,)
     pagination_class = PageNumberPagination
 
-    def get_object(self):
-        return get_object_or_404(School, id=self.kwargs['id'])
-
-    def list(self, request):
-        queryset = School.objects.all()
-        paginate_queryset = self.paginate_queryset(queryset)
-        serializer = SchoolShortSerializer(paginate_queryset, many=True)
-        return self.get_paginated_response(serializer.data)
-
-    def retrieve(self, request, pk=None):
-        queryset = School.objects.all()
-        school = get_object_or_404(queryset, pk=pk)
-        serializer = SchoolSerializer(school)
-        return Response(serializer.data)
+    def get_serializer_class(self):
+        """Переопределение сериализатора для POST запроса."""
+        if list():
+            return SchoolShortSerializer
+        return SchoolSerializer
 
     # @action(methods=['post', 'delete'], detail=True)
     # def favorite(self, request, pk):
