@@ -1,7 +1,7 @@
 from comments.models import ReviewKindergarten, ReviewSchool
-from education.models import (AgeCategory, SchoolAlbum, KindergartenAlbum, Area,
-                              Kindergartens, Language, Profile, School, Underground,
-                              Favourites_School)
+from education.models import (AgeCategory, Area, Favourites_School,
+                              KindergartenAlbum, Kindergartens, Language,
+                              Profile, School, SchoolAlbum, Underground)
 from rest_framework import serializers
 
 from .utils import get_avg_rating
@@ -125,10 +125,10 @@ class SchoolSerializer(serializers.ModelSerializer):
 
     def get_reviews(self, obj):
         return obj.reviews.count()
-    
+
     def get_is_favorited(self, obj):
         request = self.context.get('request')
-        if request:
+        if request and request.user.is_authenticated:
             user = request.user
             return Favourites_School.objects.filter(
                 school=obj, user=user).exists()
@@ -152,7 +152,6 @@ class FilterSchoolSerializer(serializers.ModelSerializer):
         model = School
         fields = ['profile', 'age_category', 'languages',
                   'underground', 'area', 'price']
-
 
 
 class KindergartenAlbumSerializer(serializers.ModelSerializer):
