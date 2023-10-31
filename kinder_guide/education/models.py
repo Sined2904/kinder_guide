@@ -212,6 +212,10 @@ class School(models.Model):
         verbose_name='Профиль',
         blank=True
     )
+    is_favorited = models.BooleanField(
+        verbose_name='В избранном',
+        default=False
+    )
 
     class Meta:
         verbose_name = "Школа"
@@ -296,6 +300,7 @@ class Music(Model_For_Additions):
 
 class KindergartenAlbum(models.Model):
     """Модель альбома изображений для детского сада."""
+
     name = models.CharField(max_length=256, verbose_name='Название')
     image = models.ImageField(upload_to="kindergartens/", verbose_name='фото')
     kindergarten = models.ForeignKey(
