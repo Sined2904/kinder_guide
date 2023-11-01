@@ -102,7 +102,7 @@ class SchoolViewSet(viewsets.ModelViewSet):
                      'telephone', 'address',
                      'email', 'website'
                      )
-    
+
     def get_object(self):
         return get_object_or_404(School, pk=self.kwargs['pk'])
 
