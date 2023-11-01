@@ -94,6 +94,7 @@ class IntelligenceSerializer(serializers.ModelSerializer):
         model = Intelligence
         fields = ['name', 'slug']
 
+
 class MusicSerializer(serializers.ModelSerializer):
     """Сериализатор модели возрастной категории."""
 
