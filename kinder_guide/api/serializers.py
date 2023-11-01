@@ -165,7 +165,7 @@ class SchoolSerializer(serializers.ModelSerializer):
         request = self.context.get('request')
         if request and request.user.is_authenticated:
             user = request.user
-            return Favourites_School.objects.filter(
+            return Favourites_Kindergartens.objects.filter(
                 school=obj, user=user).exists()
         return False
 
