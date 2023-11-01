@@ -1,7 +1,9 @@
 from comments.models import ReviewKindergarten, ReviewSchool
 from education.models import (AgeCategory, Area, Favourites_School,
                               KindergartenAlbum, Kindergartens, Language,
-                              Profile, School, SchoolAlbum, Underground)
+                              Profile, School, SchoolAlbum, Underground,
+                              Favourites_Kindergartens, Sport, Intelligence,
+                              Music, Create)
 from rest_framework import serializers
 
 from .utils import get_avg_rating
@@ -66,7 +68,38 @@ class AgeCategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AgeCategory
-        fields = ['category', ]
+        fields = ['name', 'slug']
+
+
+class SportSerializer(serializers.ModelSerializer):
+    """Сериализатор модели возрастной категории."""
+
+    class Meta:
+        model = Sport
+        fields = ['name', 'slug']
+
+
+class CreateSerializer(serializers.ModelSerializer):
+    """Сериализатор модели возрастной категории."""
+
+    class Meta:
+        model = Create
+        fields = ['name', 'slug']
+
+
+class IntelligenceSerializer(serializers.ModelSerializer):
+    """Сериализатор модели возрастной категории."""
+
+    class Meta:
+        model = Intelligence
+        fields = ['name', 'slug']
+
+class MusicSerializer(serializers.ModelSerializer):
+    """Сериализатор модели возрастной категории."""
+
+    class Meta:
+        model = Music
+        fields = ['name', 'slug']
 
 
 class SchoolAlbumSerializer(serializers.ModelSerializer):
@@ -85,12 +118,21 @@ class SchoolShortSerializer(serializers.ModelSerializer):
     album = SchoolAlbumSerializer(many=True)
     rating = serializers.SerializerMethodField()
     reviews = serializers.SerializerMethodField()
+    is_favorited = serializers.SerializerMethodField()
 
     def get_rating(self, obj):
         return get_avg_rating(ReviewSchool, obj)
 
     def get_reviews(self, obj):
         return obj.reviews.count()
+
+    def get_is_favorited(self, obj):
+        request = self.context.get('request')
+        if request and request.user.is_authenticated:
+            user = request.user
+            return Favourites_School.objects.filter(
+                school=obj, user=user).exists()
+        return False
 
     class Meta:
         model = School
@@ -120,7 +162,6 @@ class SchoolSerializer(serializers.ModelSerializer):
 
     def get_is_favorited(self, obj):
         request = self.context.get('request')
-
         if request and request.user.is_authenticated:
             user = request.user
             return Favourites_School.objects.filter(
@@ -153,12 +194,21 @@ class KindergartensShortSerializer(serializers.ModelSerializer):
 
     rating = serializers.SerializerMethodField()
     reviews = serializers.SerializerMethodField()
+    is_favorited = serializers.SerializerMethodField()
 
     def get_rating(self, obj):
         return get_avg_rating(ReviewKindergarten, obj)
 
     def get_reviews(self, obj):
         return obj.reviews.count()
+
+    def get_is_favorited(self, obj):
+        request = self.context.get('request')
+        if request and request.user.is_authenticated:
+            user = request.user
+            return Favourites_Kindergartens.objects.filter(
+                school=obj, user=user).exists()
+        return False
 
     class Meta:
         model = Kindergartens
@@ -176,12 +226,21 @@ class KindergartensSerializer(serializers.ModelSerializer):
     rating = serializers.SerializerMethodField()
     reviews = serializers.SerializerMethodField()
     age_category = AgeCategorySerializer()
+    is_favorited = serializers.SerializerMethodField()
 
     def get_rating(self, obj):
         return get_avg_rating(ReviewKindergarten, obj)
 
     def get_reviews(self, obj):
         return obj.reviews.count()
+
+    def get_is_favorited(self, obj):
+        request = self.context.get('request')
+        if request and request.user.is_authenticated:
+            user = request.user
+            return Favourites_Kindergartens.objects.filter(
+                school=obj, user=user).exists()
+        return False
 
     class Meta:
         model = Kindergartens

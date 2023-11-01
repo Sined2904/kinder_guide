@@ -5,7 +5,10 @@ from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt import views as token_views
 
 from .views import (KindergartensViewSet, ReviewKindergartenViewSet,
-                    ReviewSchoolViewSet, SchoolViewSet)
+                    ReviewSchoolViewSet, SchoolViewSet, UndergroundViewSet,
+                    AreaViewSet, LanguageViewSet, ProfileViewSet,
+                    AgeCategoryViewSet, SportViewSet, CreateViewSet,
+                    IntelligenceViewSet, MusicViewSet)
 
 app_name = 'api'
 
@@ -16,6 +19,15 @@ router.register('kindergartens',
                 KindergartensViewSet,
                 basename='kindergartens'
                 )
+router.register('underground', UndergroundViewSet, basename='underground')
+router.register('area', AreaViewSet, basename='area')
+router.register('language', LanguageViewSet, basename='language')
+router.register('profile', ProfileViewSet, basename='profile')
+router.register('agecategory', AgeCategoryViewSet, basename='agecategory')
+router.register('sport', SportViewSet, basename='sport')
+router.register('create', CreateViewSet, basename='create')
+router.register('intelligence', IntelligenceViewSet, basename='intelligence')
+router.register('music', MusicViewSet, basename='music')
 
 urlpatterns = [
     path('v1/', include(router.urls)),
