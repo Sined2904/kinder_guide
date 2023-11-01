@@ -8,7 +8,8 @@ from .views import (KindergartensViewSet, ReviewKindergartenViewSet,
                     ReviewSchoolViewSet, SchoolViewSet, UndergroundViewSet,
                     AreaViewSet, LanguageViewSet, ProfileViewSet,
                     AgeCategoryViewSet, SportViewSet, CreateViewSet,
-                    IntelligenceViewSet, MusicViewSet)
+                    IntelligenceViewSet, MusicViewSet,
+                    FavoriteKindergartenViewSet, FavoriteSchoolViewSet)
 
 app_name = 'api'
 
@@ -58,6 +59,16 @@ urlpatterns = [
                                    "patch": "me",
                                    "delete": "me"}),
         name="me",
+    ),
+    path(
+        "me/favoritekindergartens",
+        FavoriteKindergartenViewSet.as_view({'get': 'list'}),
+        name="favoritekindergartens",
+    ),
+    path(
+        "me/favoriteschool",
+        FavoriteSchoolViewSet.as_view({'get': 'list'}),
+        name="favoriteschool",
     ),
     path(
         'v1/kindergartens/<int:kindergarten_id>/reviews/',

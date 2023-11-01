@@ -304,3 +304,33 @@ class MusicViewSet(viewsets.ModelViewSet):
     serializer_class = MusicSerializer
     permission_classes = (IsAdminOrReadOnly,)
     pagination_class = None
+
+
+class FavoriteSchoolViewSet(viewsets.ModelViewSet):
+    """Вьюсет для избранного Школы."""
+
+    queryset = School.objects.all()
+    serializer_class = SchoolShortSerializer
+    permission_classes = (IsAdminOrReadOnly,)
+    pagination_class = PageNumberPagination
+
+    @action(detail=False, methods=['GET'])
+    def favoriteschool(self):
+        schools = self.request.user.favourites_school
+        serializer = SchoolShortSerializer(schools, many=True)
+        return Response(serializer.data)
+
+
+class FavoriteKindergartenViewSet(viewsets.ModelViewSet):
+    """Вьюсет для избранного Сады."""
+
+    queryset = Kindergartens.objects.all()
+    serializer_class = KindergartensShortSerializer
+    permission_classes = (IsAdminOrReadOnly,)
+    pagination_class = PageNumberPagination
+
+    @action(detail=False, methods=['GET'])
+    def favoritekindergartens(self, request):
+        kindergartes = self.request.user.favourites_kindergartens
+        serializer = KindergartensShortSerializer(kindergartes, many=True)
+        return Response(serializer.data)
