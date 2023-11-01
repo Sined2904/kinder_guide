@@ -90,9 +90,6 @@ class SchoolAlbum(models.Model):
         null=True
     )
 
-    def __str__(self):
-        return self.image
-
 
 class School(models.Model):
     """Модель школы."""
@@ -286,9 +283,6 @@ class KindergartenAlbum(models.Model):
         blank=True,
         null=True
     )
-
-    def __str__(self):
-        return self.image
 
 
 class Kindergartens(models.Model):
