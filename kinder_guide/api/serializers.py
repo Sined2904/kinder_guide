@@ -196,6 +196,7 @@ class KindergartensShortSerializer(serializers.ModelSerializer):
     rating = serializers.SerializerMethodField()
     reviews = serializers.SerializerMethodField()
     is_favorited = serializers.SerializerMethodField()
+    album = KindergartenAlbumSerializer(many=True)
 
     def get_rating(self, obj):
         return get_avg_rating(ReviewKindergarten, obj)
@@ -229,6 +230,10 @@ class KindergartensSerializer(serializers.ModelSerializer):
     reviews = serializers.SerializerMethodField()
     age_category = AgeCategorySerializer()
     is_favorited = serializers.SerializerMethodField()
+    sport_dev = SportSerializer(many=True)
+    create_dev = CreateSerializer(many=True)
+    music_dev = MusicSerializer(many=True)
+    intel_dev = IntelligenceSerializer(many=True)
 
     def get_rating(self, obj):
         return get_avg_rating(ReviewKindergarten, obj)
