@@ -1,7 +1,6 @@
-from pathlib import Path
-from datetime import timedelta
 import os
-
+from datetime import timedelta
+from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -11,7 +10,7 @@ SECRET_KEY = 'django-insecure-yir#vh&^tzfltm4qd=1*wp6@4()41%n0*mz2edk0b7g6f(q_kb
 DEBUG = True
 
 # IF TRUE - USES SQLITE3 FOR LOCAL TASTING, IF FALSE - USES POSTGRESQL
-LOCAL_DB = True
+LOCAL_DB = False
 
 LOCAL_EMAIL = False
 
@@ -43,8 +42,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
+    'django_filters',
     'djoser',
-    "corsheaders",
+    'corsheaders',
     'user.apps.UserConfig',
     'education',
     'kinder_guide',
@@ -177,6 +177,9 @@ REST_FRAMEWORK = {
     'DEFAULT_THROTTLE_CLASSES': [
         'rest_framework.throttling.UserRateThrottle',
         'rest_framework.throttling.AnonRateThrottle',
+    ],
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend',
     ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 6,
