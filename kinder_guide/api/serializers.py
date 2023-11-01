@@ -214,7 +214,8 @@ class KindergartensShortSerializer(serializers.ModelSerializer):
     class Meta:
         model = Kindergartens
         fields = ['id', 'name', 'rating', 'reviews',
-                  'description', 'address', 'album', 'price']
+                  'description', 'address', 'album', 'price',
+                  'is_favorited']
 
 
 class KindergartensSerializer(serializers.ModelSerializer):
@@ -251,4 +252,5 @@ class KindergartensSerializer(serializers.ModelSerializer):
                   'email', 'website', 'underground', 'area',
                   'languages', 'age', 'working_hours',
                   'group_suze', 'sport_dev', 'create_dev',
-                  'music_dev', 'intel_dev', 'age_category']
+                  'music_dev', 'intel_dev', 'age_category',
+                  'is_favorited']
