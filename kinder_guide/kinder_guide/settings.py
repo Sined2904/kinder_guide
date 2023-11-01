@@ -1,7 +1,6 @@
-from pathlib import Path
-from datetime import timedelta
 import os
-
+from datetime import timedelta
+from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -45,7 +44,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'django_filters',
     'djoser',
-    "corsheaders",
+    'corsheaders',
     'user.apps.UserConfig',
     'education',
     'kinder_guide',

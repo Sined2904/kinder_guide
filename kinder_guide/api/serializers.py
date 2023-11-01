@@ -61,16 +61,6 @@ class ProfileSerializer(serializers.ModelSerializer):
         fields = ['name', 'slug']
 
 
-# class AlbumSerializer(serializers.ModelSerializer):
-#     """Сериализатор модели альбома."""
-
-#     image = serializers.ImageField()
-
-#     class Meta:
-#         model = Album
-#         fields = ['image', ]
-
-
 class AgeCategorySerializer(serializers.ModelSerializer):
     """Сериализатор модели возрастной категории."""
 
@@ -148,15 +138,6 @@ class SchoolSerializer(serializers.ModelSerializer):
                   'is_favorited']
 
 
-class FilterSchoolSerializer(serializers.ModelSerializer):
-    """Сериализатор фильтров модели школы."""
-
-    class Meta:
-        model = School
-        fields = ['profile', 'age_category', 'languages',
-                  'underground', 'area', 'price']
-
-
 class KindergartenAlbumSerializer(serializers.ModelSerializer):
     """Сериализатор модели альбома для детского сада."""
 
@@ -211,12 +192,3 @@ class KindergartensSerializer(serializers.ModelSerializer):
                   'languages', 'age', 'working_hours',
                   'group_suze', 'sport_dev', 'create_dev',
                   'music_dev', 'intel_dev', 'age_category']
-
-
-class FilterKindergartenSerializer(serializers.ModelSerializer):
-    """Сериализатор фильтров модели детского сада."""
-
-    class Meta:
-        model = Kindergartens
-        fields = ['age_category', 'languages',
-                  'underground', 'area', 'price']
