@@ -21,13 +21,6 @@ class AreaAdmin(admin.ModelAdmin):
     ordering = ['name', ]
 
 
-# class AlbumAdmin(admin.ModelAdmin):
-#     list_display = ('name', 'image')
-#     empty_value_display = '-пусто-'
-#     search_fields = ('name', )
-#     ordering = ['name', ]
-
-
 class LanguageAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug')
     empty_value_display = '-пусто-'

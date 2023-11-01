@@ -52,16 +52,6 @@ class Language(Model_For_Additions):
         return self.name
 
 
-# class Album(models.Model):
-#     """Модель для фото."""
-
-#     name = models.CharField(max_length=256, verbose_name='Название')
-#     image = models.ImageField(upload_to="education/", verbose_name='фото')
-
-#     def __str__(self):
-#         return self.name
-
-
 class Profile(Model_For_Additions):
     """Модель профилей."""
 
