@@ -4,19 +4,24 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from django.shortcuts import get_object_or_404
 from education.models import (Favourites_Kindergartens, Favourites_School,
-                              Kindergartens, School)
+                              Kindergartens, School, Underground, Area,
+                              Language, Profile, AgeCategory, Sport, Create,
+                              Intelligence, Music)
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
-
 from .permissions import IsAdminOrReadOnly
 from .serializers import (KindergartensSerializer,
                           KindergartensShortSerializer,
                           ReviewKindergartenSerializer, ReviewSchoolSerializer,
-                          SchoolSerializer, SchoolShortSerializer)
+                          SchoolSerializer, SchoolShortSerializer,
+                          UndergroundSerializer, LanguageSerializer,
+                          AreaSerializer, SportSerializer, CreateSerializer,
+                          MusicSerializer, IntelligenceSerializer,
+                          ProfileSerializer, AgeCategorySerializer)
 
 
 class ReviewKindergartenViewSet(viewsets.ModelViewSet):
@@ -103,15 +108,11 @@ class SchoolViewSet(viewsets.ModelViewSet):
                      'email', 'website'
                      )
 
-    def get_object(self):
-        return get_object_or_404(School, pk=self.kwargs['pk'])
-
     def get_serializer_class(self):
         """Переопределение сериализатора для POST запроса."""
         if bool(self.kwargs) is False:
             return SchoolShortSerializer
         return SchoolSerializer
-
 
     @transaction.atomic
     @action(detail=True, methods=['POST', 'DELETE'])
@@ -165,6 +166,12 @@ class KindergartensViewSet(viewsets.ModelViewSet):
     serializer_class = KindergartensSerializer
     permission_classes = (IsAdminOrReadOnly,)
     pagination_class = PageNumberPagination
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    filterset_fields = ('id', 'name', 'price', 'price_of_year')
+    search_fields = ('name', 'description',
+                     'telephone', 'address',
+                     'email', 'website'
+                     )
 
     def get_serializer_class(self):
         """Переопределение сериализатора для POST запроса."""
@@ -216,3 +223,84 @@ class KindergartensViewSet(viewsets.ModelViewSet):
                 {'detail': 'Детский сад успешно удален из избранного'},
                 status=status.HTTP_204_NO_CONTENT
             )
+
+
+class UndergroundViewSet(viewsets.ModelViewSet):
+    """Вьюсет для метро."""
+
+    queryset = Underground.objects.all()
+    serializer_class = UndergroundSerializer
+    permission_classes = (IsAdminOrReadOnly,)
+    pagination_class = None
+
+
+class AreaViewSet(viewsets.ModelViewSet):
+    """Вьюсет для Округа."""
+
+    queryset = Area.objects.all()
+    serializer_class = AreaSerializer
+    permission_classes = (IsAdminOrReadOnly,)
+    pagination_class = None
+
+
+class LanguageViewSet(viewsets.ModelViewSet):
+    """Вьюсет для Языков."""
+
+    queryset = Language.objects.all()
+    serializer_class = LanguageSerializer
+    permission_classes = (IsAdminOrReadOnly,)
+    pagination_class = None
+
+
+class ProfileViewSet(viewsets.ModelViewSet):
+    """Вьюсет для Профилей."""
+
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+    permission_classes = (IsAdminOrReadOnly,)
+    pagination_class = None
+
+
+class AgeCategoryViewSet(viewsets.ModelViewSet):
+    """Вьюсет для Возрастных категорий."""
+
+    queryset = AgeCategory.objects.all()
+    serializer_class = AgeCategorySerializer
+    permission_classes = (IsAdminOrReadOnly,)
+    pagination_class = None
+
+
+class SportViewSet(viewsets.ModelViewSet):
+    """Вьюсет для Спортивных занятий."""
+
+    queryset = Sport.objects.all()
+    serializer_class = SportSerializer
+    permission_classes = (IsAdminOrReadOnly,)
+    pagination_class = None
+
+
+class CreateViewSet(viewsets.ModelViewSet):
+    """Вьюсет для Творческих занятий."""
+
+    queryset = Create.objects.all()
+    serializer_class = CreateSerializer
+    permission_classes = (IsAdminOrReadOnly,)
+    pagination_class = None
+
+
+class IntelligenceViewSet(viewsets.ModelViewSet):
+    """Вьюсет для Интеллектуальных занятий."""
+
+    queryset = Intelligence.objects.all()
+    serializer_class = IntelligenceSerializer
+    permission_classes = (IsAdminOrReadOnly,)
+    pagination_class = None
+
+
+class MusicViewSet(viewsets.ModelViewSet):
+    """Вьюсет для Музыкльных занятий."""
+
+    queryset = Music.objects.all()
+    serializer_class = MusicSerializer
+    permission_classes = (IsAdminOrReadOnly,)
+    pagination_class = None
