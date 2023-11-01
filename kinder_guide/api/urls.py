@@ -4,10 +4,8 @@ from news.feeds import LatestNewsFeed
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt import views as token_views
 
-from .views import (FilterKindergartenView, FilterSchoolView,
-                    KindergartensViewSet,
-                    ReviewKindergartenViewSet, ReviewSchoolViewSet,
-                    SchoolViewSet)
+from .views import (KindergartensViewSet, ReviewKindergartenViewSet,
+                    ReviewSchoolViewSet, SchoolViewSet)
 
 app_name = 'api'
 
@@ -20,16 +18,6 @@ router.register('kindergartens',
                 )
 
 urlpatterns = [
-    path(
-        'v1/schools/filter-combinations/',
-        FilterSchoolView.as_view(),
-        name='filter-school-combinations'
-    ),
-    path(
-        'v1/kindergartens/filter-combinations/',
-        FilterKindergartenView.as_view(),
-        name='filter-school-combinations'
-    ),
     path('v1/', include(router.urls)),
     path(
         'auth/signup/',

@@ -20,7 +20,6 @@ class AreaAdmin(admin.ModelAdmin):
     ordering = ['name', ]
 
 
-
 class LanguageAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug')
     empty_value_display = '-пусто-'
