@@ -6,7 +6,7 @@ from education.models import (AgeCategory, Area, Favourites_School,
                               Music, Create)
 from rest_framework import serializers
 
-from .utils import get_avg_rating
+from .utils import get_avg_rating, get_coordinates_from_address
 
 
 class ReviewSerializer(serializers.ModelSerializer):
@@ -154,6 +154,7 @@ class SchoolSerializer(serializers.ModelSerializer):
     rating = serializers.SerializerMethodField()
     reviews = serializers.SerializerMethodField()
     is_favorited = serializers.SerializerMethodField()
+    coordinates = serializers.SerializerMethodField()
 
     def get_rating(self, obj):
         return get_avg_rating(ReviewSchool, obj)
@@ -168,6 +169,9 @@ class SchoolSerializer(serializers.ModelSerializer):
             return Favourites_School.objects.filter(
                 school=obj, user=user).exists()
         return False
+    
+    def get_coordinates(self, obj):
+        return get_coordinates_from_address(School, obj)
 
     class Meta:
         model = School
@@ -177,7 +181,7 @@ class SchoolSerializer(serializers.ModelSerializer):
                   'album', 'price', 'price_of_year', 'age',
                   'classes', 'languages', 'profile',
                   'working_hours', 'age_category',
-                  'is_favorited']
+                  'is_favorited', 'coordinates']
 
 
 class KindergartenAlbumSerializer(serializers.ModelSerializer):
