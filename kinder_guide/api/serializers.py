@@ -82,6 +82,7 @@ class SchoolAlbumSerializer(serializers.ModelSerializer):
 class SchoolShortSerializer(serializers.ModelSerializer):
     """Сериализатор модели школы (кратко)."""
 
+    album = SchoolAlbumSerializer(many=True)
     rating = serializers.SerializerMethodField()
     reviews = serializers.SerializerMethodField()
 
@@ -119,6 +120,7 @@ class SchoolSerializer(serializers.ModelSerializer):
 
     def get_is_favorited(self, obj):
         request = self.context.get('request')
+
         if request and request.user.is_authenticated:
             user = request.user
             return Favourites_School.objects.filter(

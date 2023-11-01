@@ -1,5 +1,7 @@
 from comments.models import ReviewKindergarten, ReviewSchool
 from django.db import transaction
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
 from django.shortcuts import get_object_or_404
 from education.models import (Favourites_Kindergartens, Favourites_School,
                               Kindergartens, School)
@@ -8,6 +10,7 @@ from rest_framework.decorators import action
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
+
 
 from .permissions import IsAdminOrReadOnly
 from .serializers import (KindergartensSerializer,
@@ -93,7 +96,13 @@ class SchoolViewSet(viewsets.ModelViewSet):
     serializer_class = SchoolSerializer
     permission_classes = (IsAdminOrReadOnly,)
     pagination_class = PageNumberPagination
-
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    filterset_fields = ('id', 'name', 'price', 'price_of_year')
+    search_fields = ('name', 'description',
+                     'telephone', 'address',
+                     'email', 'website'
+                     )
+    
     def get_object(self):
         return get_object_or_404(School, pk=self.kwargs['pk'])
 
@@ -109,7 +118,6 @@ class SchoolViewSet(viewsets.ModelViewSet):
         """Добавляет школу в избранное."""
         user = request.user
         school = get_object_or_404(School, pk=pk)
-
         if request.method == 'POST':
             favorite, created = Favourites_School.objects.get_or_create(
                 user=user,
