@@ -110,32 +110,6 @@ class SchoolViewSet(viewsets.ModelViewSet):
             return SchoolShortSerializer
         return SchoolSerializer
 
-    # @action(methods=['post', 'delete'], detail=True)
-    # def favorite(self, request, pk):
-    #     """Добавляет школу в избранное"""
-
-    #     school = get_object_or_404(School, id=pk)
-    #     school_in_favorite = Favourites_School.objects.filter(
-    #         user=request.user,
-    #         school=school
-    #     )
-    #     if request.method == 'DELETE':
-    #         if school_in_favorite.exists():
-    #             school_in_favorite.delete()
-    #             return Response(status=status.HTTP_204_NO_CONTENT)
-    #         return Response(
-    #             {'errors': 'Вы уже отписались или не были подписаны'},
-    #             status=status.HTTP_400_BAD_REQUEST
-    #         )
-    #     else:
-    #         if school_in_favorite.exists():
-    #             return Response({'errors': 'Вы уже подписались'})
-    #         Favourites_School.objects.create(
-    #             user=request.user,
-    #             school=school
-    #         )
-    #         return Response(status=status.HTTP_201_CREATED)
-
     @action(detail=True, methods=['POST', 'DELETE'])
     def favorite(self, request, pk=None):
         """Добавляет школу в избранное."""
@@ -197,20 +171,11 @@ class KindergartensViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAdminOrReadOnly,)
     pagination_class = PageNumberPagination
 
-    def get_object(self):
-        return get_object_or_404(Kindergartens, id=self.kwargs['id'])
-
-    def list(self, request):
-        queryset = Kindergartens.objects.all()
-        paginate_queryset = self.paginate_queryset(queryset)
-        serializer = KindergartensShortSerializer(paginate_queryset, many=True)
-        return self.get_paginated_response(serializer.data)
-
-    def retrieve(self, request, pk=None):
-        queryset = Kindergartens.objects.all()
-        kindergarten = get_object_or_404(queryset, pk=pk)
-        serializer = KindergartensSerializer(kindergarten)
-        return Response(serializer.data)
+    def get_serializer_class(self):
+        """Переопределение сериализатора для POST запроса."""
+        if bool(self.kwargs) is False:
+            return KindergartensShortSerializer
+        return KindergartensSerializer
 
     @action(detail=True, methods=['POST', 'DELETE'])
     def favorite(self, request, pk=None):

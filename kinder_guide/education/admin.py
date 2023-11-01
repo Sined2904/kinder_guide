@@ -1,6 +1,5 @@
 from django.contrib import admin
 
-# from .forms import MinOneForm
 from .models import (AgeCategory, Area, Create, Favourites_Kindergartens,
                      Favourites_School, Intelligence, KindergartenAlbum,
                      Kindergartens, Language, Music, Profile, School,
@@ -21,12 +20,6 @@ class AreaAdmin(admin.ModelAdmin):
     ordering = ['name', ]
 
 
-# class AlbumAdmin(admin.ModelAdmin):
-#     list_display = ('name', 'image')
-#     empty_value_display = '-пусто-'
-#     search_fields = ('name', )
-#     ordering = ['name', ]
-
 
 class LanguageAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug')
@@ -43,8 +36,10 @@ class ProfileAdmin(admin.ModelAdmin):
 
 
 class AgeCategoryAdmin(admin.ModelAdmin):
-    list_display = ('category',)
-    search_fields = ('category', )
+    list_display = ('name', 'slug')
+    empty_value_display = '-пусто-'
+    search_fields = ('name', )
+    ordering = ['name', ]
 
 
 # школа
@@ -55,7 +50,7 @@ class SchoolAlbumInline(admin.TabularInline):
 class SchoolAdmin(admin.ModelAdmin):
     list_display = ('name', 'description', 'telephone',
                     'address', 'price', 'price_of_year', 'email',
-                    'classes', 'area', 'age', 'working_hours')
+                    'classes', 'area', 'age', 'working_hours', 'website')
     search_fields = ('name',)
     empty_value_display = '-пусто-'
     ordering = ['name', ]
@@ -105,7 +100,7 @@ class KindergartenAlbumInline(admin.TabularInline):
 class KindergartensAdmin(admin.ModelAdmin):
     list_display = ('name', 'description',
                     'telephone', 'address', 'price',
-                    'email', 'area', 'age',
+                    'email', 'area', 'age', 'website',
                     'price_of_year', 'working_hours', 'group_suze')
     search_fields = ('name',)
     empty_value_display = '-пусто-'
