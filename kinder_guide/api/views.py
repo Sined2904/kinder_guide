@@ -112,6 +112,7 @@ class SchoolViewSet(viewsets.ModelViewSet):
             return SchoolShortSerializer
         return SchoolSerializer
 
+
     @transaction.atomic
     @action(detail=True, methods=['POST', 'DELETE'])
     def favorite(self, request, pk=None):
@@ -165,20 +166,11 @@ class KindergartensViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAdminOrReadOnly,)
     pagination_class = PageNumberPagination
 
-    def get_object(self):
-        return get_object_or_404(Kindergartens, id=self.kwargs['id'])
-
-    def list(self, request):
-        queryset = Kindergartens.objects.all()
-        paginate_queryset = self.paginate_queryset(queryset)
-        serializer = KindergartensShortSerializer(paginate_queryset, many=True)
-        return self.get_paginated_response(serializer.data)
-
-    def retrieve(self, request, pk=None):
-        queryset = Kindergartens.objects.all()
-        kindergarten = get_object_or_404(queryset, pk=pk)
-        serializer = KindergartensSerializer(kindergarten)
-        return Response(serializer.data)
+    def get_serializer_class(self):
+        """Переопределение сериализатора для POST запроса."""
+        if bool(self.kwargs) is False:
+            return KindergartensShortSerializer
+        return KindergartensSerializer
 
     @transaction.atomic
     @action(detail=True, methods=['POST', 'DELETE'])
