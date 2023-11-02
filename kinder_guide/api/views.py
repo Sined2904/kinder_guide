@@ -156,7 +156,7 @@ class SchoolViewSet(viewsets.ModelViewSet):
                 {'detail': 'Школа успешно удалена из избранного'},
                 status=status.HTTP_204_NO_CONTENT
             )
-    
+
     @action(detail=False, methods=['get'])
     def all(self, request):
         schools = School.objects.all()
@@ -227,7 +227,7 @@ class KindergartensViewSet(viewsets.ModelViewSet):
                 {'detail': 'Школа успешно удалена из избранного'},
                 status=status.HTTP_204_NO_CONTENT
             )
-    
+
     @action(detail=False, methods=['get'])
     def all(self, request):
         kindergartens = Kindergartens.objects.all()
