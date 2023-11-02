@@ -1,27 +1,26 @@
 from comments.models import ReviewKindergarten, ReviewSchool
 from django.db import transaction
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters
 from django.shortcuts import get_object_or_404
-from education.models import (Favourites_Kindergartens, Favourites_School,
-                              Kindergartens, School, Underground, Area,
-                              Language, Profile, AgeCategory, Sport, Create,
-                              Intelligence, Music)
-from rest_framework import status, viewsets
+from django_filters.rest_framework import DjangoFilterBackend
+from education.models import (AgeCategory, Area, Create,
+                              Favourites_Kindergartens, Favourites_School,
+                              Intelligence, Kindergartens, Language, Music,
+                              Profile, School, Sport, Underground)
+from rest_framework import filters, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
 from .permissions import IsAdminOrReadOnly
-from .serializers import (KindergartensSerializer,
-                          KindergartensShortSerializer,
+from .serializers import (AgeCategorySerializer, AreaSerializer,
+                          CreateSerializer, IntelligenceSerializer,
+                          KindergartensSerializer,
+                          KindergartensShortSerializer, LanguageSerializer,
+                          MusicSerializer, ProfileSerializer,
                           ReviewKindergartenSerializer, ReviewSchoolSerializer,
                           SchoolSerializer, SchoolShortSerializer,
-                          UndergroundSerializer, LanguageSerializer,
-                          AreaSerializer, SportSerializer, CreateSerializer,
-                          MusicSerializer, IntelligenceSerializer,
-                          ProfileSerializer, AgeCategorySerializer)
+                          SportSerializer, UndergroundSerializer)
 
 
 class ReviewKindergartenViewSet(viewsets.ModelViewSet):
@@ -332,6 +331,8 @@ class FavoriteKindergartenViewSet(viewsets.ModelViewSet):
 
     def list(self, request):
         user = request.user
-        kindergartens = Kindergartens.objects.filter(favourites_users__user=user)
+        kindergartens = Kindergartens.objects.filter(
+            favourites_users__user=user
+        )
         serializer = KindergartensShortSerializer(kindergartens, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
