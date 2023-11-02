@@ -156,6 +156,12 @@ class SchoolViewSet(viewsets.ModelViewSet):
                 {'detail': 'Школа успешно удалена из избранного'},
                 status=status.HTTP_204_NO_CONTENT
             )
+    
+    @action(detail=False, methods=['get'])
+    def all(self, request):
+        schools = School.objects.all()
+        serializer = SchoolSerializer(schools, many=True)
+        return Response(serializer.data)
 
 
 class KindergartensViewSet(viewsets.ModelViewSet):
@@ -221,6 +227,12 @@ class KindergartensViewSet(viewsets.ModelViewSet):
                 {'detail': 'Школа успешно удалена из избранного'},
                 status=status.HTTP_204_NO_CONTENT
             )
+    
+    @action(detail=False, methods=['get'])
+    def all(self, request):
+        kindergartens = Kindergartens.objects.all()
+        serializer = KindergartensSerializer(kindergartens, many=True)
+        return Response(serializer.data)
 
 
 class UndergroundViewSet(viewsets.ModelViewSet):
