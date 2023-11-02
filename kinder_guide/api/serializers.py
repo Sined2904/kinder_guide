@@ -1,9 +1,9 @@
 from comments.models import ReviewKindergarten, ReviewSchool
-from education.models import (AgeCategory, Area, Favourites_School,
-                              KindergartenAlbum, Kindergartens, Language,
-                              Profile, School, SchoolAlbum, Underground,
-                              Favourites_Kindergartens, Sport, Intelligence,
-                              Music, Create)
+from education.models import (AgeCategory, Area, Create,
+                              Favourites_Kindergartens, Favourites_School,
+                              Intelligence, KindergartenAlbum, Kindergartens,
+                              Language, Music, Profile, School, SchoolAlbum,
+                              Sport, Underground)
 from rest_framework import serializers
 
 from .utils import get_avg_rating
