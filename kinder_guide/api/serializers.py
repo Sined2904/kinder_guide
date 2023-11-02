@@ -169,7 +169,7 @@ class SchoolSerializer(serializers.ModelSerializer):
             return Favourites_School.objects.filter(
                 school=obj, user=user).exists()
         return False
-    
+
     def get_coordinates(self, obj):
         return get_coordinates_from_address(School, obj)
 
