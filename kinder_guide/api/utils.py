@@ -8,9 +8,8 @@ def get_avg_rating(model, obj):
         return rating['rating__avg']
     return round(rating['rating__avg'], 1)
 
-def get_coordinates_from_address(model, obj):
-    for_address = model.objects.get(pk=obj.id)
-    address = for_address.address
+def get_coordinates_from_address(self, obj):
+    address = obj.address
     geolocator = Nominatim(user_agent="Tester")
     location = geolocator.geocode(address)
     coordinates = [location.latitude, location.longitude]
