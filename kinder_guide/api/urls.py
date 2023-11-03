@@ -30,6 +30,7 @@ router.register('create', CreateViewSet, basename='create')
 router.register('intelligence', IntelligenceViewSet, basename='intelligence')
 router.register('music', MusicViewSet, basename='music')
 
+
 urlpatterns = [
     path('v1/', include(router.urls)),
     path(
@@ -66,7 +67,7 @@ urlpatterns = [
         name="favoritekindergartens",
     ),
     path(
-        "v1/me/favoriteschool",
+        "v1/me/favoriteschools",
         FavoriteSchoolViewSet.as_view({'get': 'list'}),
         name="favoriteschools",
     ),
