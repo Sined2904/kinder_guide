@@ -23,7 +23,7 @@ class MyUser(AbstractUser):
     phone = models.CharField(
         'Номер телефона',
         max_length=16,
-        unique=True,
+        unique=False,
         validators=[
             RegexValidator(
                 # regex=r'^\+?1?\d{9,15}$',
