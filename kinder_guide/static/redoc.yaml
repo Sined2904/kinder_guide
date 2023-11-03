@@ -466,7 +466,7 @@ paths:
       security:
       - jwt-token:
         - write:admin, user
-  /me/favoriteschool/:
+  /me/favoriteschools/:
     get:
       tags:
         - SCHOOLS
