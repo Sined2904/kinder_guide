@@ -161,7 +161,11 @@ class SchoolViewSet(viewsets.ModelViewSet):
     def all(self, request):
         """Выводит все объекты без пагинации."""
         schools = School.objects.all()
-        serializer = SchoolSerializer(schools, many=True)
+        serializer = SchoolSerializer(
+            schools,
+            many=True,
+            context={'request': request}
+        )
         return Response(serializer.data)
 
 
@@ -233,7 +237,11 @@ class KindergartensViewSet(viewsets.ModelViewSet):
     def all(self, request):
         """Выводит все объекты без пагинации."""
         kindergartens = Kindergartens.objects.all()
-        serializer = KindergartensSerializer(kindergartens, many=True)
+        serializer = KindergartensSerializer(
+            kindergartens,
+            many=True,
+            context={'request': request}
+        )
         return Response(serializer.data)
 
 
@@ -330,7 +338,11 @@ class FavoriteSchoolViewSet(viewsets.ModelViewSet):
     def list(self, request):
         user = request.user
         schools = School.objects.filter(favourites_users__user=user)
-        serializer = SchoolShortSerializer(schools, many=True)
+        serializer = SchoolShortSerializer(
+            schools,
+            many=True,
+            context={'request': request}
+        )
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
@@ -348,5 +360,9 @@ class FavoriteKindergartenViewSet(viewsets.ModelViewSet):
         kindergartens = Kindergartens.objects.filter(
             favourites_users__user=user
         )
-        serializer = KindergartensShortSerializer(kindergartens, many=True)
+        serializer = KindergartensShortSerializer(
+            kindergartens,
+            many=True,
+            context={'request': request}
+        )
         return Response(serializer.data, status=status.HTTP_200_OK)
