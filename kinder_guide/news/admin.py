@@ -9,7 +9,8 @@ class NewsAdmin(admin.ModelAdmin):
         'title',
         'author',
         'content',
-        'date_posted'
+        'date_posted',
+        'image'
     )
     list_filter = [
         'date_posted',

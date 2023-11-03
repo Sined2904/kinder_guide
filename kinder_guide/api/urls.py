@@ -29,11 +29,11 @@ router.register('sport', SportViewSet, basename='sport')
 router.register('create', CreateViewSet, basename='create')
 router.register('intelligence', IntelligenceViewSet, basename='intelligence')
 router.register('music', MusicViewSet, basename='music')
-router.register('favoriteschool',
+router.register('favoriteschools',
                 FavoriteSchoolViewSet,
                 basename='favoriteschool'
                 )
-router.register('favoritekindergarten',
+router.register('favoritekindergartens',
                 FavoriteKindergartenViewSet,
                 basename='favoritekindergarten'
                 )
