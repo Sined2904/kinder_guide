@@ -62,12 +62,12 @@ urlpatterns = [
         name="me",
     ),
     path(
-        "v1/me/favoritekindergartens",
+        "v1/me/favoritekindergartens/",
         FavoriteKindergartenViewSet.as_view({'get': 'list'}),
         name="favoritekindergartens",
     ),
     path(
-        "v1/me/favoriteschools",
+        "v1/me/favoriteschools/",
         FavoriteSchoolViewSet.as_view({'get': 'list'}),
         name="favoriteschools",
     ),
