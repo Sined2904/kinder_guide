@@ -159,6 +159,7 @@ class SchoolViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['get'])
     def all(self, request):
+        """Выводит все объекты без пагинации."""
         schools = School.objects.all()
         serializer = SchoolSerializer(schools, many=True)
         return Response(serializer.data)
@@ -187,7 +188,7 @@ class KindergartensViewSet(viewsets.ModelViewSet):
     @transaction.atomic
     @action(detail=True, methods=['POST', 'DELETE'])
     def favorite(self, request, pk=None):
-        """Добавляет школу в избранное."""
+        """Добавляет детский сад в избранное."""
         user = request.user
         kindergartens = get_object_or_404(Kindergartens, pk=pk)
         if request.method == 'POST':
@@ -199,12 +200,12 @@ class KindergartensViewSet(viewsets.ModelViewSet):
                 kindergartens.is_favorited = True
                 kindergartens.save()
                 return Response(
-                    {'detail': 'Школа успешно добавлена в избранное'},
+                    {'detail': 'Детский сад успешно добавлен в избранное'},
                     status=status.HTTP_201_CREATED
                 )
             else:
                 return Response(
-                    {'detail': 'Школа уже в избранном'},
+                    {'detail': 'Детский сад уже в избранном'},
                     status=status.HTTP_200_OK
                 )
 
@@ -216,7 +217,7 @@ class KindergartensViewSet(viewsets.ModelViewSet):
                 )
             except Favourites_Kindergartens.DoesNotExist:
                 return Response(
-                    {'detail': 'Школа не в избранном'},
+                    {'detail': 'Детский сад не в избранном'},
                     status=status.HTTP_400_BAD_REQUEST
                 )
 
@@ -224,12 +225,13 @@ class KindergartensViewSet(viewsets.ModelViewSet):
             kindergartens.is_favorited = False
             kindergartens.save()
             return Response(
-                {'detail': 'Школа успешно удалена из избранного'},
+                {'detail': 'Детский сад успешно удален из избранного'},
                 status=status.HTTP_204_NO_CONTENT
             )
 
     @action(detail=False, methods=['get'])
     def all(self, request):
+        """Выводит все объекты без пагинации."""
         kindergartens = Kindergartens.objects.all()
         serializer = KindergartensSerializer(kindergartens, many=True)
         return Response(serializer.data)
