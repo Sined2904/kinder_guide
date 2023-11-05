@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'ckeditor',
+    'colorfield',
     'django_filters',
     'djoser',
     'corsheaders',
