@@ -238,6 +238,7 @@ class KindergartensSerializer(serializers.ModelSerializer):
     create_dev = CreateSerializer(many=True)
     music_dev = MusicSerializer(many=True)
     intel_dev = IntelligenceSerializer(many=True)
+    coordinates = serializers.SerializerMethodField()
 
     def get_rating(self, obj):
         return get_avg_rating(ReviewKindergarten, obj)
@@ -253,6 +254,9 @@ class KindergartensSerializer(serializers.ModelSerializer):
                 kindergartens=obj, user=user).exists()
         return False
 
+    def get_coordinates(self, obj):
+        return get_coordinates_from_address(School, obj)
+
     class Meta:
         model = Kindergartens
         fields = ['id', 'name', 'rating', 'reviews',
@@ -262,4 +266,4 @@ class KindergartensSerializer(serializers.ModelSerializer):
                   'languages', 'age', 'working_hours',
                   'group_suze', 'sport_dev', 'create_dev',
                   'music_dev', 'intel_dev', 'age_category',
-                  'is_favorited']
+                  'is_favorited', 'coordinates']
