@@ -37,7 +37,9 @@ class ReviewKindergartenViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     def create(self, request, kindergarten_id):
-        request.data['author'] = self.request.user.id
+        first_name = self.request.user.first_name
+        last_name = self.request.user.last_name
+        request.data['author'] = f'{first_name} {last_name}'
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
