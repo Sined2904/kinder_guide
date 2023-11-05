@@ -1,6 +1,6 @@
 from django.db import models
 from user.models import MyUser
-
+from colorfield.fields import ColorField
 
 # Абстрактные и общие модели
 class Model_For_Additions(models.Model):
@@ -18,6 +18,9 @@ class Model_For_Additions(models.Model):
 
 class Underground(Model_For_Additions):
     """Модель метро."""
+    color = ColorField('Цвет ветки',
+                       default='#ffffff',
+                       null=False)
 
     class Meta:
         ordering = ('name', )
