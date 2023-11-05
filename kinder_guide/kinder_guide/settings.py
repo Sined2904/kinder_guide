@@ -10,7 +10,7 @@ SECRET_KEY = 'django-insecure-yir#vh&^tzfltm4qd=1*wp6@4()41%n0*mz2edk0b7g6f(q_kb
 DEBUG = True
 
 # IF TRUE - USES SQLITE3 FOR LOCAL TASTING, IF FALSE - USES POSTGRESQL
-LOCAL_DB = True
+LOCAL_DB = False
 
 LOCAL_EMAIL = False
 
