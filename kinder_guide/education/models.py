@@ -77,7 +77,6 @@ class SchoolAlbum(models.Model):
     image = models.ImageField(
         upload_to="school/",
         verbose_name='фото',
-        max_upload_size=104857600
     )
     school = models.ForeignKey(
         'School',
@@ -304,7 +303,6 @@ class KindergartenAlbum(models.Model):
     image = models.ImageField(
         upload_to="kindergartens/",
         verbose_name='фото',
-        max_upload_size=104857600
     )
     kindergarten = models.ForeignKey(
         'Kindergartens',
