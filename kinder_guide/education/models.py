@@ -70,18 +70,6 @@ class Profile(Model_For_Additions):
         return self.name
 
 
-class AgeCategory(Model_For_Additions):
-    """Модель возрастной категории."""
-
-    class Meta:
-        ordering = ('name', )
-        verbose_name = 'Возрастная категория'
-        verbose_name_plural = 'Возрастные категории'
-
-    def __str__(self):
-        return self.name
-
-
 # Модели школы
 class SchoolAlbum(models.Model):
     """Модель альбома изображений для школы."""
@@ -177,13 +165,6 @@ class School(models.Model):
 #        blank=True,
 #        null=True
 #    )
-    age_category = models.ForeignKey(
-        AgeCategory,
-        on_delete=models.CASCADE,
-        verbose_name='Возрастная категория',
-        blank=True,
-        null=True
-    )
     price_of_year = models.PositiveIntegerField(
         verbose_name='Цена в год',
         blank=True,
@@ -296,6 +277,18 @@ class WorkingHours(Model_For_Additions):
         ordering = ('name', )
         verbose_name = 'Время работы'
         verbose_name_plural = 'Время работы'
+
+    def __str__(self):
+        return self.name
+
+
+class AgeCategory(Model_For_Additions):
+    """Модель возрастной категории для сада."""
+
+    class Meta:
+        ordering = ('name', )
+        verbose_name = 'Возрастная категория'
+        verbose_name_plural = 'Возрастные категории'
 
     def __str__(self):
         return self.name
