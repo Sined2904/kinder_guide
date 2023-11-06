@@ -1,21 +1,18 @@
 from django.db import models
 
-from django.contrib.auth import get_user_model
-
 
 class News(models.Model):
-    title = models.CharField(max_length=100)
-    content = models.TextField()
+    title = models.CharField(max_length=100, verbose_name='Наименование')
+    content = models.TextField(verbose_name='Контент')
     date_posted = models.DateTimeField(
         'Дата публикации', auto_now_add=True
     )
-    author = models.ForeignKey(
-        get_user_model(),
-        on_delete=models.CASCADE
-    )
+    image = models.ImageField(upload_to="news/", verbose_name='Картинка')
 
-    class Meta:
+    class Meta:        
+        verbose_name = "Новость"
+        verbose_name_plural = "Новости"
         ordering = ['-date_posted']
 
     def __str__(self):
-        return self.content
+        return self.title

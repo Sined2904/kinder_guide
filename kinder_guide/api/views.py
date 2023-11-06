@@ -7,6 +7,7 @@ from education.models import (Favourites_Kindergartens, Favourites_School,
                               Kindergartens, School, Underground, Area,
                               Language, Profile, AgeCategory, Sport, Create,
                               Intelligence, Music)
+from news.models import News
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.pagination import PageNumberPagination
@@ -17,7 +18,7 @@ from .permissions import IsAdminOrReadOnly
 from .serializers import (KindergartensSerializer,
                           KindergartensShortSerializer,
                           ReviewKindergartenSerializer, ReviewSchoolSerializer,
-                          SchoolSerializer, SchoolShortSerializer,
+                          NewsSerializer, SchoolSerializer, SchoolShortSerializer,
                           UndergroundSerializer, LanguageSerializer,
                           AreaSerializer, SportSerializer, CreateSerializer,
                           MusicSerializer, IntelligenceSerializer,
@@ -334,3 +335,12 @@ class FavoriteKindergartenViewSet(viewsets.ModelViewSet):
         kindergartes = self.request.user.favourites_kindergartens
         serializer = KindergartensShortSerializer(kindergartes, many=True)
         return Response(serializer.data)
+
+
+class NewsViewSet(viewsets.ModelViewSet):
+    """Вьюсет для новостей."""
+
+    queryset = News.objects.all()
+    serializer_class = NewsSerializer
+    permission_classes = (IsAdminOrReadOnly,)
+    pagination_class = None

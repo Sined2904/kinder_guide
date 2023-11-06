@@ -7,9 +7,9 @@ from .models import News
 class NewsAdmin(admin.ModelAdmin):
     list_display = (
         'title',
-        'author',
         'content',
-        'date_posted'
+        'date_posted',
+        'image',
     )
     list_filter = [
         'date_posted',
