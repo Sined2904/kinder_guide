@@ -74,7 +74,11 @@ class Profile(Model_For_Additions):
 class SchoolAlbum(models.Model):
     """Модель альбома изображений для школы."""
 
-    image = models.ImageField(upload_to="school/", verbose_name='фото')
+    image = models.ImageField(
+        upload_to="school/",
+        verbose_name='фото',
+        max_upload_size=104857600
+    )
     school = models.ForeignKey(
         'School',
         on_delete=models.CASCADE,
@@ -297,7 +301,11 @@ class AgeCategory(Model_For_Additions):
 class KindergartenAlbum(models.Model):
     """Модель альбома изображений для детского сада."""
 
-    image = models.ImageField(upload_to="kindergartens/", verbose_name='фото')
+    image = models.ImageField(
+        upload_to="kindergartens/",
+        verbose_name='фото',
+        max_upload_size=104857600
+    )
     kindergarten = models.ForeignKey(
         'Kindergartens',
         on_delete=models.CASCADE,
