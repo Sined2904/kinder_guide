@@ -150,7 +150,6 @@ class SchoolSerializer(serializers.ModelSerializer):
     languages = LanguageSerializer(many=True)
     profile = ProfileSerializer(many=True)
     album = SchoolAlbumSerializer(many=True)
-    age_category = AgeCategorySerializer(many=True)
     rating = serializers.SerializerMethodField()
     reviews = serializers.SerializerMethodField()
     is_favorited = serializers.SerializerMethodField()
@@ -180,7 +179,7 @@ class SchoolSerializer(serializers.ModelSerializer):
                   'underground', 'area', 'email', 'website',
                   'album', 'price', 'price_of_year',
                   'classes', 'languages', 'profile',
-                  'working_hours', 'age_category',
+                  'working_hours',
                   'is_favorited', 'coordinates']
 
 
