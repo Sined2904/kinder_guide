@@ -232,7 +232,7 @@ class KindergartensSerializer(serializers.ModelSerializer):
     album = KindergartenAlbumSerializer(many=True)
     rating = serializers.SerializerMethodField()
     reviews = serializers.SerializerMethodField()
-    age_category = AgeCategorySerializer()
+    age_category = AgeCategorySerializer(many=True)
     is_favorited = serializers.SerializerMethodField()
     sport_dev = SportSerializer(many=True)
     create_dev = CreateSerializer(many=True)
