@@ -150,7 +150,7 @@ class SchoolSerializer(serializers.ModelSerializer):
     languages = LanguageSerializer(many=True)
     profile = ProfileSerializer(many=True)
     album = SchoolAlbumSerializer(many=True)
-    age_category = AgeCategorySerializer()
+    age_category = AgeCategorySerializer(many=True)
     rating = serializers.SerializerMethodField()
     reviews = serializers.SerializerMethodField()
     is_favorited = serializers.SerializerMethodField()
