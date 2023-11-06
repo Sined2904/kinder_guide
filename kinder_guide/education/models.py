@@ -391,7 +391,7 @@ class Kindergartens(models.Model):
     working_hours = models.ManyToManyField(
         WorkingHours,
         related_name='kindergartens',
-        verbose_name='Языки',
+        verbose_name='Время работы',
         blank=True
     )
     group_suze = models.CharField(
