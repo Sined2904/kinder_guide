@@ -266,4 +266,4 @@ class KindergartensSerializer(serializers.ModelSerializer):
                   'languages', 'age', 'working_hours',
                   'group_suze', 'sport_dev', 'create_dev',
                   'music_dev', 'intel_dev', 'age_category',
-                  'is_favorited', 'coordinates']
+                  'is_favorited', 'coordinates', 'preparing_for_school']
