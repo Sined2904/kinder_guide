@@ -178,7 +178,7 @@ class SchoolSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'rating', 'reviews',
                   'description', 'telephone', 'address',
                   'underground', 'area', 'email', 'website',
-                  'album', 'price', 'price_of_year', 'age',
+                  'album', 'price', 'price_of_year',
                   'classes', 'languages', 'profile',
                   'working_hours', 'age_category',
                   'is_favorited', 'coordinates']
@@ -263,7 +263,7 @@ class KindergartensSerializer(serializers.ModelSerializer):
                   'album', 'description', 'telephone',
                   'address', 'price', 'price_of_year',
                   'email', 'website', 'underground', 'area',
-                  'languages', 'age', 'working_hours',
+                  'languages', 'working_hours',
                   'group_suze', 'sport_dev', 'create_dev',
                   'music_dev', 'intel_dev', 'age_category',
                   'is_favorited', 'coordinates', 'preparing_for_school']
