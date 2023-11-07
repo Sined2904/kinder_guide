@@ -20,7 +20,8 @@ from .serializers import (AgeCategorySerializer, AreaSerializer,
                           KindergartensShortSerializer, LanguageSerializer,
                           MusicSerializer, ProfileSerializer,
                           ReviewKindergartenSerializer, ReviewSchoolSerializer,
-                          NewsSerializer, SchoolSerializer, SchoolShortSerializer,
+                          NewsSerializer, SchoolSerializer,
+                          SchoolShortSerializer,
                           UndergroundSerializer, LanguageSerializer,
                           AreaSerializer, SportSerializer, CreateSerializer,
                           MusicSerializer, IntelligenceSerializer,
@@ -387,4 +388,3 @@ class NewsViewSet(viewsets.ModelViewSet):
             context={'request': request}
         )
         return Response(serializer.data, status=status.HTTP_200_OK)
-
