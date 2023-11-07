@@ -1,15 +1,15 @@
 from django.urls import include, path
 from djoser import views
-from news.feeds import LatestNewsFeed
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt import views as token_views
 
-from .views import (AgeCategoryViewSet, AreaViewSet, CreateViewSet,
-                    FavoriteKindergartenViewSet, FavoriteSchoolViewSet,
-                    IntelligenceViewSet, KindergartensViewSet, LanguageViewSet,
-                    MusicViewSet, ProfileViewSet, ReviewKindergartenViewSet,
-                    ReviewSchoolViewSet, SchoolViewSet, SportViewSet,
-                    UndergroundViewSet)
+from .views import (KindergartensViewSet, ReviewKindergartenViewSet,
+                    ReviewSchoolViewSet, SchoolViewSet, UndergroundViewSet,
+                    AreaViewSet, LanguageViewSet, NewsViewSet, ProfileViewSet,
+                    AgeCategoryViewSet, SportViewSet, CreateViewSet,
+                    IntelligenceViewSet, MusicViewSet,
+                    FavoriteKindergartenViewSet, FavoriteSchoolViewSet)
+
 
 app_name = 'api'
 
@@ -29,6 +29,7 @@ router.register('sport', SportViewSet, basename='sport')
 router.register('create', CreateViewSet, basename='create')
 router.register('intelligence', IntelligenceViewSet, basename='intelligence')
 router.register('music', MusicViewSet, basename='music')
+router.register('news', NewsViewSet, basename='news')
 
 
 urlpatterns = [
@@ -92,6 +93,4 @@ urlpatterns = [
         ),
         name='schools_review_delete',
     ),
-    # path('auth/', include('djoser.urls')),
-    path('feed/', LatestNewsFeed(), name='news_feed'),
 ]

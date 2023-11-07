@@ -16,8 +16,10 @@ class News(models.Model):
         verbose_name='Автор'
     )
 
-    class Meta:
+    class Meta:        
+        verbose_name = "Новость"
+        verbose_name_plural = "Новости"
         ordering = ['-date_posted']
 
     def __str__(self):
-        return self.content
+        return self.title

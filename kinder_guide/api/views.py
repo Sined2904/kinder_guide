@@ -1,11 +1,12 @@
 from comments.models import ReviewKindergarten, ReviewSchool
 from django.db import transaction
 from django.shortcuts import get_object_or_404
+from education.models import (Favourites_Kindergartens, Favourites_School,
+                              Kindergartens, School, Underground, Area,
+                              Language, Profile, AgeCategory, Sport, Create,
+                              Intelligence, Music)
+from news.models import News
 from django_filters.rest_framework import DjangoFilterBackend
-from education.models import (AgeCategory, Area, Create,
-                              Favourites_Kindergartens, Favourites_School,
-                              Intelligence, Kindergartens, Language, Music,
-                              Profile, School, Sport, Underground)
 from rest_framework import filters, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.pagination import PageNumberPagination
@@ -19,8 +20,11 @@ from .serializers import (AgeCategorySerializer, AreaSerializer,
                           KindergartensShortSerializer, LanguageSerializer,
                           MusicSerializer, ProfileSerializer,
                           ReviewKindergartenSerializer, ReviewSchoolSerializer,
-                          SchoolSerializer, SchoolShortSerializer,
-                          SportSerializer, UndergroundSerializer)
+                          NewsSerializer, SchoolSerializer, SchoolShortSerializer,
+                          UndergroundSerializer, LanguageSerializer,
+                          AreaSerializer, SportSerializer, CreateSerializer,
+                          MusicSerializer, IntelligenceSerializer,
+                          ProfileSerializer, AgeCategorySerializer)
 
 
 class ReviewKindergartenViewSet(viewsets.ModelViewSet):
@@ -357,6 +361,21 @@ class FavoriteKindergartenViewSet(viewsets.ModelViewSet):
     pagination_class = PageNumberPagination
     http_method_names = ['get']
 
+    @action(detail=False, methods=['GET'])
+    def favoritekindergartens(self, request):
+        kindergartes = self.request.user.favourites_kindergartens
+        serializer = KindergartensShortSerializer(kindergartes, many=True)
+        return Response(serializer.data)
+
+
+class NewsViewSet(viewsets.ModelViewSet):
+    """Вьюсет для новостей."""
+
+    queryset = News.objects.all()
+    serializer_class = NewsSerializer
+    permission_classes = (IsAdminOrReadOnly,)
+    pagination_class = None
+
     def list(self, request):
         user = request.user
         kindergartens = Kindergartens.objects.filter(
@@ -368,3 +387,4 @@ class FavoriteKindergartenViewSet(viewsets.ModelViewSet):
             context={'request': request}
         )
         return Response(serializer.data, status=status.HTTP_200_OK)
+

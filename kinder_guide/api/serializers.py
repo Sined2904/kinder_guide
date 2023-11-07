@@ -1,9 +1,11 @@
 from comments.models import ReviewKindergarten, ReviewSchool
-from education.models import (AgeCategory, Area, Create,
-                              Favourites_Kindergartens, Favourites_School,
-                              Intelligence, KindergartenAlbum, Kindergartens,
-                              Language, Music, Profile, School, SchoolAlbum,
-                              Sport, Underground)
+from education.models import (AgeCategory, Area, Favourites_School,
+                              KindergartenAlbum, Kindergartens, Language,
+                              Profile, School, SchoolAlbum, Underground,
+                              Favourites_Kindergartens, Sport, Intelligence,
+                              Music, Create)
+from news.models import News
+
 from rest_framework import serializers
 
 from .utils import get_avg_rating, get_coordinates_from_address
@@ -265,4 +267,13 @@ class KindergartensSerializer(serializers.ModelSerializer):
                   'languages', 'working_hours',
                   'group_suze', 'sport_dev', 'create_dev',
                   'music_dev', 'intel_dev', 'age_category',
+                  'is_favorited']
+
+
+class NewsSerializer(serializers.ModelSerializer):
+    """Сериализатор новостей."""
+
+    class Meta:
+        model = News
+        fields = ['id', 'title', 'content', 'date_posted','image']
                   'is_favorited', 'coordinates', 'preparing_for_school']
