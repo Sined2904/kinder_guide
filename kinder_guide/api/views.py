@@ -22,6 +22,7 @@ from .serializers import (AgeCategorySerializer, AreaSerializer,
                           SchoolSerializer, SchoolShortSerializer,
                           UndergroundSerializer, DevelopmentSerializer,
                           GroupSizeSerializer)
+from .filters import SchoolFilter, KindergartenFilter
 
 
 class ReviewKindergartenViewSet(viewsets.ModelViewSet):
@@ -103,8 +104,8 @@ class SchoolViewSet(viewsets.ModelViewSet):
     serializer_class = SchoolSerializer
     permission_classes = (IsAdminOrReadOnly,)
     pagination_class = PageNumberPagination
+    filterset_class = SchoolFilter
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    filterset_fields = ('id', 'name', 'price', 'price_of_year')
     search_fields = ('name', 'description',
                      'telephone', 'address',
                      'email', 'website'
@@ -180,7 +181,7 @@ class KindergartensViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAdminOrReadOnly,)
     pagination_class = PageNumberPagination
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    filterset_fields = ('id', 'name', 'price', 'price_of_year')
+    filterset_class = KindergartenFilter
     search_fields = ('name', 'description',
                      'telephone', 'address',
                      'email', 'website')
