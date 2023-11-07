@@ -18,6 +18,7 @@ LOCAL_DB = bool(os.getenv('LOCAL_DB', default='False') == "True")
 LOCAL_EMAIL = bool(os.getenv('LOCAL_EMAIL', default='False') == "True")
 
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
+print(ALLOWED_HOSTS)
 
 # CORS_ALLOWED_ORIGINS = [
 #     'http://localhost',
