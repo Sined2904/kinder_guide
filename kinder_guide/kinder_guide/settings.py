@@ -1,17 +1,20 @@
 import os
 from datetime import timedelta
 from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.getenv('SECRET_KEY', '1234')
+SECRET_KEY = os.getenv("SECRET_KEY", '1234')
 
-DEBUG = bool(os.getenv('DEBUG', default='False'))
+DEBUG = bool(os.getenv('DEBUG', default='False') == "True")
 
 # IF TRUE - USES SQLITE3 FOR LOCAL TASTING, IF FALSE - USES POSTGRESQL
-LOCAL_DB = bool(os.getenv('LOCAL_DB', default='False'))
+LOCAL_DB = bool(os.getenv('LOCAL_DB', default='False') == "True")
 
-LOCAL_EMAIL = bool(os.getenv('LOCAL_EMAIL', default='False'))
+LOCAL_EMAIL = bool(os.getenv('LOCAL_EMAIL', default='False') == "True")
 
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
 
@@ -19,7 +22,7 @@ ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
 #     'http://localhost',
 # ]
 # CORS_ORIGIN_WHITELIST = ('http://localhost',)
-CORS_ALLOW_ALL_ORIGINS = DEBUG
+CORS_ALLOW_ALL_ORIGINS = True
 
 CORS_ALLOW_METHODS = [
     'DELETE',
@@ -51,6 +54,7 @@ INSTALLED_APPS = [
     'comments',
     'about_us',
     'news',
+    'decouple'
 ]
 
 MIDDLEWARE = [
@@ -88,7 +92,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'kinder_guide.wsgi.application'
 
-
+print(LOCAL_DB)
 if LOCAL_DB:
     DATABASES = {
         'default': {
