@@ -3,8 +3,8 @@ from django.db import transaction
 from django.shortcuts import get_object_or_404
 from education.models import (Favourites_Kindergartens, Favourites_School,
                               Kindergartens, School, Underground, Area,
-                              Language, Profile, AgeCategory, Sport, Create,
-                              Intelligence, Music)
+                              Language, Profile, AgeCategory, Development,
+                              GroupSize)
 from news.models import News
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, status, viewsets
@@ -15,17 +15,13 @@ from rest_framework.response import Response
 
 from .permissions import IsAdminOrReadOnly
 from .serializers import (AgeCategorySerializer, AreaSerializer,
-                          CreateSerializer, IntelligenceSerializer,
                           KindergartensSerializer,
                           KindergartensShortSerializer, LanguageSerializer,
-                          MusicSerializer, ProfileSerializer,
-                          ReviewKindergartenSerializer, ReviewSchoolSerializer,
-                          NewsSerializer, SchoolSerializer,
-                          SchoolShortSerializer,
-                          UndergroundSerializer, LanguageSerializer,
-                          AreaSerializer, SportSerializer, CreateSerializer,
-                          MusicSerializer, IntelligenceSerializer,
-                          ProfileSerializer, AgeCategorySerializer)
+                          ProfileSerializer, ReviewKindergartenSerializer,
+                          ReviewSchoolSerializer, NewsSerializer,
+                          SchoolSerializer, SchoolShortSerializer,
+                          UndergroundSerializer, DevelopmentSerializer,
+                          GroupSizeSerializer)
 
 
 class ReviewKindergartenViewSet(viewsets.ModelViewSet):
@@ -187,8 +183,7 @@ class KindergartensViewSet(viewsets.ModelViewSet):
     filterset_fields = ('id', 'name', 'price', 'price_of_year')
     search_fields = ('name', 'description',
                      'telephone', 'address',
-                     'email', 'website'
-                     )
+                     'email', 'website')
 
     def get_serializer_class(self):
         """Переопределение сериализатора для POST запроса."""
@@ -297,38 +292,20 @@ class AgeCategoryViewSet(viewsets.ModelViewSet):
     pagination_class = None
 
 
-class SportViewSet(viewsets.ModelViewSet):
+class DevelopmentViewSet(viewsets.ModelViewSet):
     """Вьюсет для Спортивных занятий."""
 
-    queryset = Sport.objects.all()
-    serializer_class = SportSerializer
+    queryset = Development.objects.all()
+    serializer_class = DevelopmentSerializer
     permission_classes = (IsAdminOrReadOnly,)
     pagination_class = None
 
 
-class CreateViewSet(viewsets.ModelViewSet):
+class GroupSizeViewSet(viewsets.ModelViewSet):
     """Вьюсет для Творческих занятий."""
 
-    queryset = Create.objects.all()
-    serializer_class = CreateSerializer
-    permission_classes = (IsAdminOrReadOnly,)
-    pagination_class = None
-
-
-class IntelligenceViewSet(viewsets.ModelViewSet):
-    """Вьюсет для Интеллектуальных занятий."""
-
-    queryset = Intelligence.objects.all()
-    serializer_class = IntelligenceSerializer
-    permission_classes = (IsAdminOrReadOnly,)
-    pagination_class = None
-
-
-class MusicViewSet(viewsets.ModelViewSet):
-    """Вьюсет для Музыкльных занятий."""
-
-    queryset = Music.objects.all()
-    serializer_class = MusicSerializer
+    queryset = GroupSize.objects.all()
+    serializer_class = GroupSizeSerializer
     permission_classes = (IsAdminOrReadOnly,)
     pagination_class = None
 

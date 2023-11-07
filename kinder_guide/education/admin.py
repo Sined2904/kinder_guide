@@ -1,9 +1,10 @@
 from django.contrib import admin
 
-from .models import (AgeCategory, Area, Create, Favourites_Kindergartens,
-                     Favourites_School, Intelligence, KindergartenAlbum,
-                     Kindergartens, Language, Music, Profile, School,
-                     SchoolAlbum, Sport, Underground, Class, WorkingHours)
+from .models import (AgeCategory, Area, Favourites_Kindergartens,
+                     Favourites_School, KindergartenAlbum,
+                     Kindergartens, Language, Profile, School,
+                     SchoolAlbum, Underground, Class, WorkingHours,
+                     Development, GroupSize)
 
 
 class UndergroundAdmin(admin.ModelAdmin):
@@ -71,28 +72,14 @@ class Favourites_SchoolAdmin(admin.ModelAdmin):
 
 
 # Детский сад
-class SportAdmin(admin.ModelAdmin):
+class DevelopmentAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug')
     empty_value_display = '-пусто-'
     search_fields = ('name', )
     ordering = ['name', ]
 
 
-class CreateAdmin(admin.ModelAdmin):
-    list_display = ('name', 'slug')
-    empty_value_display = '-пусто-'
-    search_fields = ('name', )
-    ordering = ['name', ]
-
-
-class IntelligenceAdmin(admin.ModelAdmin):
-    list_display = ('name', 'slug')
-    empty_value_display = '-пусто-'
-    search_fields = ('name', )
-    ordering = ['name', ]
-
-
-class MusicAdmin(admin.ModelAdmin):
+class GroupSizeAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug')
     empty_value_display = '-пусто-'
     search_fields = ('name', )
@@ -114,7 +101,7 @@ class KindergartensAdmin(admin.ModelAdmin):
     list_display = ('name', 'description',
                     'telephone', 'address', 'price',
                     'email', 'area', 'website',
-                    'price_of_year', 'group_suze')
+                    'price_of_year')
     search_fields = ('name',)
     empty_value_display = '-пусто-'
     ordering = ['name', ]
@@ -128,6 +115,8 @@ class Favourites_KindergartensAdmin(admin.ModelAdmin):
     ordering = ['user', ]
 
 
+admin.site.register(Development, DevelopmentAdmin)
+admin.site.register(GroupSize, GroupSizeAdmin)
 admin.site.register(WorkingHours, WorkingHoursAdmin)
 admin.site.register(Class, ClassAdmin)
 admin.site.register(Underground, UndergroundAdmin)
@@ -136,10 +125,6 @@ admin.site.register(Language, LanguageAdmin)
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(AgeCategory, AgeCategoryAdmin)
 admin.site.register(School, SchoolAdmin)
-admin.site.register(Sport, SportAdmin)
-admin.site.register(Create, CreateAdmin)
-admin.site.register(Intelligence, IntelligenceAdmin)
-admin.site.register(Music, MusicAdmin)
 admin.site.register(Kindergartens, KindergartensAdmin)
 admin.site.register(Favourites_School, Favourites_SchoolAdmin)
 admin.site.register(Favourites_Kindergartens, Favourites_KindergartensAdmin)

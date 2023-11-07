@@ -1,21 +1,20 @@
 import os
 from datetime import timedelta
 from pathlib import Path
+from distutils.util import strtobool
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-yir#vh&^tzfltm4qd=1*wp6@4()41%n0*mz2edk0b7g6f(q_kb'
+SECRET_KEY = os.getenv('SECRET_KEY', '1234')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = bool(os.getenv('DEBUG', default='False'))
 
 # IF TRUE - USES SQLITE3 FOR LOCAL TASTING, IF FALSE - USES POSTGRESQL
-LOCAL_DB = False
+LOCAL_DB = bool(os.getenv('LOCAL_DB', default='False'))
 
-LOCAL_EMAIL = False
+LOCAL_EMAIL = bool(os.getenv('LOCAL_EMAIL', default='False'))
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'kinder.acceleratorpracticum.ru', '45.86.181.122']
-
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
 
 # CORS_ALLOWED_ORIGINS = [
 #     'http://localhost',

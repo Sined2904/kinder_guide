@@ -6,8 +6,7 @@ from rest_framework_simplejwt import views as token_views
 from .views import (KindergartensViewSet, ReviewKindergartenViewSet,
                     ReviewSchoolViewSet, SchoolViewSet, UndergroundViewSet,
                     AreaViewSet, LanguageViewSet, NewsViewSet, ProfileViewSet,
-                    AgeCategoryViewSet, SportViewSet, CreateViewSet,
-                    IntelligenceViewSet, MusicViewSet,
+                    AgeCategoryViewSet, GroupSizeViewSet, DevelopmentViewSet,
                     FavoriteKindergartenViewSet, FavoriteSchoolViewSet)
 
 
@@ -25,10 +24,8 @@ router.register('area', AreaViewSet, basename='area')
 router.register('language', LanguageViewSet, basename='language')
 router.register('profile', ProfileViewSet, basename='profile')
 router.register('agecategory', AgeCategoryViewSet, basename='agecategory')
-router.register('sport', SportViewSet, basename='sport')
-router.register('create', CreateViewSet, basename='create')
-router.register('intelligence', IntelligenceViewSet, basename='intelligence')
-router.register('music', MusicViewSet, basename='music')
+router.register('groupsize', GroupSizeViewSet, basename='sport')
+router.register('development', DevelopmentViewSet, basename='create')
 router.register('news', NewsViewSet, basename='news')
 
 
