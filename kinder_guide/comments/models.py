@@ -8,7 +8,7 @@ class Review(models.Model):
         get_user_model(),
         on_delete=models.CASCADE
     )
-    content = models.TextField()
+    content = models.TextField(blank=True)
     date_posted = models.DateTimeField(
         auto_now_add=True)
     rating = models.IntegerField(
@@ -33,6 +33,10 @@ class ReviewSchool(Review):
         related_name='reviews'
     )
 
+    class Meta:
+        verbose_name = 'Отзыв школы'
+        verbose_name_plural = 'Отзывы школ'
+
 
 class ReviewKindergarten(Review):
     review_post = models.ForeignKey(
@@ -40,3 +44,7 @@ class ReviewKindergarten(Review):
         on_delete=models.CASCADE,
         related_name='reviews'
     )
+
+    class Meta:
+        verbose_name = 'Отзыв детского сада'
+        verbose_name_plural = 'Отзывы детских садов'

@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
+    'ckeditor',
+    'colorfield',
     'django_filters',
     'djoser',
     'corsheaders',
@@ -199,6 +201,7 @@ DJOSER = {
     "PASSWORD_RESET_CONFIRM_RETYPE": True,
     'PASSWORD_RESET_CONFIRM_URL': 'password-reset/{uid}/{token}',
     'SEND_CONFIRMATION_EMAIL': True,
+    "TOKEN_MODEL": None,
     'SERIALIZERS': {
         'current_user': 'user.serializers.CustomUserSerializer',
         'user_create': 'djoser.serializers.UserCreateSerializer',

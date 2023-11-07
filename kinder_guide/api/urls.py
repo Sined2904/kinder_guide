@@ -10,6 +10,7 @@ from .views import (KindergartensViewSet, ReviewKindergartenViewSet,
                     IntelligenceViewSet, MusicViewSet,
                     FavoriteKindergartenViewSet, FavoriteSchoolViewSet)
 
+
 app_name = 'api'
 
 router = DefaultRouter()
@@ -30,30 +31,31 @@ router.register('intelligence', IntelligenceViewSet, basename='intelligence')
 router.register('music', MusicViewSet, basename='music')
 router.register('news', NewsViewSet, basename='news')
 
+
 urlpatterns = [
     path('v1/', include(router.urls)),
     path(
-        'auth/signup/',
+        'v1/auth/signup/',
         views.UserViewSet.as_view({'post': 'create'}),
         name='signup',
     ),
     path(
-        'auth/signin/',
+        'v1/auth/signin/',
         token_views.TokenObtainPairView.as_view(),
         name='token_obtain_pair',
     ),
     path(
-        'auth/reset/',
+        'v1/auth/reset/',
         views.UserViewSet.as_view({'post': 'reset_password'}),
         name='reset_password',
     ),
     path(
-        'auth/reset/confirm/',
+        'v1/auth/reset/confirm/',
         views.UserViewSet.as_view({'post': 'reset_password_confirm'}),
         name='reset_password',
     ),
     path(
-        "me/",
+        "v1/me/",
         views.UserViewSet.as_view({"get": "me",
                                    "put": "me",
                                    "patch": "me",
@@ -61,14 +63,14 @@ urlpatterns = [
         name="me",
     ),
     path(
-        "me/favoritekindergartens",
+        "v1/me/favoritekindergartens/",
         FavoriteKindergartenViewSet.as_view({'get': 'list'}),
         name="favoritekindergartens",
     ),
     path(
-        "me/favoriteschool",
+        "v1/me/favoriteschools/",
         FavoriteSchoolViewSet.as_view({'get': 'list'}),
-        name="favoriteschool",
+        name="favoriteschools",
     ),
     path(
         'v1/kindergartens/<int:kindergarten_id>/reviews/',

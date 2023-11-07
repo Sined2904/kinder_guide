@@ -1,6 +1,8 @@
 from django.db import models
 from user.models import MyUser
 
+from colorfield.fields import ColorField
+
 
 # Абстрактные и общие модели
 class Model_For_Additions(models.Model):
@@ -18,6 +20,10 @@ class Model_For_Additions(models.Model):
 
 class Underground(Model_For_Additions):
     """Модель метро."""
+
+    color = ColorField('Цвет ветки',
+                       default='#ffffff',
+                       null=False)
 
     class Meta:
         ordering = ('name', )
@@ -64,23 +70,14 @@ class Profile(Model_For_Additions):
         return self.name
 
 
-class AgeCategory(Model_For_Additions):
-    """Модель возрастной категории."""
-
-    class Meta:
-        ordering = ('name', )
-        verbose_name = 'Возрастная категория'
-        verbose_name_plural = 'Возрастные категории'
-
-    def __str__(self):
-        return self.name
-
-
 # Модели школы
 class SchoolAlbum(models.Model):
     """Модель альбома изображений для школы."""
 
-    image = models.ImageField(upload_to="school/", verbose_name='фото')
+    image = models.ImageField(
+        upload_to="school/",
+        verbose_name='фото',
+    )
     school = models.ForeignKey(
         'School',
         on_delete=models.CASCADE,
@@ -89,6 +86,18 @@ class SchoolAlbum(models.Model):
         blank=True,
         null=True
     )
+
+
+class Class(Model_For_Additions):
+    """Модель классов для школы."""
+
+    class Meta:
+        ordering = ('name', )
+        verbose_name = 'Класс в школе'
+        verbose_name_plural = 'Классы в школе'
+
+    def __str__(self):
+        return self.name
 
 
 class School(models.Model):
@@ -153,29 +162,22 @@ class School(models.Model):
         blank=True,
         null=True
     )
-    age = models.CharField(
-        max_length=250,
-        verbose_name='Возраст',
-        blank=True,
-        null=True
-    )
-    age_category = models.ForeignKey(
-        AgeCategory,
-        on_delete=models.CASCADE,
-        verbose_name='Возрастная категория',
-        blank=True,
-        null=True
-    )
+#    age = models.CharField(
+#        max_length=250,
+#        verbose_name='Возраст',
+#        blank=True,
+#        null=True
+#    )
     price_of_year = models.PositiveIntegerField(
         verbose_name='Цена в год',
         blank=True,
         null=True
     )
-    classes = models.CharField(
-        max_length=250,
+    classes = models.ManyToManyField(
+        Class,
+        related_name='school',
         verbose_name='Классы',
-        blank=True,
-        null=True
+        blank=True
     )
     languages = models.ManyToManyField(
         Language,
@@ -271,10 +273,37 @@ class Music(Model_For_Additions):
         return self.name
 
 
+class WorkingHours(Model_For_Additions):
+    """Модель времени работы (для модели Kindergartens)."""
+
+    class Meta:
+        ordering = ('name', )
+        verbose_name = 'Время работы'
+        verbose_name_plural = 'Время работы'
+
+    def __str__(self):
+        return self.name
+
+
+class AgeCategory(Model_For_Additions):
+    """Модель возрастной категории для сада."""
+
+    class Meta:
+        ordering = ('name', )
+        verbose_name = 'Возрастная категория'
+        verbose_name_plural = 'Возрастные категории'
+
+    def __str__(self):
+        return self.name
+
+
 class KindergartenAlbum(models.Model):
     """Модель альбома изображений для детского сада."""
 
-    image = models.ImageField(upload_to="kindergartens/", verbose_name='фото')
+    image = models.ImageField(
+        upload_to="kindergartens/",
+        verbose_name='фото',
+    )
     kindergarten = models.ForeignKey(
         'Kindergartens',
         on_delete=models.CASCADE,
@@ -341,15 +370,14 @@ class Kindergartens(models.Model):
         blank=True,
         null=True
     )
-    age = models.CharField(
-        max_length=250,
-        verbose_name='Возраст',
-        blank=True,
-        null=True
-    )
-    age_category = models.ForeignKey(
+#    age = models.CharField(
+#        max_length=250,
+#        verbose_name='Возраст',
+#        blank=True,
+#        null=True
+#    )
+    age_category = models.ManyToManyField(
         AgeCategory,
-        on_delete=models.CASCADE,
         verbose_name='Возрастная категория',
         blank=True,
         null=True
@@ -359,11 +387,11 @@ class Kindergartens(models.Model):
         blank=True,
         null=True
     )
-    working_hours = models.CharField(
-        max_length=250,
+    working_hours = models.ManyToManyField(
+        WorkingHours,
+        related_name='kindergartens',
         verbose_name='Время работы',
-        blank=True,
-        null=True
+        blank=True
     )
     group_suze = models.CharField(
         max_length=250,
@@ -400,6 +428,10 @@ class Kindergartens(models.Model):
         related_name='kindergartens',
         verbose_name='Интеллектуальное развитие',
         blank=True
+    )
+    preparing_for_school = models.BooleanField(
+        'Подготовка к школе',
+        default=False
     )
 
     class Meta:

@@ -3,7 +3,7 @@ from django.contrib import admin
 from .models import (AgeCategory, Area, Create, Favourites_Kindergartens,
                      Favourites_School, Intelligence, KindergartenAlbum,
                      Kindergartens, Language, Music, Profile, School,
-                     SchoolAlbum, Sport, Underground)
+                     SchoolAlbum, Sport, Underground, Class, WorkingHours)
 
 
 class UndergroundAdmin(admin.ModelAdmin):
@@ -46,10 +46,17 @@ class SchoolAlbumInline(admin.TabularInline):
     model = SchoolAlbum
 
 
+class ClassAdmin(admin.ModelAdmin):
+    list_display = ('name', 'slug')
+    empty_value_display = '-пусто-'
+    search_fields = ('name', )
+    ordering = ['name', ]
+
+
 class SchoolAdmin(admin.ModelAdmin):
     list_display = ('name', 'description', 'telephone',
                     'address', 'price', 'price_of_year', 'email',
-                    'classes', 'area', 'age', 'working_hours', 'website')
+                    'area', 'working_hours', 'website')
     search_fields = ('name',)
     empty_value_display = '-пусто-'
     ordering = ['name', ]
@@ -92,6 +99,13 @@ class MusicAdmin(admin.ModelAdmin):
     ordering = ['name', ]
 
 
+class WorkingHoursAdmin(admin.ModelAdmin):
+    list_display = ('name', 'slug')
+    empty_value_display = '-пусто-'
+    search_fields = ('name', )
+    ordering = ['name', ]
+
+
 class KindergartenAlbumInline(admin.TabularInline):
     model = KindergartenAlbum
 
@@ -99,8 +113,8 @@ class KindergartenAlbumInline(admin.TabularInline):
 class KindergartensAdmin(admin.ModelAdmin):
     list_display = ('name', 'description',
                     'telephone', 'address', 'price',
-                    'email', 'area', 'age', 'website',
-                    'price_of_year', 'working_hours', 'group_suze')
+                    'email', 'area', 'website',
+                    'price_of_year', 'group_suze')
     search_fields = ('name',)
     empty_value_display = '-пусто-'
     ordering = ['name', ]
@@ -114,6 +128,8 @@ class Favourites_KindergartensAdmin(admin.ModelAdmin):
     ordering = ['user', ]
 
 
+admin.site.register(WorkingHours, WorkingHoursAdmin)
+admin.site.register(Class, ClassAdmin)
 admin.site.register(Underground, UndergroundAdmin)
 admin.site.register(Area, AreaAdmin)
 admin.site.register(Language, LanguageAdmin)
