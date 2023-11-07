@@ -1,6 +1,5 @@
 from django.db import models
 from user.models import MyUser
-
 from colorfield.fields import ColorField
 
 
@@ -162,12 +161,6 @@ class School(models.Model):
         blank=True,
         null=True
     )
-#    age = models.CharField(
-#        max_length=250,
-#        verbose_name='Возраст',
-#        blank=True,
-#        null=True
-#    )
     price_of_year = models.PositiveIntegerField(
         verbose_name='Цена в год',
         blank=True,
@@ -225,49 +218,25 @@ class Favourites_School(models.Model):
 
 
 # Модели детского сада
-class Sport(Model_For_Additions):
-    """Модель спортивных занятий (для модели Kindergartens)."""
+class Development(Model_For_Additions):
+    """Модель "развития" (для модели Kindergartens)."""
 
     class Meta:
         ordering = ('name', )
-        verbose_name = 'Спортивное занятие'
-        verbose_name_plural = 'Спортивные занятия'
+        verbose_name = 'Развитие'
+        verbose_name_plural = 'Развития'
 
     def __str__(self):
         return self.name
 
 
-class Create(Model_For_Additions):
-    """Модель творческих занятий (для модели Kindergartens)."""
+class GroupSize(Model_For_Additions):
+    """Модель размера группы(для модели Kindergartens)."""
 
     class Meta:
         ordering = ('name', )
-        verbose_name = 'Творческое занятие'
-        verbose_name_plural = 'Творческие занятия'
-
-    def __str__(self):
-        return self.name
-
-
-class Intelligence(Model_For_Additions):
-    """Модель интеллектуальных занятий (для модели Kindergartens)."""
-
-    class Meta:
-        ordering = ('name', )
-        verbose_name = 'Интеллектуальное занятие'
-        verbose_name_plural = 'Интеллектуальные занятия'
-
-    def __str__(self):
-        return self.name
-
-
-class Music(Model_For_Additions):
-    """Модель музыкальных занятий (для модели Kindergartens)."""
-
-    class Meta:
-        ordering = ('name', )
-        verbose_name = 'Музыкальное занятие'
-        verbose_name_plural = 'Музыкальные занятия'
+        verbose_name = 'Размер группы'
+        verbose_name_plural = 'Размеры групп'
 
     def __str__(self):
         return self.name
@@ -370,12 +339,6 @@ class Kindergartens(models.Model):
         blank=True,
         null=True
     )
-#    age = models.CharField(
-#        max_length=250,
-#        verbose_name='Возраст',
-#        blank=True,
-#        null=True
-#    )
     age_category = models.ManyToManyField(
         AgeCategory,
         verbose_name='Возрастная категория',
@@ -393,11 +356,11 @@ class Kindergartens(models.Model):
         verbose_name='Время работы',
         blank=True
     )
-    group_suze = models.CharField(
-        max_length=250,
+    group_suze = models.ManyToManyField(
+        GroupSize,
+        related_name='kindergartens',
         verbose_name='Размер группы',
-        blank=True,
-        null=True
+        blank=True
     )
     languages = models.ManyToManyField(
         Language,
@@ -405,28 +368,10 @@ class Kindergartens(models.Model):
         verbose_name='Языки',
         blank=True
     )
-    sport_dev = models.ManyToManyField(
-        Sport,
+    development = models.ManyToManyField(
+        Development,
         related_name='kindergartens',
-        verbose_name='Спортивное развитие',
-        blank=True
-    )
-    create_dev = models.ManyToManyField(
-        Create,
-        related_name='kindergartens',
-        verbose_name='Творческое развитие',
-        blank=True
-    )
-    music_dev = models.ManyToManyField(
-        Music,
-        related_name='kindergartens',
-        verbose_name='Музыкальное развитие',
-        blank=True
-    )
-    intel_dev = models.ManyToManyField(
-        Intelligence,
-        related_name='kindergartens',
-        verbose_name='Интеллектуальное развитие',
+        verbose_name='Развитие',
         blank=True
     )
     preparing_for_school = models.BooleanField(

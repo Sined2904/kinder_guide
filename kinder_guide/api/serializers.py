@@ -2,8 +2,8 @@ from comments.models import ReviewKindergarten, ReviewSchool
 from education.models import (AgeCategory, Area, Favourites_School,
                               KindergartenAlbum, Kindergartens, Language,
                               Profile, School, SchoolAlbum, Underground,
-                              Favourites_Kindergartens, Sport, Intelligence,
-                              Music, Create)
+                              Favourites_Kindergartens, Development,
+                              GroupSize)
 from news.models import News
 from rest_framework import serializers
 
@@ -72,35 +72,19 @@ class AgeCategorySerializer(serializers.ModelSerializer):
         fields = ['name', 'slug']
 
 
-class SportSerializer(serializers.ModelSerializer):
-    """Сериализатор модели возрастной категории."""
+class DevelopmentSerializer(serializers.ModelSerializer):
+    """Сериализатор модели развитие."""
 
     class Meta:
-        model = Sport
+        model = Development
         fields = ['name', 'slug']
 
 
-class CreateSerializer(serializers.ModelSerializer):
-    """Сериализатор модели возрастной категории."""
+class GroupSizeSerializer(serializers.ModelSerializer):
+    """Сериализатор модели 'Размер группы'."""
 
     class Meta:
-        model = Create
-        fields = ['name', 'slug']
-
-
-class IntelligenceSerializer(serializers.ModelSerializer):
-    """Сериализатор модели возрастной категории."""
-
-    class Meta:
-        model = Intelligence
-        fields = ['name', 'slug']
-
-
-class MusicSerializer(serializers.ModelSerializer):
-    """Сериализатор модели возрастной категории."""
-
-    class Meta:
-        model = Music
+        model = GroupSize
         fields = ['name', 'slug']
 
 
@@ -234,10 +218,8 @@ class KindergartensSerializer(serializers.ModelSerializer):
     reviews = serializers.SerializerMethodField()
     age_category = AgeCategorySerializer(many=True)
     is_favorited = serializers.SerializerMethodField()
-    sport_dev = SportSerializer(many=True)
-    create_dev = CreateSerializer(many=True)
-    music_dev = MusicSerializer(many=True)
-    intel_dev = IntelligenceSerializer(many=True)
+    group_suze = GroupSizeSerializer(many=True)
+    development = DevelopmentSerializer(many=True)
     coordinates = serializers.SerializerMethodField()
 
     def get_rating(self, obj):
@@ -264,8 +246,7 @@ class KindergartensSerializer(serializers.ModelSerializer):
                   'address', 'price', 'price_of_year',
                   'email', 'website', 'underground', 'area',
                   'languages', 'working_hours',
-                  'group_suze', 'sport_dev', 'create_dev',
-                  'music_dev', 'intel_dev', 'age_category',
+                  'group_suze', 'development', 'age_category',
                   'is_favorited', 'coordinates', 'preparing_for_school']
 
 
