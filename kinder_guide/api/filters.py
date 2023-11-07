@@ -33,8 +33,8 @@ class SchoolFilter(FilterSet):
         to_field_name='slug',
         queryset=Underground.objects.all(),
     )
-    min_price = NumberFilter(name="price", lookup_type='gte')
-    max_price = NumberFilter(name="price", lookup_type='lte')
+    min_price = NumberFilter(field_name="price", lookup_expr='gte')
+    max_price = NumberFilter(field_name="price", lookup_expr='lte',)
 
     class Meta:
         model = School
@@ -81,8 +81,8 @@ class KindergartenFilter(FilterSet):
         to_field_name='slug',
         queryset=Underground.objects.all(),
     )
-    min_price = NumberFilter(name="price", lookup_type='gte')
-    max_price = NumberFilter(name="price", lookup_type='lte')
+    min_price = NumberFilter(field_name="price", lookup_expr='gte')
+    max_price = NumberFilter(field_name="price", lookup_expr='lte',)
 
     class Meta:
         model = Kindergartens
