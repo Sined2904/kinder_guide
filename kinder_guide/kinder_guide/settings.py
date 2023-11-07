@@ -55,7 +55,6 @@ INSTALLED_APPS = [
     'comments',
     'about_us',
     'news',
-    'decouple'
 ]
 
 MIDDLEWARE = [
@@ -93,7 +92,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'kinder_guide.wsgi.application'
 
-print(LOCAL_DB)
+
 if LOCAL_DB:
     DATABASES = {
         'default': {
