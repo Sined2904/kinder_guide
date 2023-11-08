@@ -102,7 +102,7 @@ class SchoolViewSet(viewsets.ModelViewSet):
 
     queryset = School.objects.all()
     serializer_class = SchoolSerializer
-    permission_classes = (IsAdminOrReadOnly,)
+    permission_classes = (IsAuthenticatedOrReadOnly,)
     pagination_class = PageNumberPagination
     filterset_class = SchoolFilter
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
@@ -178,7 +178,7 @@ class KindergartensViewSet(viewsets.ModelViewSet):
 
     queryset = Kindergartens.objects.all()
     serializer_class = KindergartensSerializer
-    permission_classes = (IsAdminOrReadOnly,)
+    permission_classes = (IsAuthenticatedOrReadOnly,)
     pagination_class = PageNumberPagination
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filterset_class = KindergartenFilter
