@@ -15,6 +15,13 @@ class ReviewSerializer(serializers.ModelSerializer):
 
     grade = serializers.IntegerField(source='rating')
 
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        f_name = instance.author.first_name
+        l_name = instance.author.last_name
+        representation['author'] = f'{f_name} {l_name}'
+        return representation
+
 
 class ReviewSchoolSerializer(ReviewSerializer):
     """Сериализатор отзывов школы."""
