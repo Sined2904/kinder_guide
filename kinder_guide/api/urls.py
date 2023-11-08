@@ -3,12 +3,11 @@ from djoser import views
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt import views as token_views
 
-from .views import (KindergartensViewSet, ReviewKindergartenViewSet,
-                    ReviewSchoolViewSet, SchoolViewSet, UndergroundViewSet,
-                    AreaViewSet, LanguageViewSet, NewsViewSet, ProfileViewSet,
-                    AgeCategoryViewSet, GroupSizeViewSet, DevelopmentViewSet,
-                    FavoriteKindergartenViewSet, FavoriteSchoolViewSet)
-
+from .views import (AgeCategoryViewSet, AreaViewSet, DevelopmentViewSet,
+                    FavoriteKindergartenViewSet, FavoriteSchoolViewSet,
+                    GroupSizeViewSet, KindergartensViewSet, LanguageViewSet,
+                    NewsViewSet, ProfileViewSet, ReviewKindergartenViewSet,
+                    ReviewSchoolViewSet, SchoolViewSet, UndergroundViewSet)
 
 app_name = 'api'
 
@@ -24,8 +23,8 @@ router.register('area', AreaViewSet, basename='area')
 router.register('language', LanguageViewSet, basename='language')
 router.register('profile', ProfileViewSet, basename='profile')
 router.register('agecategory', AgeCategoryViewSet, basename='agecategory')
-router.register('groupsize', GroupSizeViewSet, basename='sport')
-router.register('development', DevelopmentViewSet, basename='create')
+router.register('groupsize', GroupSizeViewSet, basename='groupsize')
+router.register('development', DevelopmentViewSet, basename='development')
 router.register('news', NewsViewSet, basename='news')
 
 

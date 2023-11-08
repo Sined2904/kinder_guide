@@ -205,6 +205,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
+        400:
+          description: Отсутствует обязательное поле или оно некорректно
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
         401:
           description: Необходим JWT-токен
         403:
@@ -237,26 +243,30 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ValidationError'
-      security:
-      - jwt-token:
-        - write:admin, user
-    delete:
-      tags:
-        - USERS
-      operationId: Удаление своего аккаунта
-      description: |
-        Удалить пользователя.  
-        Права доступа: **Любой авторизованный пользователь, администратор**
-      responses:
-        204:
-          description: Удачное выполнение запроса
         401:
           description: Необходим JWT-токен
         403:
           description: Нет прав доступа
       security:
       - jwt-token:
-        - write:admin  
+        - write:admin, user
+    # delete:
+    #   tags:
+    #     - USERS
+    #   operationId: Удаление своего аккаунта
+    #   description: |
+    #     Удалить пользователя.  
+    #     Права доступа: **Любой авторизованный пользователь**
+    #   responses:
+    #     204:
+    #       description: Удачное выполнение запроса
+    #     401:
+    #       description: Необходим JWT-токен
+    #     403:
+    #       description: Нет прав доступа
+    #   security:
+    #   - jwt-token:
+    #     - write:admin, user
   /schools/:
     get:
       tags:
@@ -329,18 +339,9 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  count:
-                    type: integer
-                  next:
-                    type: string
-                  previous:
-                    type: string
-                  results:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/School'
+                type: array
+                items:
+                  $ref: '#/components/schemas/School'
   /schools/{school_id}/:
     parameters:
       - name: school_id
@@ -566,18 +567,9 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  count:
-                    type: integer
-                  next:
-                    type: string
-                  previous:
-                    type: string
-                  results:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Kindergarten'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Kindergarten'
   /kindergartens/{kindergarten_id}/:
     parameters:
       - name: kindergarten_id
@@ -931,18 +923,9 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  count:
-                    type: integer
-                  next:
-                    type: string
-                  previous:
-                    type: string
-                  results:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Review'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Review'
         404:
           description: Не найдена школа или отзыв
     post:
@@ -1081,18 +1064,9 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  count:
-                    type: integer
-                  next:
-                    type: string
-                  previous:
-                    type: string
-                  results:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Review'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Review'
         404:
           description: Не найден детский сад или отзыв
     post:
@@ -1374,18 +1348,9 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  count:
-                    type: integer
-                  next:
-                    type: string
-                  previous:
-                    type: string
-                  results:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/News'
+                type: array
+                items:
+                  $ref: '#/components/schemas/News'
     post:
       tags:
         - NEWS
@@ -1507,18 +1472,9 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  count:
-                    type: integer
-                  next:
-                    type: string
-                  previous:
-                    type: string
-                  results:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Subway'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Subway'
         401:
           description: Необходим JWT-токен
         403:
@@ -1540,23 +1496,14 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  count:
-                    type: integer
-                  next:
-                    type: string
-                  previous:
-                    type: string
-                  results:
-                    type: array
-                    items:
-                      properties:
-                        name:
-                          type: string
-                          example: 'Северо-Восточный'
-                        slag:
-                          type: string
+                type: array
+                items:
+                  properties:
+                    name:
+                      type: string
+                      example: 'Северо-Восточный'
+                    slag:
+                      type: string
         401:
           description: Необходим JWT-токен
         403:
@@ -1578,18 +1525,9 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  count:
-                    type: integer
-                  next:
-                    type: string
-                  previous:
-                    type: string
-                  results:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Language'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Language'
         401:
           description: Необходим JWT-токен
         403:
@@ -1611,18 +1549,9 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  count:
-                    type: integer
-                  next:
-                    type: string
-                  previous:
-                    type: string
-                  results:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Profile'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Profile'
         401:
           description: Необходим JWT-токен
         403:
@@ -1644,23 +1573,9 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  count:
-                    type: integer
-                  next:
-                    type: string
-                  previous:
-                    type: string
-                  results:
-                    type: array
-                    items:
-                      properties:
-                        name:
-                          type: string
-                          example: 'Дошкольное обучение'
-                        slag:
-                          type: string
+                type: array
+                items:
+                  $ref: '#/components/schemas/AgeCategory'
         401:
           description: Необходим JWT-токен
         403:
@@ -1668,13 +1583,13 @@ paths:
       security:
       - jwt-token:
         - read:admin
-  /sport/:
+  /groupsize/:
     get:
       tags:
         - FILTERS
-      operationId: Получение списка всех объектов спортивного развития
+      operationId: Получение списка всех объектов размера группы
       description: |
-        Получить список всех объектов спортивного развития для фильтрации.  
+        Получить список всех объектов размера группы для фильтрации.  
         Права доступа: **Администратор**
       responses:
         200:
@@ -1682,18 +1597,9 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  count:
-                    type: integer
-                  next:
-                    type: string
-                  previous:
-                    type: string
-                  results:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Sport_dev'
+                type: array
+                items:
+                  $ref: '#/components/schemas/GroupSize'
         401:
           description: Необходим JWT-токен
         403:
@@ -1701,13 +1607,13 @@ paths:
       security:
       - jwt-token:
         - read:admin
-  /create/:
+  /development/:
     get:
       tags:
         - FILTERS
-      operationId: Получение списка всех объектов творческого развития
+      operationId: Получение списка всех объектов развития
       description: |
-        Получить список всех объектов творческого развития для фильтрации.  
+        Получить список всех объектов развития для фильтрации.  
         Права доступа: **Администратор**
       responses:
         200:
@@ -1715,84 +1621,9 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  count:
-                    type: integer
-                  next:
-                    type: string
-                  previous:
-                    type: string
-                  results:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Create_dev'
-        401:
-          description: Необходим JWT-токен
-        403:
-          description: Нет прав доступа
-      security:
-      - jwt-token:
-        - read:admin
-  /intelligence/:
-    get:
-      tags:
-        - FILTERS
-      operationId: Получение списка всех объектов интеллектуального развития
-      description: |
-        Получить список всех объектов интеллектуального развития для фильтрации.  
-        Права доступа: **Администратор**
-      responses:
-        200:
-          description: Удачное выполнение запроса
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  count:
-                    type: integer
-                  next:
-                    type: string
-                  previous:
-                    type: string
-                  results:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Intel_dev'
-        401:
-          description: Необходим JWT-токен
-        403:
-          description: Нет прав доступа
-      security:
-      - jwt-token:
-        - read:admin
-  /music/:
-    get:
-      tags:
-        - FILTERS
-      operationId: Получение списка всех объектов музыкального развития
-      description: |
-        Получить список всех объектов музыкального развития для фильтрации.  
-        Права доступа: **Администратор**
-      responses:
-        200:
-          description: Удачное выполнение запроса
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  count:
-                    type: integer
-                  next:
-                    type: string
-                  previous:
-                    type: string
-                  results:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Music_dev'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Development'
         401:
           description: Необходим JWT-токен
         403:
@@ -2114,22 +1945,11 @@ components:
         price_of_year:
           type: integer
           title: цена за год
-        age:
-          type: string
-          title: возраст
-          example: '6 - 17 лет'
-        age_category:
-          type: object
-          properties:
-            name:
-              type: string
-              example: 'Дошкольное обучение'
-            slag:
-              type: string
         classes:
-          type: string
+          type: array
           title: классы
-          example: 'С 1 по 11'
+          items:
+            $ref: '#/components/schemas/Classes'
         working_hours:
           type: string
           title: время работы
@@ -2139,7 +1959,7 @@ components:
           title: языки
           items:
             $ref: '#/components/schemas/Language'
-        profiles:
+        profile:
           type: array
           title: профиль
           items:
@@ -2148,6 +1968,14 @@ components:
           type: bool
           title: в избранном
           example: True
+        coordinates:
+          type: array
+          items:
+            type: number
+          description: Координаты школы [широта,долгота]
+          example: [55.6279099,37.60823370062961]
+          minItems: 2
+          maxItems: 2
     SchoolWrite:
       title: Школа (POST)
       type: object
@@ -2209,22 +2037,11 @@ components:
         price_of_year:
           type: integer
           title: цена за год
-        age:
-          type: string
-          title: возраст
-          example: '6 - 17 лет'
-        age_category:
-          type: object
-          properties:
-            name:
-              type: string
-              example: 'Дошкольное обучение'
-            slag:
-              type: string
         classes:
-          type: string
+          type: array
           title: классы
-          example: 'С 1 по 11'
+          items:
+            $ref: '#/components/schemas/Classes'
         working_hours:
           type: string
           title: время работы
@@ -2234,11 +2051,19 @@ components:
           title: языки
           items:
             $ref: '#/components/schemas/Language'
-        profiles:
+        profile:
           type: array
           title: профиль
           items:
             $ref: '#/components/schemas/Profile'
+        coordinates:
+          type: array
+          items:
+            type: number
+          description: Координаты школы [широта,долгота]
+          example: [55.6279099,37.60823370062961]
+          minItems: 2
+          maxItems: 2
     SchoolChange:
       title: Школа (PATCH)
       type: object
@@ -2297,22 +2122,11 @@ components:
         price_of_year:
           type: integer
           title: цена за год
-        age:
-          type: string
-          title: возраст
-          example: '6 - 17 лет'
-        age_category:
-          type: object
-          properties:
-            name:
-              type: string
-              example: 'Дошкольное обучение'
-            slag:
-              type: string
         classes:
-          type: string
+          type: array
           title: классы
-          example: 'С 1 по 11'
+          items:
+            $ref: '#/components/schemas/Classes'
         working_hours:
           type: string
           title: время работы
@@ -2322,11 +2136,19 @@ components:
           title: языки
           items:
             $ref: '#/components/schemas/Language'
-        profiles:
+        profile:
           type: array
           title: профиль
           items:
             $ref: '#/components/schemas/Profile'
+        coordinates:
+          type: array
+          items:
+            type: number
+          description: Координаты школы [широта,долгота]
+          example: [55.6279099,37.60823370062961]
+          minItems: 2
+          maxItems: 2
     Kindergartens:
       title: Детские сады
       type: object
@@ -2435,55 +2257,47 @@ components:
         price_of_year:
           type: integer
           title: цена за год
-        age:
-          type: string
-          title: возраст
-          example: '1 - 7 лет'
         age_category:
-          type: object
-          properties:
-            name:
-              type: string
-              example: 'Дошкольное обучение'
-            slag:
-              type: string
+          type: array
+          title: возрастная категория
+          items:
+            $ref: '#/components/schemas/AgeCategory'
         working_hours:
-          type: string
+          type: array
           title: время работы
-          example: 'С 8:00 до 20:00'
+          items:
+            $ref: '#/components/schemas/WorkingHours'
         group_suze:
-          type: string
+          type: array
           title: размер группы
-          example: 'До 15 человек'
+          items:
+            $ref: '#/components/schemas/GroupSize'
         languages:
           type: array
           title: языки
           items:
             $ref: '#/components/schemas/Language'
-        sport_dev:
+        development:
           type: array
-          title: спортивное развитие
+          title: развитие
           items:
-            $ref: '#/components/schemas/Sport_dev'
-        create_dev:
-          type: array
-          title: творческое развитие
-          items:
-            $ref: '#/components/schemas/Create_dev'
-        music_dev:
-          type: array
-          title: музыкальное развитие
-          items:
-            $ref: '#/components/schemas/Music_dev'
-        intel_dev:
-          type: array
-          title: интеллектуальное развитие
-          items:
-            $ref: '#/components/schemas/Intel_dev'
+            $ref: '#/components/schemas/Development'
         is_favorited:
           type: bool
           title: в избранном
           example: True
+        coordinates:
+          type: array
+          items:
+            type: number
+          description: Координаты школы [широта,долгота]
+          example: [55.6279099,37.60823370062961]
+          minItems: 2
+          maxItems: 2
+        preparing_for_school:
+          type: bool
+          title: подготовка к школе
+          example: False
     KindergartenWrite:
       title: Детский сад (POST)
       type: object
@@ -2545,51 +2359,43 @@ components:
         price_of_year:
           type: integer
           title: цена за год
-        age:
-          type: string
-          title: возраст
-          example: '1 - 7 лет'
         age_category:
-          type: object
-          properties:
-            name:
-              type: string
-              example: 'Дошкольное обучение'
-            slag:
-              type: string
+          type: array
+          title: возрастная категория
+          items:
+            $ref: '#/components/schemas/AgeCategory'
         working_hours:
-          type: string
+          type: array
           title: время работы
-          example: 'С 8:00 до 20:00'
+          items:
+            $ref: '#/components/schemas/WorkingHours'
         group_suze:
-          type: string
+          type: array
           title: размер группы
-          example: 'До 15 человек'
+          items:
+            $ref: '#/components/schemas/GroupSize'
         languages:
           type: array
           title: языки
           items:
             $ref: '#/components/schemas/Language'
-        sport_dev:
+        development:
           type: array
-          title: спортивное развитие
+          title: развитие
           items:
-            $ref: '#/components/schemas/Sport_dev'
-        create_dev:
+            $ref: '#/components/schemas/Development'
+        coordinates:
           type: array
-          title: творческое развитие
           items:
-            $ref: '#/components/schemas/Create_dev'
-        music_dev:
-          type: array
-          title: музыкальное развитие
-          items:
-            $ref: '#/components/schemas/Music_dev'
-        intel_dev:
-          type: array
-          title: интеллектуальное развитие
-          items:
-            $ref: '#/components/schemas/Intel_dev'
+            type: number
+          description: Координаты школы [широта,долгота]
+          example: [55.6279099,37.60823370062961]
+          minItems: 2
+          maxItems: 2
+        preparing_for_school:
+          type: bool
+          title: подготовка к школе
+          example: False
     KindergartenChange:
       title: Детский сад (PATCH)
       type: object
@@ -2648,51 +2454,43 @@ components:
         price_of_year:
           type: integer
           title: цена за год
-        age:
-          type: string
-          title: возраст
-          example: '1 - 7 лет'
         age_category:
-          type: object
-          properties:
-            name:
-              type: string
-              example: 'Дошкольное обучение'
-            slag:
-              type: string
+          type: array
+          title: возрастная категория
+          items:
+            $ref: '#/components/schemas/AgeCategory'
         working_hours:
-          type: string
+          type: array
           title: время работы
-          example: 'С 8:00 до 20:00'
+          items:
+            $ref: '#/components/schemas/WorkingHours'
         group_suze:
-          type: string
+          type: array
           title: размер группы
-          example: 'До 15 человек'
+          items:
+            $ref: '#/components/schemas/GroupSize'
         languages:
           type: array
           title: языки
           items:
             $ref: '#/components/schemas/Language'
-        sport_dev:
+        development:
           type: array
-          title: спортивное развитие
+          title: развитие
           items:
-            $ref: '#/components/schemas/Sport_dev'
-        create_dev:
+            $ref: '#/components/schemas/Development'
+        coordinates:
           type: array
-          title: творческое развитие
           items:
-            $ref: '#/components/schemas/Create_dev'
-        music_dev:
-          type: array
-          title: музыкальное развитие
-          items:
-            $ref: '#/components/schemas/Music_dev'
-        intel_dev:
-          type: array
-          title: интеллектуальное развитие
-          items:
-            $ref: '#/components/schemas/Intel_dev'
+            type: number
+          description: Координаты школы [широта,долгота]
+          example: [55.6279099,37.60823370062961]
+          minItems: 2
+          maxItems: 2
+        preparing_for_school:
+          type: bool
+          title: подготовка к школе
+          example: False
     Coursess:
       title: Курсы
       type: object
@@ -2776,10 +2574,14 @@ components:
         price:
           type: integer
           title: цена
-        age:
-          type: string
-          title: возраст
-          example: 'C 18 лет'
+        coordinates:
+          type: array
+          items:
+            type: number
+          description: Координаты школы [широта,долгота]
+          example: [55.6279099,37.60823370062961]
+          minItems: 2
+          maxItems: 2
     CoursesWrite:
       title: Курсы (POST)
       type: object
@@ -2825,20 +2627,24 @@ components:
         price:
           type: integer
           title: цена
-        age:
-          type: string
-          title: возраст
-          example: 'C 18 лет'
         languages:
           type: array
           title: языки
           items:
             $ref: '#/components/schemas/Language'
-        profiles:
+        profile:
           type: array
           title: профиль
           items:
             $ref: '#/components/schemas/Profile'
+        coordinates:
+          type: array
+          items:
+            type: number
+          description: Координаты школы [широта,долгота]
+          example: [55.6279099,37.60823370062961]
+          minItems: 2
+          maxItems: 2
     Language:
       title: Языки
       type: object
@@ -2858,40 +2664,50 @@ components:
           example: 'Гуманитарный'
         slug:
           type: string
-    Sport_dev:
-      title: Спортивное развитие
+    AgeCategory:
+      title: Возрастная категория
       type: object
       properties:
         name:
           type: string
-          example: 'Футбол'
+          example: '1-3 года'
         slug:
           type: string
-    Create_dev:
-      title: Творческое развитие
+    Classes:
+      title: Классы
       type: object
       properties:
         name:
           type: string
-          example: 'Рукоделие'
+          example: '1-11 класс'
         slug:
           type: string
-    Music_dev:
-      title: Музыкальное развитие
+    WorkingHours:
+      title: Часы работы
       type: object
       properties:
         name:
           type: string
-          example: 'Вокал'
+          example: 'С 8:00 до 20:00'
         slug:
           type: string
-    Intel_dev:
-      title: Интеллектуальное развитие
+    GroupSize:
+      title: Размер группы
       type: object
       properties:
         name:
           type: string
-          example: 'Шахматы'
+          example: 'До 15 человек'
+        slug:
+          type: string
+    Development:
+      title: Развитие
+      type: object
+      description: Направления развития (спорт, музыка и т.д.)
+      properties:
+        name:
+          type: string
+          example: 'Музыка'
         slug:
           type: string
     Album:

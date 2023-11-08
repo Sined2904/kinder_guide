@@ -1,6 +1,6 @@
+from colorfield.fields import ColorField
 from django.db import models
 from user.models import MyUser
-from colorfield.fields import ColorField
 
 
 # Абстрактные и общие модели
@@ -342,8 +342,7 @@ class Kindergartens(models.Model):
     age_category = models.ManyToManyField(
         AgeCategory,
         verbose_name='Возрастная категория',
-        blank=True,
-        null=True
+        blank=True
     )
     price_of_year = models.PositiveIntegerField(
         verbose_name='Цена в год',

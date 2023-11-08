@@ -1,9 +1,9 @@
 from comments.models import ReviewKindergarten, ReviewSchool
-from education.models import (AgeCategory, Area, Favourites_School,
-                              KindergartenAlbum, Kindergartens, Language,
-                              Profile, School, SchoolAlbum, Underground,
-                              Favourites_Kindergartens, Development,
-                              GroupSize)
+from education.models import (AgeCategory, Area, Class, Development,
+                              Favourites_Kindergartens, Favourites_School,
+                              GroupSize, KindergartenAlbum, Kindergartens,
+                              Language, Profile, School, SchoolAlbum,
+                              Underground, WorkingHours)
 from news.models import News
 from rest_framework import serializers
 
@@ -72,6 +72,22 @@ class AgeCategorySerializer(serializers.ModelSerializer):
         fields = ['name', 'slug']
 
 
+class ClassSerializer(serializers.ModelSerializer):
+    """Сериализатор модели классов."""
+
+    class Meta:
+        model = Class
+        fields = ['name', 'slug']
+
+
+class WorkingHoursSerializer(serializers.ModelSerializer):
+    """Сериализатор модели часов работы."""
+
+    class Meta:
+        model = WorkingHours
+        fields = ['name', 'slug']
+
+
 class DevelopmentSerializer(serializers.ModelSerializer):
     """Сериализатор модели развитие."""
 
@@ -135,6 +151,7 @@ class SchoolSerializer(serializers.ModelSerializer):
     languages = LanguageSerializer(many=True)
     profile = ProfileSerializer(many=True)
     album = SchoolAlbumSerializer(many=True)
+    classes = ClassSerializer(many=True)
     rating = serializers.SerializerMethodField()
     reviews = serializers.SerializerMethodField()
     is_favorited = serializers.SerializerMethodField()
@@ -221,6 +238,7 @@ class KindergartensSerializer(serializers.ModelSerializer):
     group_suze = GroupSizeSerializer(many=True)
     development = DevelopmentSerializer(many=True)
     coordinates = serializers.SerializerMethodField()
+    working_hours = WorkingHoursSerializer(many=True)
 
     def get_rating(self, obj):
         return get_avg_rating(ReviewKindergarten, obj)
