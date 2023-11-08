@@ -1,28 +1,28 @@
 from comments.models import ReviewKindergarten, ReviewSchool
 from django.db import transaction
 from django.shortcuts import get_object_or_404
-from education.models import (Favourites_Kindergartens, Favourites_School,
-                              Kindergartens, School, Underground, Area,
-                              Language, Profile, AgeCategory, Development,
-                              GroupSize)
-from news.models import News
 from django_filters.rest_framework import DjangoFilterBackend
+from education.models import (AgeCategory, Area, Class, Development,
+                              Favourites_Kindergartens, Favourites_School,
+                              GroupSize, Kindergartens, Language, Profile,
+                              School, Underground, WorkingHours)
+from news.models import News
 from rest_framework import filters, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
+from .filters import KindergartenFilter, SchoolFilter
 from .permissions import IsAdminOrReadOnly
 from .serializers import (AgeCategorySerializer, AreaSerializer,
-                          KindergartensSerializer,
+                          ClassSerializer, DevelopmentSerializer,
+                          GroupSizeSerializer, KindergartensSerializer,
                           KindergartensShortSerializer, LanguageSerializer,
-                          ProfileSerializer, ReviewKindergartenSerializer,
-                          ReviewSchoolSerializer, NewsSerializer,
+                          NewsSerializer, ProfileSerializer,
+                          ReviewKindergartenSerializer, ReviewSchoolSerializer,
                           SchoolSerializer, SchoolShortSerializer,
-                          UndergroundSerializer, DevelopmentSerializer,
-                          GroupSizeSerializer)
-from .filters import SchoolFilter, KindergartenFilter
+                          UndergroundSerializer, WorkingHoursSerializer)
 
 
 class ReviewKindergartenViewSet(viewsets.ModelViewSet):
@@ -278,6 +278,24 @@ class ProfileViewSet(viewsets.ModelViewSet):
 
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
+    permission_classes = (IsAdminOrReadOnly,)
+    pagination_class = None
+
+
+class WorkingHoursViewSet(viewsets.ModelViewSet):
+    """Вьюсет для Часов работы."""
+
+    queryset = WorkingHours.objects.all()
+    serializer_class = WorkingHoursSerializer
+    permission_classes = (IsAdminOrReadOnly,)
+    pagination_class = None
+
+
+class ClassViewSet(viewsets.ModelViewSet):
+    """Вьюсет для Профилей."""
+
+    queryset = Class.objects.all()
+    serializer_class = ClassSerializer
     permission_classes = (IsAdminOrReadOnly,)
     pagination_class = None
 

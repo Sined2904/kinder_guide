@@ -1,10 +1,9 @@
 from django.contrib import admin
 
-from .models import (AgeCategory, Area, Favourites_Kindergartens,
-                     Favourites_School, KindergartenAlbum,
-                     Kindergartens, Language, Profile, School,
-                     SchoolAlbum, Underground, Class, WorkingHours,
-                     Development, GroupSize)
+from .models import (AgeCategory, Area, Class, Development,
+                     Favourites_Kindergartens, Favourites_School, GroupSize,
+                     KindergartenAlbum, Kindergartens, Language, Profile,
+                     School, SchoolAlbum, Underground, WorkingHours)
 
 
 class UndergroundAdmin(admin.ModelAdmin):
