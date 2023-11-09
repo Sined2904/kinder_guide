@@ -218,18 +218,6 @@ class Favourites_School(models.Model):
 
 
 # Модели детского сада
-class Development(Model_For_Additions):
-    """Модель "развития" (для модели Kindergartens)."""
-
-    class Meta:
-        ordering = ('name', )
-        verbose_name = 'Развитие'
-        verbose_name_plural = 'Развития'
-
-    def __str__(self):
-        return self.name
-
-
 class GroupSize(Model_For_Additions):
     """Модель размера группы(для модели Kindergartens)."""
 
@@ -355,7 +343,7 @@ class Kindergartens(models.Model):
         verbose_name='Время работы',
         blank=True
     )
-    group_suze = models.ManyToManyField(
+    group_size = models.ManyToManyField(
         GroupSize,
         related_name='kindergartens',
         verbose_name='Размер группы',
@@ -367,11 +355,29 @@ class Kindergartens(models.Model):
         verbose_name='Языки',
         blank=True
     )
-    development = models.ManyToManyField(
-        Development,
-        related_name='kindergartens',
-        verbose_name='Развитие',
-        blank=True
+    create_dev = models.CharField(
+        max_length=250,
+        verbose_name='Творческое развитие',
+        blank=True,
+        null=True
+    )
+    intel_dev = models.CharField(
+        max_length=250,
+        verbose_name='Интеллектуальное развитие',
+        blank=True,
+        null=True
+    )
+    music_dev = models.CharField(
+        max_length=250,
+        verbose_name='Музыкальное развитие',
+        blank=True,
+        null=True
+    )
+    sport_dev = models.CharField(
+        max_length=250,
+        verbose_name='Спортивное развитие',
+        blank=True,
+        null=True
     )
     preparing_for_school = models.BooleanField(
         'Подготовка к школе',

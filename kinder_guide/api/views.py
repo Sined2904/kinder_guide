@@ -2,7 +2,7 @@ from comments.models import ReviewKindergarten, ReviewSchool
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
-from education.models import (AgeCategory, Area, Class, Development,
+from education.models import (AgeCategory, Area, Class,
                               Favourites_Kindergartens, Favourites_School,
                               GroupSize, Kindergartens, Language, Profile,
                               School, Underground, WorkingHours)
@@ -16,8 +16,8 @@ from rest_framework.response import Response
 from .filters import KindergartenFilter, SchoolFilter
 from .permissions import IsAdminOrReadOnly
 from .serializers import (AgeCategorySerializer, AreaSerializer,
-                          ClassSerializer, DevelopmentSerializer,
-                          GroupSizeSerializer, KindergartensSerializer,
+                          ClassSerializer, GroupSizeSerializer,
+                          KindergartensSerializer,
                           KindergartensShortSerializer, LanguageSerializer,
                           NewsSerializer, ProfileSerializer,
                           ReviewKindergartenSerializer, ReviewSchoolSerializer,
@@ -247,7 +247,7 @@ class KindergartensViewSet(viewsets.ModelViewSet):
 
 
 class UndergroundViewSet(viewsets.ModelViewSet):
-    """Вьюсет для метро."""
+    """Вьюсет для Метро."""
 
     queryset = Underground.objects.all()
     serializer_class = UndergroundSerializer
@@ -292,7 +292,7 @@ class WorkingHoursViewSet(viewsets.ModelViewSet):
 
 
 class ClassViewSet(viewsets.ModelViewSet):
-    """Вьюсет для Профилей."""
+    """Вьюсет для Классов."""
 
     queryset = Class.objects.all()
     serializer_class = ClassSerializer
@@ -309,17 +309,8 @@ class AgeCategoryViewSet(viewsets.ModelViewSet):
     pagination_class = None
 
 
-class DevelopmentViewSet(viewsets.ModelViewSet):
-    """Вьюсет для Спортивных занятий."""
-
-    queryset = Development.objects.all()
-    serializer_class = DevelopmentSerializer
-    permission_classes = (IsAdminOrReadOnly,)
-    pagination_class = None
-
-
 class GroupSizeViewSet(viewsets.ModelViewSet):
-    """Вьюсет для Творческих занятий."""
+    """Вьюсет для Размера группы."""
 
     queryset = GroupSize.objects.all()
     serializer_class = GroupSizeSerializer
@@ -364,7 +355,7 @@ class FavoriteKindergartenViewSet(viewsets.ModelViewSet):
 
 
 class NewsViewSet(viewsets.ModelViewSet):
-    """Вьюсет для новостей."""
+    """Вьюсет для Новостей."""
 
     queryset = News.objects.all()
     serializer_class = NewsSerializer

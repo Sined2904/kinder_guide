@@ -1,8 +1,8 @@
 from django_filters import FilterSet, NumberFilter
 from django_filters import rest_framework as filters
-from education.models import (School, Kindergartens, Profile, Class, Language,
-                              Area, Underground, WorkingHours, GroupSize,
-                              Development, AgeCategory)
+from education.models import (AgeCategory, Area, Class, GroupSize,
+                              Kindergartens, Language, Profile, School,
+                              Underground, WorkingHours)
 
 
 class SchoolFilter(FilterSet):
@@ -56,11 +56,6 @@ class KindergartenFilter(FilterSet):
         to_field_name='slug',
         queryset=GroupSize.objects.all(),
     )
-    development = filters.ModelMultipleChoiceFilter(
-        field_name='development__slug',
-        to_field_name='slug',
-        queryset=Development.objects.all(),
-    )
     age_category = filters.ModelMultipleChoiceFilter(
         field_name='age_category__slug',
         to_field_name='slug',
@@ -86,7 +81,7 @@ class KindergartenFilter(FilterSet):
 
     class Meta:
         model = Kindergartens
-        fields = ['working_hours', 'group_suze', 'development',
+        fields = ['working_hours', 'group_suze',
                   'preparing_for_school', 'age_category', 'area',
                   'underground', 'languages', 'area', 'min_price',
                   'max_price']
