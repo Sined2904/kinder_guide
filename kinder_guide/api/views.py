@@ -22,7 +22,9 @@ from .serializers import (AgeCategorySerializer, AreaSerializer,
                           NewsSerializer, ProfileSerializer,
                           ReviewKindergartenSerializer, ReviewSchoolSerializer,
                           SchoolSerializer, SchoolShortSerializer,
-                          UndergroundSerializer, WorkingHoursSerializer)
+                          UndergroundSerializer, WorkingHoursSerializer,
+                          KindergartensAddToFavouritesSerializer,
+                          SchoolAddToFavouritesSerializer)
 
 
 class ReviewKindergartenViewSet(viewsets.ModelViewSet):
@@ -379,3 +381,43 @@ class NewsViewSet(viewsets.ModelViewSet):
             context={'request': request}
         )
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class AddFavoriteSchoolViewSet(viewsets.ViewSet):
+    """Вьюсет для добавления избранного школы после регистрации."""
+
+    queryset = School.objects.all()
+    serializer_class = SchoolAddToFavouritesSerializer
+    permission_classes = (IsAuthenticatedOrReadOnly,)
+    pagination_class = PageNumberPagination
+    http_method_names = ['post']
+
+    def create(self, request, *args, **kwargs):
+        id_schools = request.data['school']
+        for i in id_schools:
+            Favourites_School.objects.create(
+                user=request.user,
+                school=get_object_or_404(School, id=i)
+            )
+        return Response('Все школы добавлены в избранное',
+                        status=status.HTTP_201_CREATED)
+
+
+class AddFavoriteKindergartenViewSet(viewsets.ModelViewSet):
+    """Вьюсет для добавления избранного сады после регистрации."""
+
+    queryset = Kindergartens.objects.all()
+    serializer_class = KindergartensAddToFavouritesSerializer
+    permission_classes = (IsAdminOrReadOnly,)
+    pagination_class = PageNumberPagination
+    http_method_names = ['post']
+
+    def create(self, request, *args, **kwargs):
+        id_kindergartens = request.data['kindergartens']
+        for i in id_kindergartens:
+            Favourites_Kindergartens.objects.create(
+                user=request.user,
+                kindergartens=get_object_or_404(Kindergartens, id=i)
+            )
+        return Response('Все сады добавлены в избранное',
+                        status=status.HTTP_201_CREATED)

@@ -8,7 +8,8 @@ from .views import (AgeCategoryViewSet, AreaViewSet, ClassViewSet,
                     GroupSizeViewSet, KindergartensViewSet, LanguageViewSet,
                     NewsViewSet, ProfileViewSet, ReviewKindergartenViewSet,
                     ReviewSchoolViewSet, SchoolViewSet, UndergroundViewSet,
-                    WorkingHoursViewSet)
+                    WorkingHoursViewSet, AddFavoriteKindergartenViewSet,
+                    AddFavoriteSchoolViewSet)
 
 app_name = 'api'
 
@@ -68,6 +69,16 @@ urlpatterns = [
     path(
         "v1/me/favoriteschools/",
         FavoriteSchoolViewSet.as_view({'get': 'list'}),
+        name="favoriteschools",
+    ),
+    path(
+        "v1/me/add_favoritekindegartens/",
+        AddFavoriteKindergartenViewSet.as_view({'post': 'create'}),
+        name="favoritekindergartens",
+    ),
+    path(
+        "v1/me/add_favoriteschools/",
+        AddFavoriteSchoolViewSet.as_view({'post': 'create'}),
         name="favoriteschools",
     ),
     path(
