@@ -274,3 +274,19 @@ class NewsSerializer(serializers.ModelSerializer):
     class Meta:
         model = News
         fields = ['id', 'title', 'content', 'date_posted', 'image']
+
+
+class SchoolAddToFavouritesSerializer(serializers.ModelSerializer):
+    """Сериализатор для добавления в избранное после авторизации."""
+
+    class Meta:
+        model = Favourites_School
+        fields = ['school']
+
+
+class KindergartensAddToFavouritesSerializer(serializers.ModelSerializer):
+    """Сериализатор для добавления в избранное после авторизации."""
+
+    class Meta:
+        model = Favourites_Kindergartens
+        fields = ['kindergartens']
