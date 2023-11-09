@@ -327,15 +327,16 @@ class FavoriteSchoolViewSet(viewsets.ModelViewSet):
     pagination_class = PageNumberPagination
     http_method_names = ['get']
 
-    def list(self, request):
-        user = request.user
-        schools = School.objects.filter(favourites_users__user=user)
-        serializer = SchoolShortSerializer(
-            schools,
-            many=True,
-            context={'request': request}
+    def get_queryset(self):
+        schools = School.objects.filter(
+            favourites_users__user=self.request.user
         )
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return schools
+
+    def list(self, request, *args, **kwargs):
+        if self.request.user.is_anonymous:
+            return Response('Для получения избранного, авторизируйтесь')
+        return super().list(request, *args, **kwargs)
 
 
 class FavoriteKindergartenViewSet(viewsets.ModelViewSet):
@@ -347,11 +348,16 @@ class FavoriteKindergartenViewSet(viewsets.ModelViewSet):
     pagination_class = PageNumberPagination
     http_method_names = ['get']
 
-    @action(detail=False, methods=['GET'])
-    def favoritekindergartens(self, request):
-        kindergartes = self.request.user.favourites_kindergartens
-        serializer = KindergartensShortSerializer(kindergartes, many=True)
-        return Response(serializer.data)
+    def get_queryset(self):
+        kindergartes = Kindergartens.objects.filter(
+            favourites_users__user=self.request.user
+        )
+        return kindergartes
+
+    def list(self, request, *args, **kwargs):
+        if self.request.user.is_anonymous:
+            return Response('Для получения избранного, авторизируйтесь')
+        return super().list(request, *args, **kwargs)
 
 
 class NewsViewSet(viewsets.ModelViewSet):
