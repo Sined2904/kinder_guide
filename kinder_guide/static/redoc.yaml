@@ -1607,30 +1607,6 @@ paths:
       security:
       - jwt-token:
         - read:admin
-  /development/:
-    get:
-      tags:
-        - FILTERS
-      operationId: Получение списка всех объектов развития
-      description: |
-        Получить список всех объектов развития для фильтрации.  
-        Права доступа: **Администратор**
-      responses:
-        200:
-          description: Удачное выполнение запроса
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Development'
-        401:
-          description: Необходим JWT-токен
-        403:
-          description: Нет прав доступа
-      security:
-      - jwt-token:
-        - read:admin
 
 components:
   schemas:
@@ -2277,11 +2253,6 @@ components:
           title: языки
           items:
             $ref: '#/components/schemas/Language'
-        development:
-          type: array
-          title: развитие
-          items:
-            $ref: '#/components/schemas/Development'
         is_favorited:
           type: bool
           title: в избранном
@@ -2294,6 +2265,22 @@ components:
           example: [55.6279099,37.60823370062961]
           minItems: 2
           maxItems: 2
+        create_dev:
+          type: string
+          title: творческое развитие
+          example: 'Рукоделие'
+        intel_dev:
+          type: string
+          title: интеллектуальное развитие
+          example: 'Шахматы'
+        music_dev:
+          type: string
+          title: музыкальное развитие
+          example: 'Вокал'
+        sport_dev:
+          type: string
+          title: спортивное развитие
+          example: 'Футбол'
         preparing_for_school:
           type: bool
           title: подготовка к школе
@@ -2379,11 +2366,6 @@ components:
           title: языки
           items:
             $ref: '#/components/schemas/Language'
-        development:
-          type: array
-          title: развитие
-          items:
-            $ref: '#/components/schemas/Development'
         coordinates:
           type: array
           items:
@@ -2392,6 +2374,22 @@ components:
           example: [55.6279099,37.60823370062961]
           minItems: 2
           maxItems: 2
+        create_dev:
+          type: string
+          title: творческое развитие
+          example: 'Рукоделие'
+        intel_dev:
+          type: string
+          title: интеллектуальное развитие
+          example: 'Шахматы'
+        music_dev:
+          type: string
+          title: музыкальное развитие
+          example: 'Вокал'
+        sport_dev:
+          type: string
+          title: спортивное развитие
+          example: 'Футбол'
         preparing_for_school:
           type: bool
           title: подготовка к школе
@@ -2474,11 +2472,6 @@ components:
           title: языки
           items:
             $ref: '#/components/schemas/Language'
-        development:
-          type: array
-          title: развитие
-          items:
-            $ref: '#/components/schemas/Development'
         coordinates:
           type: array
           items:
@@ -2487,6 +2480,22 @@ components:
           example: [55.6279099,37.60823370062961]
           minItems: 2
           maxItems: 2
+        create_dev:
+          type: string
+          title: творческое развитие
+          example: 'Рукоделие'
+        intel_dev:
+          type: string
+          title: интеллектуальное развитие
+          example: 'Шахматы'
+        music_dev:
+          type: string
+          title: музыкальное развитие
+          example: 'Вокал'
+        sport_dev:
+          type: string
+          title: спортивное развитие
+          example: 'Футбол'
         preparing_for_school:
           type: bool
           title: подготовка к школе
@@ -2698,16 +2707,6 @@ components:
         name:
           type: string
           example: 'До 15 человек'
-        slug:
-          type: string
-    Development:
-      title: Развитие
-      type: object
-      description: Направления развития (спорт, музыка и т.д.)
-      properties:
-        name:
-          type: string
-          example: 'Музыка'
         slug:
           type: string
     Album:
