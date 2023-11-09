@@ -26,7 +26,7 @@ from .serializers import (AgeCategorySerializer, AreaSerializer,
 
 
 class ReviewKindergartenViewSet(viewsets.ModelViewSet):
-    """Вьюсет для Отзывов Десткого сада."""
+    """Вьюсет для отзывов десткого сада."""
 
     queryset = ReviewKindergarten.objects.all()
     serializer_class = ReviewKindergartenSerializer
@@ -61,7 +61,7 @@ class ReviewKindergartenViewSet(viewsets.ModelViewSet):
 
 
 class ReviewSchoolViewSet(viewsets.ModelViewSet):
-    """Вьюсет для Отзывов школ."""
+    """Вьюсет для отзывов школ."""
 
     queryset = ReviewSchool.objects.all()
     serializer_class = ReviewSchoolSerializer
@@ -96,7 +96,7 @@ class ReviewSchoolViewSet(viewsets.ModelViewSet):
 
 
 class SchoolViewSet(viewsets.ModelViewSet):
-    """Вьюсет для Школы."""
+    """Вьюсет для школы."""
 
     queryset = School.objects.all()
     serializer_class = SchoolSerializer
@@ -172,7 +172,7 @@ class SchoolViewSet(viewsets.ModelViewSet):
 
 
 class KindergartensViewSet(viewsets.ModelViewSet):
-    """Вьюсет для Десткого сада."""
+    """Вьюсет для десткого сада."""
 
     queryset = Kindergartens.objects.all()
     serializer_class = KindergartensSerializer
@@ -247,7 +247,7 @@ class KindergartensViewSet(viewsets.ModelViewSet):
 
 
 class UndergroundViewSet(viewsets.ModelViewSet):
-    """Вьюсет для Метро."""
+    """Вьюсет для метро."""
 
     queryset = Underground.objects.all()
     serializer_class = UndergroundSerializer
@@ -256,7 +256,7 @@ class UndergroundViewSet(viewsets.ModelViewSet):
 
 
 class AreaViewSet(viewsets.ModelViewSet):
-    """Вьюсет для Округа."""
+    """Вьюсет для округа."""
 
     queryset = Area.objects.all()
     serializer_class = AreaSerializer
@@ -265,7 +265,7 @@ class AreaViewSet(viewsets.ModelViewSet):
 
 
 class LanguageViewSet(viewsets.ModelViewSet):
-    """Вьюсет для Языков."""
+    """Вьюсет для языков."""
 
     queryset = Language.objects.all()
     serializer_class = LanguageSerializer
@@ -274,7 +274,7 @@ class LanguageViewSet(viewsets.ModelViewSet):
 
 
 class ProfileViewSet(viewsets.ModelViewSet):
-    """Вьюсет для Профилей."""
+    """Вьюсет для профилей."""
 
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
@@ -283,7 +283,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
 
 
 class WorkingHoursViewSet(viewsets.ModelViewSet):
-    """Вьюсет для Часов работы."""
+    """Вьюсет для часов работы."""
 
     queryset = WorkingHours.objects.all()
     serializer_class = WorkingHoursSerializer
@@ -292,7 +292,7 @@ class WorkingHoursViewSet(viewsets.ModelViewSet):
 
 
 class ClassViewSet(viewsets.ModelViewSet):
-    """Вьюсет для Классов."""
+    """Вьюсет для классов."""
 
     queryset = Class.objects.all()
     serializer_class = ClassSerializer
@@ -301,7 +301,7 @@ class ClassViewSet(viewsets.ModelViewSet):
 
 
 class AgeCategoryViewSet(viewsets.ModelViewSet):
-    """Вьюсет для Возрастных категорий."""
+    """Вьюсет для возрастных категорий."""
 
     queryset = AgeCategory.objects.all()
     serializer_class = AgeCategorySerializer
@@ -310,7 +310,7 @@ class AgeCategoryViewSet(viewsets.ModelViewSet):
 
 
 class GroupSizeViewSet(viewsets.ModelViewSet):
-    """Вьюсет для Размера группы."""
+    """Вьюсет для размера группы."""
 
     queryset = GroupSize.objects.all()
     serializer_class = GroupSizeSerializer
@@ -319,7 +319,7 @@ class GroupSizeViewSet(viewsets.ModelViewSet):
 
 
 class FavoriteSchoolViewSet(viewsets.ModelViewSet):
-    """Вьюсет для избранного Школы."""
+    """Вьюсет для избранного школы."""
 
     queryset = School.objects.all()
     serializer_class = SchoolShortSerializer
@@ -339,7 +339,7 @@ class FavoriteSchoolViewSet(viewsets.ModelViewSet):
 
 
 class FavoriteKindergartenViewSet(viewsets.ModelViewSet):
-    """Вьюсет для избранного Сады."""
+    """Вьюсет для избранного сады."""
 
     queryset = Kindergartens.objects.all()
     serializer_class = KindergartensShortSerializer
@@ -355,7 +355,7 @@ class FavoriteKindergartenViewSet(viewsets.ModelViewSet):
 
 
 class NewsViewSet(viewsets.ModelViewSet):
-    """Вьюсет для Новостей."""
+    """Вьюсет для новостей."""
 
     queryset = News.objects.all()
     serializer_class = NewsSerializer
