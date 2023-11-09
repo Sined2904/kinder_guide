@@ -186,6 +186,7 @@ class School(models.Model):
     )
 
     class Meta:
+        ordering = ('name', )
         verbose_name = "Школа"
         verbose_name_plural = "Школы"
 
@@ -210,6 +211,7 @@ class Favourites_School(models.Model):
     )
 
     class Meta:
+        ordering = ('user', )
         verbose_name = 'Избранное - школа'
         verbose_name_plural = 'Избранное - школы'
 
@@ -385,6 +387,7 @@ class Kindergartens(models.Model):
     )
 
     class Meta:
+        ordering = ('name', )
         verbose_name = "Детский сад"
         verbose_name_plural = "Детские сады"
 
@@ -409,6 +412,7 @@ class Favourites_Kindergartens(models.Model):
     )
 
     class Meta:
+        ordering = ('user', )
         verbose_name = 'Избранное - детский садик'
         verbose_name_plural = 'Избранное - детские сады'
 
