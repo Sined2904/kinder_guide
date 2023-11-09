@@ -1607,6 +1607,54 @@ paths:
       security:
       - jwt-token:
         - read:admin
+  /class/:
+    get:
+      tags:
+        - FILTERS
+      operationId: Получение списка всех объектов классов школы
+      description: |
+        Получить список всех объектов размера классов школы для фильтрации.  
+        Права доступа: **Администратор**
+      responses:
+        200:
+          description: Удачное выполнение запроса
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Classes'
+        401:
+          description: Необходим JWT-токен
+        403:
+          description: Нет прав доступа
+      security:
+      - jwt-token:
+        - read:admin
+  /workinghours/:
+    get:
+      tags:
+        - FILTERS
+      operationId: Получение списка всех объектов часов работы
+      description: |
+        Получить список всех объектов часов работы для фильтрации.  
+        Права доступа: **Администратор**
+      responses:
+        200:
+          description: Удачное выполнение запроса
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WorkingHours'
+        401:
+          description: Необходим JWT-токен
+        403:
+          description: Нет прав доступа
+      security:
+      - jwt-token:
+        - read:admin
 
 components:
   schemas:
