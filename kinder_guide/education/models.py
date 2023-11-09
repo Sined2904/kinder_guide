@@ -355,7 +355,7 @@ class Kindergartens(models.Model):
         verbose_name='Время работы',
         blank=True
     )
-    group_suze = models.ManyToManyField(
+    group_size = models.ManyToManyField(
         GroupSize,
         related_name='kindergartens',
         verbose_name='Размер группы',

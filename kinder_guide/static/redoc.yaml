@@ -2267,7 +2267,7 @@ components:
           title: время работы
           items:
             $ref: '#/components/schemas/WorkingHours'
-        group_suze:
+        group_size:
           type: array
           title: размер группы
           items:
@@ -2369,7 +2369,7 @@ components:
           title: время работы
           items:
             $ref: '#/components/schemas/WorkingHours'
-        group_suze:
+        group_size:
           type: array
           title: размер группы
           items:
@@ -2464,7 +2464,7 @@ components:
           title: время работы
           items:
             $ref: '#/components/schemas/WorkingHours'
-        group_suze:
+        group_size:
           type: array
           title: размер группы
           items:

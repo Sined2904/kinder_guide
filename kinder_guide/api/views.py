@@ -247,7 +247,7 @@ class KindergartensViewSet(viewsets.ModelViewSet):
 
 
 class UndergroundViewSet(viewsets.ModelViewSet):
-    """Вьюсет для метро."""
+    """Вьюсет для Метро."""
 
     queryset = Underground.objects.all()
     serializer_class = UndergroundSerializer
@@ -292,7 +292,7 @@ class WorkingHoursViewSet(viewsets.ModelViewSet):
 
 
 class ClassViewSet(viewsets.ModelViewSet):
-    """Вьюсет для Профилей."""
+    """Вьюсет для Классов."""
 
     queryset = Class.objects.all()
     serializer_class = ClassSerializer
@@ -310,7 +310,7 @@ class AgeCategoryViewSet(viewsets.ModelViewSet):
 
 
 class DevelopmentViewSet(viewsets.ModelViewSet):
-    """Вьюсет для Спортивных занятий."""
+    """Вьюсет для Развития."""
 
     queryset = Development.objects.all()
     serializer_class = DevelopmentSerializer
@@ -319,7 +319,7 @@ class DevelopmentViewSet(viewsets.ModelViewSet):
 
 
 class GroupSizeViewSet(viewsets.ModelViewSet):
-    """Вьюсет для Творческих занятий."""
+    """Вьюсет для Размера группы."""
 
     queryset = GroupSize.objects.all()
     serializer_class = GroupSizeSerializer
@@ -364,7 +364,7 @@ class FavoriteKindergartenViewSet(viewsets.ModelViewSet):
 
 
 class NewsViewSet(viewsets.ModelViewSet):
-    """Вьюсет для новостей."""
+    """Вьюсет для Новостей."""
 
     queryset = News.objects.all()
     serializer_class = NewsSerializer

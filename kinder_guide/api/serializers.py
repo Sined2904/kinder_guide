@@ -104,7 +104,7 @@ class DevelopmentSerializer(serializers.ModelSerializer):
 
 
 class GroupSizeSerializer(serializers.ModelSerializer):
-    """Сериализатор модели 'Размер группы'."""
+    """Сериализатор модели размер группы."""
 
     class Meta:
         model = GroupSize
@@ -242,7 +242,7 @@ class KindergartensSerializer(serializers.ModelSerializer):
     reviews = serializers.SerializerMethodField()
     age_category = AgeCategorySerializer(many=True)
     is_favorited = serializers.SerializerMethodField()
-    group_suze = GroupSizeSerializer(many=True)
+    group_size = GroupSizeSerializer(many=True)
     development = DevelopmentSerializer(many=True)
     coordinates = serializers.SerializerMethodField()
     working_hours = WorkingHoursSerializer(many=True)
@@ -271,7 +271,7 @@ class KindergartensSerializer(serializers.ModelSerializer):
                   'address', 'price', 'price_of_year',
                   'email', 'website', 'underground', 'area',
                   'languages', 'working_hours',
-                  'group_suze', 'development', 'age_category',
+                  'group_size', 'development', 'age_category',
                   'is_favorited', 'coordinates', 'preparing_for_school']
 
 
