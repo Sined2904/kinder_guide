@@ -467,6 +467,37 @@ paths:
       security:
       - jwt-token:
         - write:admin, user
+  /me/add_favoriteschools/:
+    post:
+      tags:
+        - SCHOOLS
+      operationId: Добавление списка школ в избранное
+      description: |
+        Добавить новые школы в избранное.  
+        Права доступа: **Любой авторизованный пользователь**
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Add_fav_school'
+      responses:
+        201:
+          description: Все школы добавлены в избранное
+        400:
+          description: Отсутствует обязательное поле или оно некорректно
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        401:
+          description: Необходим JWT-токен
+        403:
+          description: Нет прав доступа
+        404:
+          description: Школа не найдена
+      security:
+      - jwt-token:
+        - write:admin, user
   /me/favoriteschools/:
     get:
       tags:
@@ -686,6 +717,37 @@ paths:
           description: Детский сад успешно удален из избранного
         400:
           description: Детский сад не в избранном
+        401:
+          description: Необходим JWT-токен
+        403:
+          description: Нет прав доступа
+        404:
+          description: Детский сад не найден
+      security:
+      - jwt-token:
+        - write:admin, user
+  /me/add_favoritekindegartens/:
+    post:
+      tags:
+        - KINDERGARTENS
+      operationId: Добавление списка детских садов в избранное
+      description: |
+        Добавить новые детские сады в избранное.  
+        Права доступа: **Любой авторизованный пользователь**
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Add_fav_kindergarten'
+      responses:
+        201:
+          description: Все сады добавлены в избранное
+        400:
+          description: Отсутствует обязательное поле или оно некорректно
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
         401:
           description: Необходим JWT-токен
         403:
@@ -2006,7 +2068,7 @@ components:
       description: Информация о школе (POST)
       required:
         - name
-        - album
+        - telephone
       properties:
         name:
           type: string
@@ -2173,6 +2235,15 @@ components:
           example: [55.6279099,37.60823370062961]
           minItems: 2
           maxItems: 2
+    Add_fav_school:
+      type: object
+      description: Добавление списка id школ в избранное
+      properties:
+        school:
+          type: array
+          items:
+            type: integer
+          example: [1, 2]
     Kindergartens:
       title: Детские сады
       type: object
@@ -2339,7 +2410,7 @@ components:
       description: Информация о детском саде (POST)
       required:
         - name
-        - album
+        - telephone
       properties:
         name:
           type: string
@@ -2548,6 +2619,15 @@ components:
           type: bool
           title: подготовка к школе
           example: False
+    Add_fav_kindergarten:
+      type: object
+      description: Добавление списка id садов в избранное
+      properties:
+        kindergartens:
+          type: array
+          items:
+            type: integer
+          example: [1, 2]
     Coursess:
       title: Курсы
       type: object
@@ -2645,7 +2725,7 @@ components:
       description: Информация о курсах (POST)
       required:
         - name
-        - album
+        - telephone
       properties:
         name:
           type: string
@@ -2841,12 +2921,6 @@ components:
         content:
           type: string
           title: Текст новости
-        author:
-          type: string
-          title: Name автора новости
-          pattern: ^[\p{L}\w.@+-]+\z
-          maxLength: 150
-          readOnly: true
         date_posted:
           type: string
           format: date-time
@@ -2871,12 +2945,6 @@ components:
         content:
           type: string
           title: Текст новости
-        author:
-          type: string
-          title: Name автора новости
-          pattern: ^[\p{L}\w.@+-]+\z
-          maxLength: 150
-          readOnly: true
         date_posted:
           type: string
           format: date-time
