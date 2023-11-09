@@ -2,7 +2,7 @@ from comments.models import ReviewKindergarten, ReviewSchool
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
-from education.models import (AgeCategory, Area, Class, Development,
+from education.models import (AgeCategory, Area, Class,
                               Favourites_Kindergartens, Favourites_School,
                               GroupSize, Kindergartens, Language, Profile,
                               School, Underground, WorkingHours)
@@ -16,8 +16,8 @@ from rest_framework.response import Response
 from .filters import KindergartenFilter, SchoolFilter
 from .permissions import IsAdminOrReadOnly
 from .serializers import (AgeCategorySerializer, AreaSerializer,
-                          ClassSerializer, DevelopmentSerializer,
-                          GroupSizeSerializer, KindergartensSerializer,
+                          ClassSerializer, GroupSizeSerializer,
+                          KindergartensSerializer,
                           KindergartensShortSerializer, LanguageSerializer,
                           NewsSerializer, ProfileSerializer,
                           ReviewKindergartenSerializer, ReviewSchoolSerializer,
@@ -305,15 +305,6 @@ class AgeCategoryViewSet(viewsets.ModelViewSet):
 
     queryset = AgeCategory.objects.all()
     serializer_class = AgeCategorySerializer
-    permission_classes = (IsAdminOrReadOnly,)
-    pagination_class = None
-
-
-class DevelopmentViewSet(viewsets.ModelViewSet):
-    """Вьюсет для Развития."""
-
-    queryset = Development.objects.all()
-    serializer_class = DevelopmentSerializer
     permission_classes = (IsAdminOrReadOnly,)
     pagination_class = None
 

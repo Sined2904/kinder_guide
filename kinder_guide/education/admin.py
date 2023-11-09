@@ -1,9 +1,9 @@
 from django.contrib import admin
 
-from .models import (AgeCategory, Area, Class, Development,
-                     Favourites_Kindergartens, Favourites_School, GroupSize,
-                     KindergartenAlbum, Kindergartens, Language, Profile,
-                     School, SchoolAlbum, Underground, WorkingHours)
+from .models import (AgeCategory, Area, Class, Favourites_Kindergartens,
+                     Favourites_School, GroupSize, KindergartenAlbum,
+                     Kindergartens, Language, Profile, School, SchoolAlbum,
+                     Underground, WorkingHours)
 
 
 class UndergroundAdmin(admin.ModelAdmin):
@@ -41,7 +41,7 @@ class AgeCategoryAdmin(admin.ModelAdmin):
     ordering = ['name', ]
 
 
-# школа
+# Школа
 class SchoolAlbumInline(admin.TabularInline):
     model = SchoolAlbum
 
@@ -71,13 +71,6 @@ class Favourites_SchoolAdmin(admin.ModelAdmin):
 
 
 # Детский сад
-class DevelopmentAdmin(admin.ModelAdmin):
-    list_display = ('name', 'slug')
-    empty_value_display = '-пусто-'
-    search_fields = ('name', )
-    ordering = ['name', ]
-
-
 class GroupSizeAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug')
     empty_value_display = '-пусто-'
@@ -114,7 +107,6 @@ class Favourites_KindergartensAdmin(admin.ModelAdmin):
     ordering = ['user', ]
 
 
-admin.site.register(Development, DevelopmentAdmin)
 admin.site.register(GroupSize, GroupSizeAdmin)
 admin.site.register(WorkingHours, WorkingHoursAdmin)
 admin.site.register(Class, ClassAdmin)
