@@ -78,10 +78,51 @@ class KindergartenFilter(FilterSet):
     )
     min_price = NumberFilter(field_name="price", lookup_expr='gte')
     max_price = NumberFilter(field_name="price", lookup_expr='lte',)
+    create_dev = filters.BooleanFilter(
+        field_name='kindergartens__create_dev',
+        method='get_create_dev'
+    )
+    intel_dev = filters.BooleanFilter(
+        field_name='kindergartens__intel_dev',
+        method='get_intel_dev'
+    )
+    music_dev = filters.BooleanFilter(
+        field_name='kindergartens__music_dev',
+        method='get_music_dev'
+    )
+    sport_dev = filters.BooleanFilter(
+        field_name='kindergartens__sport_dev',
+        method='get_sport_dev'
+    )
+
+    def get_create_dev(self, queryset, name, value):
+        if value is True:
+            queryset = Kindergartens.objects.exclude(create_dev=None)
+            return queryset
+        return queryset
+
+    def get_intel_dev(self, queryset, name, value):
+        if value is True:
+            queryset = Kindergartens.objects.exclude(intel_dev=None)
+            return queryset
+        return queryset
+
+    def get_music_dev(self, queryset, name, value):
+        if value is True:
+            queryset = Kindergartens.objects.exclude(music_dev=None)
+            return queryset
+        return queryset
+
+    def get_sport_dev(self, queryset, name, value):
+        if value is True:
+            queryset = Kindergartens.objects.exclude(sport_dev=None)
+            return queryset
+        return queryset
 
     class Meta:
         model = Kindergartens
         fields = ['working_hours', 'group_suze',
                   'preparing_for_school', 'age_category', 'area',
                   'underground', 'languages', 'area', 'min_price',
-                  'max_price']
+                  'max_price', 'create_dev', 'intel_dev', 'music_dev',
+                  'sport_dev']
