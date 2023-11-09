@@ -263,7 +263,9 @@ class KindergartensSerializer(serializers.ModelSerializer):
                   'email', 'website', 'underground', 'area',
                   'languages', 'working_hours',
                   'group_size', 'age_category',
-                  'is_favorited', 'coordinates', 'preparing_for_school']
+                  'is_favorited', 'coordinates',
+                  'create_dev', 'intel_dev', 'music_dev',
+                  'sport_dev', 'preparing_for_school']
 
 
 class NewsSerializer(serializers.ModelSerializer):
