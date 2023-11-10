@@ -3,7 +3,8 @@ from django.contrib import admin
 from .models import (AgeCategory, Area, Class, Favourites_Kindergartens,
                      Favourites_School, GroupSize, KindergartenAlbum,
                      Kindergartens, Language, Profile, School, SchoolAlbum,
-                     Underground, WorkingHours)
+                     Underground, WorkingHours, SchoolAverageRating,
+                     KindergartenAverageRating)
 
 
 class UndergroundAdmin(admin.ModelAdmin):
@@ -107,6 +108,20 @@ class Favourites_KindergartensAdmin(admin.ModelAdmin):
     ordering = ['user', ]
 
 
+class SchoolAverageRatingAdmin(admin.ModelAdmin):
+    list_display = ('school', 'average_rating')
+    empty_value_display = '-пусто-'
+    search_fields = ('school', )
+    ordering = ['school', ]
+
+
+class KindergartenAverageRatingAdmin(admin.ModelAdmin):
+    list_display = ('kindergarten', 'average_rating')
+    empty_value_display = '-пусто-'
+    search_fields = ('Kindergarten', )
+    ordering = ['kindergarten', ]
+
+
 admin.site.register(GroupSize, GroupSizeAdmin)
 admin.site.register(WorkingHours, WorkingHoursAdmin)
 admin.site.register(Class, ClassAdmin)
@@ -119,3 +134,5 @@ admin.site.register(School, SchoolAdmin)
 admin.site.register(Kindergartens, KindergartensAdmin)
 admin.site.register(Favourites_School, Favourites_SchoolAdmin)
 admin.site.register(Favourites_Kindergartens, Favourites_KindergartensAdmin)
+admin.site.register(SchoolAverageRating, SchoolAverageRatingAdmin)
+admin.site.register(KindergartenAverageRating, KindergartenAverageRatingAdmin)

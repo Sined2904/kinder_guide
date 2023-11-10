@@ -4,8 +4,10 @@ from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from education.models import (AgeCategory, Area, Class,
                               Favourites_Kindergartens, Favourites_School,
-                              GroupSize, Kindergartens, Language, Profile,
-                              School, Underground, WorkingHours)
+                              GroupSize, KindergartenAverageRating, Kindergartens, Language, Profile,
+                              School, Underground, WorkingHours,
+                              SchoolAverageRating)
+from api.utils import get_avg_rating
 from news.models import News
 from rest_framework import filters, status, viewsets
 from rest_framework.decorators import action
@@ -44,8 +46,8 @@ class ReviewKindergartenViewSet(viewsets.ModelViewSet):
         request.data['author'] = self.request.user.id
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-
         serializer.save(review_post_id=kindergarten_id)
+        update_kindergarten_avg_rating(kindergarten_id)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def delete(self, request, kindergarten_id, review_id):
@@ -59,7 +61,24 @@ class ReviewKindergartenViewSet(viewsets.ModelViewSet):
 
         self.check_object_permissions(request, review)
         review.delete()
+        update_kindergarten_avg_rating(kindergarten_id)
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def patch(self, request, kindergarten_id, review_id):
+        review = get_object_or_404(
+            ReviewKindergarten, id=review_id,
+            review_post_id=kindergarten_id
+        )
+        self.check_object_permissions(request, review)
+
+        serializer = self.get_serializer(
+            review, data=request.data, partial=True
+        )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        update_kindergarten_avg_rating(kindergarten_id)
+
+        return Response(serializer.data)
 
 
 class ReviewSchoolViewSet(viewsets.ModelViewSet):
@@ -79,8 +98,9 @@ class ReviewSchoolViewSet(viewsets.ModelViewSet):
         request.data['author'] = self.request.user.id
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-
         serializer.save(review_post_id=school_id)
+        update_school_avg_rating(school_id)
+
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def delete(self, request, school_id, review_id):
@@ -94,7 +114,25 @@ class ReviewSchoolViewSet(viewsets.ModelViewSet):
 
         self.check_object_permissions(request, review)
         review.delete()
+        update_school_avg_rating(school_id)
+
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def patch(self, request, school_id, review_id):
+        review = get_object_or_404(
+            ReviewSchool, id=review_id,
+            review_post_id=school_id
+        )
+        self.check_object_permissions(request, review)
+
+        serializer = self.get_serializer(
+            review, data=request.data, partial=True
+        )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        update_school_avg_rating(school_id)
+
+        return Response(serializer.data)
 
 
 class SchoolViewSet(viewsets.ModelViewSet):
@@ -425,3 +463,25 @@ class AddFavoriteKindergartenViewSet(viewsets.ModelViewSet):
             )
         return Response('Все сады добавлены в избранное',
                         status=status.HTTP_201_CREATED)
+
+
+def update_school_avg_rating(school_id):
+    school = get_object_or_404(School, id=school_id)
+    avg_rating = get_avg_rating(ReviewSchool, school)
+    school_avg_rating, _ = SchoolAverageRating.objects.get_or_create(
+        school=school
+    )
+    school_avg_rating.average_rating = avg_rating
+    school_avg_rating.save()
+
+
+def update_kindergarten_avg_rating(kindergarten_id):
+    kindergarten = get_object_or_404(Kindergartens, id=kindergarten_id)
+    avg_rating = get_avg_rating(ReviewKindergarten, kindergarten)
+    kindergarten_avg_rating, _ = (
+        KindergartenAverageRating.objects.get_or_create(
+            kindergarten=kindergarten
+        )
+    )
+    kindergarten_avg_rating.average_rating = avg_rating
+    kindergarten_avg_rating.save()

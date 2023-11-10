@@ -1,3 +1,4 @@
+
 from colorfield.fields import ColorField
 from django.db import models
 from user.models import MyUser
@@ -15,6 +16,44 @@ class Model_For_Additions(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class SchoolAverageRating(models.Model):
+    """Модель средней оценки школы."""
+
+    school = models.ForeignKey(
+        'education.School',
+        on_delete=models.CASCADE,
+    )
+    average_rating = models.FloatField(
+        verbose_name='Средняя оценка',
+        default=None,
+        null=True,
+        blank=True,
+    )
+
+    class Meta:
+        verbose_name = 'Средняя оценка школы'
+        verbose_name_plural = 'Средние оценки школ'
+
+
+class KindergartenAverageRating(models.Model):
+    """Модель средней оценки детского сада."""
+
+    kindergarten = models.ForeignKey(
+        'education.Kindergartens',
+        on_delete=models.CASCADE,
+    )
+    average_rating = models.FloatField(
+        verbose_name='Средняя оценка',
+        default=None,
+        null=True,
+        blank=True,
+    )
+
+    class Meta:
+        verbose_name = 'Средняя оценка детского сада'
+        verbose_name_plural = 'Средние оценки детских садов'
 
 
 class Underground(Model_For_Additions):

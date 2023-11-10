@@ -35,12 +35,18 @@ class SchoolFilter(FilterSet):
     )
     min_price = NumberFilter(field_name="price", lookup_expr='gte')
     max_price = NumberFilter(field_name="price", lookup_expr='lte',)
+    min_avg_rating = NumberFilter(
+        field_name='schoolaveragerating__average_rating', lookup_expr='gte'
+    )
+    max_avg_rating = NumberFilter(
+        field_name='schoolaveragerating__average_rating', lookup_expr='lte'
+    )
 
     class Meta:
         model = School
         fields = ['profile', 'classes', 'languages',
                   'area', 'underground', 'min_price',
-                  'max_price']
+                  'max_price', 'min_avg_rating', 'max_avg_rating']
 
 
 class KindergartenFilter(FilterSet):
