@@ -144,7 +144,7 @@ class SchoolViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticatedOrReadOnly,)
     pagination_class = PageNumberPagination
     filterset_class = SchoolFilter
-    ordering_fields = ('name', 'price')
+    ordering_fields = ('name', 'price', 'schoolaveragerating')
     filter_backends = [DjangoFilterBackend, filters.SearchFilter,
                        filters.OrderingFilter]
     search_fields = ('name', 'description',
@@ -224,7 +224,7 @@ class KindergartensViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend, filters.SearchFilter,
                        filters.OrderingFilter]
     filterset_class = KindergartenFilter
-    ordering_fields = ('name', 'price')
+    ordering_fields = ('name', 'price', 'kindergartenaveragerating')
     search_fields = ('name', 'description',
                      'telephone', 'address',
                      'email', 'website')
