@@ -35,18 +35,12 @@ class SchoolFilter(FilterSet):
     )
     min_price = NumberFilter(field_name="price", lookup_expr='gte')
     max_price = NumberFilter(field_name="price", lookup_expr='lte',)
-    min_avg_rating = NumberFilter(
-        field_name='schoolaveragerating__average_rating', lookup_expr='gte'
-    )
-    max_avg_rating = NumberFilter(
-        field_name='schoolaveragerating__average_rating', lookup_expr='lte'
-    )
 
     class Meta:
         model = School
         fields = ['profile', 'classes', 'languages',
                   'area', 'underground', 'min_price',
-                  'max_price', 'min_avg_rating', 'max_avg_rating']
+                  'max_price',]
 
 
 class KindergartenFilter(FilterSet):
@@ -100,14 +94,6 @@ class KindergartenFilter(FilterSet):
         field_name='kindergartens__sport_dev',
         method='get_sport_dev'
     )
-    min_avg_rating = NumberFilter(
-        field_name='kindergartenaveragerating__average_rating',
-        lookup_expr='gte'
-    )
-    max_avg_rating = NumberFilter(
-        field_name='kindergartenaveragerating_average_rating',
-        lookup_expr='lte'
-    )
 
     def get_create_dev(self, queryset, name, value):
         if value is True:
@@ -139,4 +125,4 @@ class KindergartenFilter(FilterSet):
                   'preparing_for_school', 'age_category', 'area',
                   'underground', 'languages', 'area', 'min_price',
                   'max_price', 'create_dev', 'intel_dev', 'music_dev',
-                  'sport_dev', 'min_avg_rating', 'max_avg_rating']
+                  'sport_dev', ]
