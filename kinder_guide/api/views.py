@@ -4,7 +4,8 @@ from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from education.models import (AgeCategory, Area, Class,
                               Favourites_Kindergartens, Favourites_School,
-                              GroupSize, KindergartenAverageRating, Kindergartens, Language, Profile,
+                              GroupSize, KindergartenAverageRating,
+                              Kindergartens, Language, Profile,
                               School, Underground, WorkingHours,
                               SchoolAverageRating)
 from api.utils import get_avg_rating
