@@ -1,14 +1,14 @@
+from api.utils import get_avg_rating
 from comments.models import ReviewKindergarten, ReviewSchool
 from django.db import transaction
+from django.db.models import Count
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from education.models import (AgeCategory, Area, Class,
                               Favourites_Kindergartens, Favourites_School,
                               GroupSize, KindergartenAverageRating,
-                              Kindergartens, Language, Profile,
-                              School, Underground, WorkingHours,
-                              SchoolAverageRating)
-from api.utils import get_avg_rating
+                              Kindergartens, Language, Profile, School,
+                              SchoolAverageRating, Underground, WorkingHours)
 from news.models import News
 from rest_framework import filters, status, viewsets
 from rest_framework.decorators import action
@@ -20,14 +20,14 @@ from .filters import KindergartenFilter, SchoolFilter
 from .permissions import IsAdminOrReadOnly
 from .serializers import (AgeCategorySerializer, AreaSerializer,
                           ClassSerializer, GroupSizeSerializer,
+                          KindergartensAddToFavouritesSerializer,
                           KindergartensSerializer,
                           KindergartensShortSerializer, LanguageSerializer,
                           NewsSerializer, ProfileSerializer,
                           ReviewKindergartenSerializer, ReviewSchoolSerializer,
-                          SchoolSerializer, SchoolShortSerializer,
-                          UndergroundSerializer, WorkingHoursSerializer,
-                          KindergartensAddToFavouritesSerializer,
-                          SchoolAddToFavouritesSerializer)
+                          SchoolAddToFavouritesSerializer, SchoolSerializer,
+                          SchoolShortSerializer, UndergroundSerializer,
+                          WorkingHoursSerializer)
 
 
 class ReviewKindergartenViewSet(viewsets.ModelViewSet):
@@ -139,7 +139,7 @@ class ReviewSchoolViewSet(viewsets.ModelViewSet):
 class SchoolViewSet(viewsets.ModelViewSet):
     """Вьюсет для школы."""
 
-    queryset = School.objects.all()
+    queryset = School.objects.annotate(reviews_count=Count("reviews"))
     serializer_class = SchoolSerializer
     permission_classes = (IsAuthenticatedOrReadOnly,)
     pagination_class = PageNumberPagination
@@ -147,7 +147,8 @@ class SchoolViewSet(viewsets.ModelViewSet):
     ordering_fields = (
         'name',
         'price',
-        'schoolaveragerating__average_rating'
+        'schoolaveragerating__average_rating',
+        'reviews_count',
     )
     filter_backends = [DjangoFilterBackend, filters.SearchFilter,
                        filters.OrderingFilter]
@@ -155,6 +156,18 @@ class SchoolViewSet(viewsets.ModelViewSet):
                      'telephone', 'address',
                      'email', 'website'
                      )
+
+    def filter_queryset(self, queryset):
+        value = self.request.query_params.get('ordering')
+        qs = queryset
+        if value and any(v in ['reviews', '-reviews'] for v in value):
+            qs = qs.annotate(reviews_count=Count("schoolreviews"))
+            if 'reviews' in value:
+                qs = qs.order_by("reviews")
+            elif '-reviews' in value:
+                qs = qs.order_by("-reviews")
+
+        return super().filter_queryset(qs)
 
     def get_serializer_class(self):
         """Переопределение сериализатора для POST запроса."""
@@ -221,7 +234,7 @@ class SchoolViewSet(viewsets.ModelViewSet):
 class KindergartensViewSet(viewsets.ModelViewSet):
     """Вьюсет для десткого сада."""
 
-    queryset = Kindergartens.objects.all()
+    queryset = Kindergartens.objects.annotate(reviews_count=Count("reviews"))
     serializer_class = KindergartensSerializer
     permission_classes = (IsAuthenticatedOrReadOnly,)
     pagination_class = PageNumberPagination
@@ -231,11 +244,24 @@ class KindergartensViewSet(viewsets.ModelViewSet):
     ordering_fields = (
         'name',
         'price',
-        'kindergartenaveragerating__average_rating'
+        'kindergartenaveragerating__average_rating',
+        'reviews_count',
     )
     search_fields = ('name', 'description',
                      'telephone', 'address',
                      'email', 'website')
+
+    def filter_queryset(self, queryset):
+        value = self.request.query_params.get('ordering')
+        qs = queryset
+        if value and any(v in ['reviews', '-reviews'] for v in value):
+            qs = qs.annotate(reviews_count=Count("kindergartenreviews"))
+            if 'reviews' in value:
+                qs = qs.order_by("reviews")
+            elif '-reviews' in value:
+                qs = qs.order_by("-reviews")
+
+        return super().filter_queryset(qs)
 
     def get_serializer_class(self):
         """Переопределение сериализатора для POST запроса."""
