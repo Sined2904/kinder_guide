@@ -38,12 +38,20 @@ class ReviewKindergartenViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticatedOrReadOnly,)
 
     def list(self, request, kindergarten_id):
+        try:
+            _ = Kindergartens.objects.get(id=kindergarten_id)
+        except School.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
         kindergarten_id = self.kwargs.get('kindergarten_id')
         queryset = self.queryset.filter(review_post_id=kindergarten_id)
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
     def create(self, request, kindergarten_id):
+        try:
+            _ = Kindergartens.objects.get(id=kindergarten_id)
+        except School.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
         request.data['author'] = self.request.user.id
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -66,11 +74,14 @@ class ReviewKindergartenViewSet(viewsets.ModelViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def patch(self, request, kindergarten_id, review_id):
-        review = get_object_or_404(
-            ReviewKindergarten, id=review_id,
-            review_post_id=kindergarten_id
-        )
-        self.check_object_permissions(request, review)
+        try:
+            review = get_object_or_404(
+                ReviewKindergarten, id=review_id,
+                review_post_id=kindergarten_id
+            )
+            self.check_object_permissions(request, review)
+        except ReviewKindergarten.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
         serializer = self.get_serializer(
             review, data=request.data, partial=True
@@ -90,12 +101,20 @@ class ReviewSchoolViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticatedOrReadOnly,)
 
     def list(self, request, school_id):
+        try:
+            _ = School.objects.get(id=school_id)
+        except School.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
         school_id = self.kwargs.get('school_id')
         queryset = self.queryset.filter(review_post_id=school_id)
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
     def create(self, request, school_id):
+        try:
+            _ = School.objects.get(id=school_id)
+        except School.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
         request.data['author'] = self.request.user.id
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -120,11 +139,14 @@ class ReviewSchoolViewSet(viewsets.ModelViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def patch(self, request, school_id, review_id):
-        review = get_object_or_404(
-            ReviewSchool, id=review_id,
-            review_post_id=school_id
-        )
-        self.check_object_permissions(request, review)
+        try:
+            review = get_object_or_404(
+                ReviewSchool, id=review_id,
+                review_post_id=school_id
+            )
+            self.check_object_permissions(request, review)
+        except ReviewSchool.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
         serializer = self.get_serializer(
             review, data=request.data, partial=True
