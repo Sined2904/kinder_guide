@@ -1,7 +1,7 @@
 from api.utils import get_avg_rating
 from comments.models import ReviewKindergarten, ReviewSchool
 from django.db import transaction
-from django.db.models import Count
+from django.db.models import Count, F
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from education.models import (AgeCategory, Area, Class,
@@ -147,7 +147,7 @@ class SchoolViewSet(viewsets.ModelViewSet):
     ordering_fields = (
         'name',
         'price',
-        'schoolaveragerating__average_rating',
+        'rating',
         'reviews_count',
     )
     filter_backends = [DjangoFilterBackend, filters.SearchFilter,
@@ -156,6 +156,12 @@ class SchoolViewSet(viewsets.ModelViewSet):
                      'telephone', 'address',
                      'email', 'website'
                      )
+
+    def get_queryset(self):
+        query = super().get_queryset().annotate(
+            rating=F('schoolaveragerating__average_rating')
+        )
+        return query
 
     def filter_queryset(self, queryset):
         value = self.request.query_params.get('ordering')
@@ -244,12 +250,18 @@ class KindergartensViewSet(viewsets.ModelViewSet):
     ordering_fields = (
         'name',
         'price',
-        'kindergartenaveragerating__average_rating',
+        'rating',
         'reviews_count',
     )
     search_fields = ('name', 'description',
                      'telephone', 'address',
                      'email', 'website')
+
+    def get_queryset(self):
+        query = super().get_queryset().annotate(
+            rating=F('kindergartenaveragerating__average_rating')
+        )
+        return query
 
     def filter_queryset(self, queryset):
         value = self.request.query_params.get('ordering')
