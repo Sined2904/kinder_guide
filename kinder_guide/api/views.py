@@ -458,18 +458,7 @@ class NewsViewSet(viewsets.ModelViewSet):
     serializer_class = NewsSerializer
     permission_classes = (IsAdminOrReadOnly,)
     pagination_class = None
-
-    def list(self, request):
-        user = request.user
-        kindergartens = Kindergartens.objects.filter(
-            favourites_users__user=user
-        )
-        serializer = KindergartensShortSerializer(
-            kindergartens,
-            many=True,
-            context={'request': request}
-        )
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    http_method_names = ['get']
 
 
 class AddFavoriteSchoolViewSet(viewsets.ViewSet):
