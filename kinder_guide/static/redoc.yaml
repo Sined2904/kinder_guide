@@ -127,7 +127,7 @@ paths:
                 email:
                   type: string
                   format: email
-                  maxLength: 254
+                  # maxLength: 254
                   example: 'ivanov@yandex.ru'
               required:
                 - email
