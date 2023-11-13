@@ -13,6 +13,7 @@ from .utils import get_avg_rating, get_coordinates_from_address
 
 class ReviewSerializer(serializers.ModelSerializer):
     """Сериализатор отзывов."""
+
     grade = serializers.IntegerField(
         source='rating',
         validators=[MinValueValidator(1), MaxValueValidator(5)]
