@@ -187,38 +187,38 @@ paths:
       security:
       - jwt-token:
         - read:admin, user
-    post:
-      tags:
-        - USERS
-      operationId: Внесение данных своей учетной записи
-      description: |
-        Внести данные в учетную запись.  
-        Права доступа: **Любой авторизованный пользователь**
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserWrite'
-      responses:
-        200:
-          description: Удачное выполнение запроса
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-        400:
-          description: Отсутствует обязательное поле или оно некорректно
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ValidationError'
-        401:
-          description: Необходим JWT-токен
-        403:
-          description: Нет прав доступа
-      security:
-      - jwt-token:
-        - write:admin, user
+    # post:
+    #   tags:
+    #     - USERS
+    #   operationId: Внесение данных своей учетной записи
+    #   description: |
+    #     Внести данные в учетную запись.  
+    #     Права доступа: **Любой авторизованный пользователь**
+    #   requestBody:
+    #     content:
+    #       application/json:
+    #         schema:
+    #           $ref: '#/components/schemas/UserWrite'
+    #   responses:
+    #     200:
+    #       description: Удачное выполнение запроса
+    #       content:
+    #         application/json:
+    #           schema:
+    #             $ref: '#/components/schemas/User'
+    #     400:
+    #       description: Отсутствует обязательное поле или оно некорректно
+    #       content:
+    #         application/json:
+    #           schema:
+    #             $ref: '#/components/schemas/ValidationError'
+    #     401:
+    #       description: Необходим JWT-токен
+    #     403:
+    #       description: Нет прав доступа
+    #   security:
+    #   - jwt-token:
+    #     - write:admin, user
     patch:
       tags:
         - USERS
