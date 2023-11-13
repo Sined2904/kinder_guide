@@ -205,6 +205,7 @@ DJOSER = {
     'PASSWORD_RESET_CONFIRM_URL': 'password-reset/{uid}/{token}',
     'SEND_CONFIRMATION_EMAIL': True,
     "TOKEN_MODEL": None,
+    "PASSWORD_RESET_SHOW_EMAIL_NOT_FOUND": True,
     'SERIALIZERS': {
         'current_user': 'user.serializers.CustomUserSerializer',
         'user_create': 'djoser.serializers.UserCreateSerializer',
