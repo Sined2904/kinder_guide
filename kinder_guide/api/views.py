@@ -40,7 +40,7 @@ class ReviewKindergartenViewSet(viewsets.ModelViewSet):
     def list(self, request, kindergarten_id):
         try:
             _ = Kindergartens.objects.get(id=kindergarten_id)
-        except School.DoesNotExist:
+        except Kindergartens.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
         kindergarten_id = self.kwargs.get('kindergarten_id')
         queryset = self.queryset.filter(review_post_id=kindergarten_id)
@@ -50,7 +50,7 @@ class ReviewKindergartenViewSet(viewsets.ModelViewSet):
     def create(self, request, kindergarten_id):
         try:
             _ = Kindergartens.objects.get(id=kindergarten_id)
-        except School.DoesNotExist:
+        except Kindergartens.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
         request.data['author'] = self.request.user.id
         serializer = self.get_serializer(data=request.data)
