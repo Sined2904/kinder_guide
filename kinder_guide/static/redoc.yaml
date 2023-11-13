@@ -49,7 +49,7 @@ paths:
         - AUTH
       operationId: Регистрация нового пользователя
       description: |
-        Поля `email` и `phone` должны быть уникальными.  
+        Поле `email` должно быть уникальными.  
         Пароль должен быть не менее 8 символов.  
         Права доступа: **Доступно без токена**
       requestBody:
@@ -119,7 +119,6 @@ paths:
         Получение ссылки на восстановление пароля в обмен на email.  
         Права доступа: **Доступно без токена**
       requestBody:
-        required: email
         content:
           application/json:
             schema:
@@ -130,9 +129,11 @@ paths:
                   format: email
                   maxLength: 254
                   example: 'ivanov@yandex.ru'
+              required:
+                - email
       responses:
-        200:
-          description: Успешный запрос. Ссылка на восстановление пароля отправлена на указанную почту.
+        204:
+          description: Удачное выполнение запроса
         400:
           content:
             application/json:
@@ -156,8 +157,8 @@ paths:
             schema:
               $ref: '#/components/schemas/Confirm'
       responses:
-        200:
-          description: Успешный запрос. Пароль изменен.
+        204:
+          description: Удачное выполнение запроса
         400:
           content:
             application/json:
@@ -1747,7 +1748,7 @@ components:
         phone:
           type: string
           pattern: ^\+\d{1,3}[\d()-]{6,14}\d$
-          maxLength: 18
+          maxLength: 16
           example: '+7(910)000-00-00'
         email:
           type: string
@@ -1778,7 +1779,7 @@ components:
         phone:
           type: string
           pattern: ^\+\d{1,3}[\d()-]{6,14}\d$
-          maxLength: 18
+          maxLength: 16
           example: '+7(910)000-00-00'
         email:
           type: string
@@ -1812,6 +1813,11 @@ components:
       title: Подтверждение пароля
       type: object
       description: Информация о новом подтвержденном пароле
+      required:
+        - uid
+        - token
+        - new_password
+        - re_new_password
       properties:
         uid:
           type: string
@@ -1862,7 +1868,7 @@ components:
           type: string
           title: номер телефона
           pattern: ^\+\d{1,3}[\d()-]{6,14}\d$
-          maxLength: 18
+          maxLength: 16
           example: '+7(910)000-00-00'
         email:
           type: string
@@ -1915,7 +1921,7 @@ components:
           type: string
           title: номер телефона
           pattern: ^\+\d{1,3}[\d()-]{6,14}\d$
-          maxLength: 18
+          maxLength: 16
           example: '+7(910)000-00-00'
         email:
           type: string
@@ -1990,7 +1996,7 @@ components:
           type: string
           title: номер телефона
           pattern: ^\+\d{1,3}[\d()-]{6,14}\d$
-          maxLength: 18
+          maxLength: 16
           example: '+7(910)000-00-00'
         address:
           type: string
@@ -2082,7 +2088,7 @@ components:
           type: string
           title: номер телефона
           pattern: ^\+\d{1,3}[\d()-]{6,14}\d$
-          maxLength: 18
+          maxLength: 16
           example: '+7(910)000-00-00'
         address:
           type: string
@@ -2167,7 +2173,7 @@ components:
           type: string
           title: номер телефона
           pattern: ^\+\d{1,3}[\d()-]{6,14}\d$
-          maxLength: 18
+          maxLength: 16
           example: '+7(910)000-00-00'
         address:
           type: string
@@ -2311,7 +2317,7 @@ components:
           type: string
           title: номер телефона
           pattern: ^\+\d{1,3}[\d()-]{6,14}\d$
-          maxLength: 18
+          maxLength: 16
           example: '+7(910)000-00-00'
         address:
           type: string
@@ -2424,7 +2430,7 @@ components:
           type: string
           title: номер телефона
           pattern: ^\+\d{1,3}[\d()-]{6,14}\d$
-          maxLength: 18
+          maxLength: 16
           example: '+7(910)000-00-00'
         address:
           type: string
@@ -2530,7 +2536,7 @@ components:
           type: string
           title: номер телефона
           pattern: ^\+\d{1,3}[\d()-]{6,14}\d$
-          maxLength: 18
+          maxLength: 16
           example: '+7(910)000-00-00'
         address:
           type: string
@@ -2686,7 +2692,7 @@ components:
           type: string
           title: номер телефона
           pattern: ^\+\d{1,3}[\d()-]{6,14}\d$
-          maxLength: 18
+          maxLength: 16
           example: '+7(910)000-00-00'
         address:
           type: string
@@ -2739,7 +2745,7 @@ components:
           type: string
           title: номер телефона
           pattern: ^\+\d{1,3}[\d()-]{6,14}\d$
-          maxLength: 18
+          maxLength: 16
           example: '+7(910)000-00-00'
         address:
           type: string
