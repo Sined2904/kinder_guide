@@ -6,14 +6,17 @@ from education.models import (AgeCategory, Area, Class,
                               Underground, WorkingHours)
 from news.models import News
 from rest_framework import serializers
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 from .utils import get_avg_rating, get_coordinates_from_address
 
 
 class ReviewSerializer(serializers.ModelSerializer):
     """Сериализатор отзывов."""
-
-    grade = serializers.IntegerField(source='rating')
+    grade = serializers.IntegerField(
+        source='rating',
+        validators=[MinValueValidator(1), MaxValueValidator(5)]
+    )
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
