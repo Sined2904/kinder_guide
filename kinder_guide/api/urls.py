@@ -56,9 +56,7 @@ urlpatterns = [
     path(
         "v1/me/",
         views.UserViewSet.as_view({"get": "me",
-                                   "put": "me",
-                                   "patch": "me",
-                                   "delete": "me"}),
+                                   "patch": "me"}),
         name="me",
     ),
     path(
