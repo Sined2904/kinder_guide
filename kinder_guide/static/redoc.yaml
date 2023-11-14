@@ -2865,7 +2865,6 @@ components:
       type: object
       description: Содержание отзыва
       required:
-        - content
         - grade
       properties:
         id:
