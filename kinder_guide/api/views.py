@@ -47,6 +47,18 @@ class ReviewKindergartenViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
+    def get(self, request, kindergarten_id, review_id):
+        try:
+            review = ReviewKindergarten.objects.get(
+                id=review_id,
+                review_post_id=kindergarten_id
+            )
+        except ReviewKindergarten.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        serializer = self.get_serializer(review)
+        return Response(serializer.data)
+
     def create(self, request, kindergarten_id):
         try:
             _ = Kindergartens.objects.get(id=kindergarten_id)
@@ -115,6 +127,18 @@ class ReviewSchoolViewSet(viewsets.ModelViewSet):
         school_id = self.kwargs.get('school_id')
         queryset = self.queryset.filter(review_post_id=school_id)
         serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def get(self, request, school_id, review_id):
+        try:
+            review = ReviewSchool.objects.get(
+                id=review_id,
+                review_post_id=school_id
+            )
+        except ReviewSchool.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        serializer = self.get_serializer(review)
         return Response(serializer.data)
 
     def create(self, request, school_id):

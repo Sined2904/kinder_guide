@@ -89,7 +89,7 @@ urlpatterns = [
     path(
         'v1/kindergartens/<int:kindergarten_id>/reviews/<int:review_id>/',
         ReviewKindergartenViewSet.as_view(
-            {'delete': 'delete', 'patch': 'patch'}
+            {'delete': 'delete', 'patch': 'patch', 'get': 'get'}
         ),
         name='schools_review_update',
     ),
@@ -103,7 +103,7 @@ urlpatterns = [
     path(
         'v1/schools/<int:school_id>/reviews/<int:review_id>/',
         ReviewSchoolViewSet.as_view(
-            {'delete': 'delete', 'patch': 'patch'}
+            {'delete': 'delete', 'patch': 'patch', 'get': 'get'}
         ),
         name='schools_review_update',
     ),
