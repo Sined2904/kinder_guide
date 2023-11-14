@@ -51,8 +51,8 @@ class KindergartenFilter(FilterSet):
         to_field_name='slug',
         queryset=WorkingHours.objects.all(),
     )
-    group_suze = filters.ModelMultipleChoiceFilter(
-        field_name='group_suze__slug',
+    group_size = filters.ModelMultipleChoiceFilter(
+        field_name='group_size__slug',
         to_field_name='slug',
         queryset=GroupSize.objects.all(),
     )
@@ -121,7 +121,7 @@ class KindergartenFilter(FilterSet):
 
     class Meta:
         model = Kindergartens
-        fields = ['working_hours', 'group_suze',
+        fields = ['working_hours', 'group_size',
                   'preparing_for_school', 'age_category', 'area',
                   'underground', 'languages', 'area', 'min_price',
                   'max_price', 'create_dev', 'intel_dev', 'music_dev',
