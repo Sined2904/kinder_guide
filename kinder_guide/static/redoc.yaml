@@ -1574,7 +1574,7 @@ paths:
       security:
       - jwt-token:
         - read:admin
-  /language/:
+  /languages/:
     get:
       tags:
         - FILTERS
@@ -1622,7 +1622,7 @@ paths:
       security:
       - jwt-token:
         - read:admin
-  /agecategory/:
+  /age_category/:
     get:
       tags:
         - FILTERS
@@ -1646,7 +1646,7 @@ paths:
       security:
       - jwt-token:
         - read:admin
-  /groupsize/:
+  /group_size/:
     get:
       tags:
         - FILTERS
@@ -1670,7 +1670,7 @@ paths:
       security:
       - jwt-token:
         - read:admin
-  /class/:
+  /classes/:
     get:
       tags:
         - FILTERS
@@ -1694,7 +1694,7 @@ paths:
       security:
       - jwt-token:
         - read:admin
-  /workinghours/:
+  /working_hours/:
     get:
       tags:
         - FILTERS
