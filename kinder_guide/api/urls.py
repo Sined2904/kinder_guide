@@ -43,6 +43,7 @@ urlpatterns = [
         token_views.TokenObtainPairView.as_view(),
         name='token_obtain_pair',
     ),
+    path("v1/auth/", include("djoser.social.urls")),
     path(
         'v1/auth/reset/',
         views.UserViewSet.as_view({'post': 'reset_password'}),

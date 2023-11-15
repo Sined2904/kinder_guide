@@ -49,6 +49,8 @@ INSTALLED_APPS = [
     'colorfield',
     'django_filters',
     'djoser',
+    'social_django',
+    'rest_framework_simplejwt',
     'corsheaders',
     'user.apps.UserConfig',
     'education',
@@ -67,6 +69,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',
     # 'corsheaders.middleware.CorsMiddleware',
     # 'django.middleware.common.CommonMiddleware',
 
@@ -86,6 +89,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -196,6 +201,8 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
+WHITE_LIST_SOCIAL = os.getenv('WHITE_LIST_SOCIAL', '').split(',')
+
 
 DJOSER = {
     'LOGIN_FIELD': 'email',
@@ -218,8 +225,21 @@ DJOSER = {
         'password_reset_confirm': ['rest_framework.permissions.AllowAny'],
         'user_delete': ['djoser.permissions.CurrentUserOrAdmin'],
         'token_create': ['rest_framework.permissions.AllowAny'],
-    }
+    },
+    'SOCIAL_AUTH_TOKEN_STRATEGY': 'djoser.social.token.jwt.TokenStrategy',
+    'SOCIAL_AUTH_ALLOWED_REDIRECT_URIS': WHITE_LIST_SOCIAL,
 }
+
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.yandex.YandexOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+os.getenv("SECRET_KEY", '1234')
+
+SOCIAL_AUTH_YANDEX_OAUTH2_KEY = os.getenv("SOCIAL_AUTH_YANDEX_OAUTH2_KEY", '1234')
+
+SOCIAL_AUTH_YANDEX_OAUTH2_SECRET = os.getenv("SOCIAL_AUTH_YANDEX_OAUTH2_SECRET", '1234')
 
 # Email settings
 
