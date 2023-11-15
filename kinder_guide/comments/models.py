@@ -1,13 +1,11 @@
 from django.contrib.auth import get_user_model
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+from education.models import School, Kindergartens
 
 
 class Review(models.Model):
-    author = models.ForeignKey(
-        get_user_model(),
-        on_delete=models.CASCADE
-    )
+
     content = models.TextField(blank=True)
     date_posted = models.DateTimeField(
         auto_now_add=True)
@@ -27,8 +25,12 @@ class Review(models.Model):
 
 
 class ReviewSchool(Review):
+    author = models.ForeignKey(
+        get_user_model(),
+        on_delete=models.CASCADE
+    )
     review_post = models.ForeignKey(
-        'education.School',
+        School,
         on_delete=models.CASCADE,
         related_name='reviews'
     )
@@ -45,8 +47,12 @@ class ReviewSchool(Review):
 
 
 class ReviewKindergarten(Review):
+    author = models.ForeignKey(
+        get_user_model(),
+        on_delete=models.CASCADE
+    )
     review_post = models.ForeignKey(
-        'education.Kindergartens',
+        Kindergartens,
         on_delete=models.CASCADE,
         related_name='reviews'
     )
