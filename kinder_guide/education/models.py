@@ -141,6 +141,13 @@ class Class(Model_For_Additions):
 class School(models.Model):
     """Модель школы."""
 
+    TYPES = (
+        ('kindergarten', 'Детский сад'),
+        ('school', 'Школа')
+    )
+    type = models.CharField(max_length=13,
+                            default='school',
+                            choices=TYPES)
     name = models.CharField(
         max_length=250,
         null=False,
@@ -315,6 +322,13 @@ class KindergartenAlbum(models.Model):
 class Kindergartens(models.Model):
     """Модель детского сада."""
 
+    TYPES = (
+        ('kindergarten', 'Детский сад'),
+        ('school', 'Школа')
+    )
+    type = models.CharField(max_length=13,
+                            default='kindergarten',
+                            choices=TYPES)
     name = models.CharField(
         max_length=250,
         null=False,
