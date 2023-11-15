@@ -36,6 +36,12 @@ class ReviewSchool(Review):
     class Meta:
         verbose_name = 'Отзыв школы'
         verbose_name_plural = 'Отзывы школ'
+        constraints = (
+            models.UniqueConstraint(
+                fields=['author', 'review_post'],
+                name='unique_author_reviewschool'
+            ),
+        )
 
 
 class ReviewKindergarten(Review):
@@ -48,3 +54,9 @@ class ReviewKindergarten(Review):
     class Meta:
         verbose_name = 'Отзыв детского сада'
         verbose_name_plural = 'Отзывы детских садов'
+        constraints = (
+            models.UniqueConstraint(
+                fields=['author', 'review_post'],
+                name='unique_author_reviewkindergarten'
+            ),
+        )
