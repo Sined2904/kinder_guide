@@ -38,12 +38,32 @@ class ReviewKindergartenViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticatedOrReadOnly,)
 
     def list(self, request, kindergarten_id):
+        try:
+            _ = Kindergartens.objects.get(id=kindergarten_id)
+        except Kindergartens.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
         kindergarten_id = self.kwargs.get('kindergarten_id')
         queryset = self.queryset.filter(review_post_id=kindergarten_id)
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
+    def get(self, request, kindergarten_id, review_id):
+        try:
+            review = ReviewKindergarten.objects.get(
+                id=review_id,
+                review_post_id=kindergarten_id
+            )
+        except ReviewKindergarten.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        serializer = self.get_serializer(review)
+        return Response(serializer.data)
+
     def create(self, request, kindergarten_id):
+        try:
+            _ = Kindergartens.objects.get(id=kindergarten_id)
+        except Kindergartens.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
         request.data['author'] = self.request.user.id
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -59,19 +79,29 @@ class ReviewKindergartenViewSet(viewsets.ModelViewSet):
             )
         except ReviewKindergarten.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
-
-        self.check_object_permissions(request, review)
+        if review.author != request.user:
+            return Response(
+                status=status.HTTP_403_FORBIDDEN,
+                data='У вас нет разрешения удалять этот отзыв'
+            )
         review.delete()
         update_kindergarten_avg_rating(kindergarten_id)
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_204_NO_CONTENT, data='Удалено')
 
     def patch(self, request, kindergarten_id, review_id):
-        review = get_object_or_404(
-            ReviewKindergarten, id=review_id,
-            review_post_id=kindergarten_id
-        )
-        self.check_object_permissions(request, review)
-
+        try:
+            review = get_object_or_404(
+                ReviewKindergarten, id=review_id,
+                review_post_id=kindergarten_id
+            )
+            self.check_object_permissions(request, review)
+        except ReviewKindergarten.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        if review.author != request.user:
+            return Response(
+                status=status.HTTP_403_FORBIDDEN,
+                data="У вас нет разрешения редактировать этот отзыв"
+            )
         serializer = self.get_serializer(
             review, data=request.data, partial=True
         )
@@ -90,12 +120,32 @@ class ReviewSchoolViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticatedOrReadOnly,)
 
     def list(self, request, school_id):
+        try:
+            _ = School.objects.get(id=school_id)
+        except School.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
         school_id = self.kwargs.get('school_id')
         queryset = self.queryset.filter(review_post_id=school_id)
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
+    def get(self, request, school_id, review_id):
+        try:
+            review = ReviewSchool.objects.get(
+                id=review_id,
+                review_post_id=school_id
+            )
+        except ReviewSchool.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        serializer = self.get_serializer(review)
+        return Response(serializer.data)
+
     def create(self, request, school_id):
+        try:
+            _ = School.objects.get(id=school_id)
+        except School.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
         request.data['author'] = self.request.user.id
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -113,19 +163,30 @@ class ReviewSchoolViewSet(viewsets.ModelViewSet):
         except ReviewSchool.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-        self.check_object_permissions(request, review)
+        if review.author != request.user:
+            return Response(
+                status=status.HTTP_403_FORBIDDEN,
+                data='У вас нет разрешения удалять этот отзыв'
+            )
         review.delete()
         update_school_avg_rating(school_id)
 
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_204_NO_CONTENT, data='Удалено')
 
     def patch(self, request, school_id, review_id):
-        review = get_object_or_404(
-            ReviewSchool, id=review_id,
-            review_post_id=school_id
-        )
-        self.check_object_permissions(request, review)
-
+        try:
+            review = get_object_or_404(
+                ReviewSchool, id=review_id,
+                review_post_id=school_id
+            )
+            self.check_object_permissions(request, review)
+        except ReviewSchool.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        if review.author != request.user:
+            return Response(
+                status=status.HTTP_403_FORBIDDEN,
+                data="У вас нет разрешения редактировать этот отзыв"
+            )
         serializer = self.get_serializer(
             review, data=request.data, partial=True
         )

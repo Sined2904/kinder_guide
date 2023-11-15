@@ -1574,7 +1574,7 @@ paths:
       security:
       - jwt-token:
         - read:admin
-  /language/:
+  /languages/:
     get:
       tags:
         - FILTERS
@@ -1622,7 +1622,7 @@ paths:
       security:
       - jwt-token:
         - read:admin
-  /agecategory/:
+  /age_category/:
     get:
       tags:
         - FILTERS
@@ -1646,7 +1646,7 @@ paths:
       security:
       - jwt-token:
         - read:admin
-  /groupsize/:
+  /group_size/:
     get:
       tags:
         - FILTERS
@@ -1670,7 +1670,7 @@ paths:
       security:
       - jwt-token:
         - read:admin
-  /class/:
+  /classes/:
     get:
       tags:
         - FILTERS
@@ -1694,7 +1694,7 @@ paths:
       security:
       - jwt-token:
         - read:admin
-  /workinghours/:
+  /working_hours/:
     get:
       tags:
         - FILTERS
@@ -1734,7 +1734,7 @@ components:
       properties:
         id:
           type: integer
-          title: id пользователя
+          title: Id пользователя
         first_name:
           type: string
           pattern: ^[\p{L}\w.@+-]+\z
@@ -1891,7 +1891,7 @@ components:
       properties:
         id:
           type: integer
-          title: id пользователя
+          title: Id пользователя
           readOnly: true
         first_name:
           type: string
@@ -1936,7 +1936,7 @@ components:
       properties:
         id:
           type: integer
-          title: id школы
+          title: Id школы
           readOnly: true
         name:
           type: string
@@ -1975,7 +1975,7 @@ components:
       properties:
         id:
           type: integer
-          title: id школы
+          title: Id школы
           readOnly: true
         name:
           type: string
@@ -2257,7 +2257,7 @@ components:
       properties:
         id:
           type: integer
-          title: id детского сада
+          title: Id детского сада
           readOnly: true
         name:
           type: string
@@ -2296,7 +2296,7 @@ components:
       properties:
         id:
           type: integer
-          title: id детского сада
+          title: Id детского сада
           readOnly: true
         name:
           type: string
@@ -2641,7 +2641,7 @@ components:
       properties:
         id:
           type: integer
-          title: id курсов
+          title: Id курсов
           readOnly: true
         name:
           type: string
@@ -2671,7 +2671,7 @@ components:
       properties:
         id:
           type: integer
-          title: id курсов
+          title: Id курсов
           readOnly: true
         name:
           type: string
@@ -2865,12 +2865,11 @@ components:
       type: object
       description: Содержание отзыва
       required:
-        - content
         - grade
       properties:
         id:
           type: integer
-          title: id отзыва
+          title: Id отзыва
           readOnly: true
         content:
           type: string
@@ -2894,7 +2893,7 @@ components:
       properties:
         id:
           type: integer
-          title: id отзыва
+          title: Id отзыва
           readOnly: true
         content:
           type: string
@@ -2918,7 +2917,7 @@ components:
       properties:
         id:
           type: integer
-          title: id новости
+          title: Id новости
           readOnly: true
         title:
           type: string
@@ -2942,7 +2941,7 @@ components:
       properties:
         id:
           type: integer
-          title: id новости
+          title: Id новости
           readOnly: true
         title:
           type: string
