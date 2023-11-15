@@ -203,6 +203,7 @@ SIMPLE_JWT = {
 
 WHITE_LIST_SOCIAL = os.getenv('WHITE_LIST_SOCIAL', '').split(',')
 
+SOCIAL_AUTH_JSONFIELD_ENABLED = True
 
 DJOSER = {
     'LOGIN_FIELD': 'email',
