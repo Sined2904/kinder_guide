@@ -344,6 +344,7 @@ class UndergroundViewSet(viewsets.ModelViewSet):
     serializer_class = UndergroundSerializer
     permission_classes = (IsAdminOrReadOnly,)
     pagination_class = None
+    http_method_names = ['get']
 
 
 class AreaViewSet(viewsets.ModelViewSet):
@@ -353,6 +354,7 @@ class AreaViewSet(viewsets.ModelViewSet):
     serializer_class = AreaSerializer
     permission_classes = (IsAdminOrReadOnly,)
     pagination_class = None
+    http_method_names = ['get']
 
 
 class LanguageViewSet(viewsets.ModelViewSet):
@@ -362,6 +364,7 @@ class LanguageViewSet(viewsets.ModelViewSet):
     serializer_class = LanguageSerializer
     permission_classes = (IsAdminOrReadOnly,)
     pagination_class = None
+    http_method_names = ['get']
 
 
 class ProfileViewSet(viewsets.ModelViewSet):
@@ -371,6 +374,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
     serializer_class = ProfileSerializer
     permission_classes = (IsAdminOrReadOnly,)
     pagination_class = None
+    http_method_names = ['get']
 
 
 class WorkingHoursViewSet(viewsets.ModelViewSet):
@@ -380,6 +384,7 @@ class WorkingHoursViewSet(viewsets.ModelViewSet):
     serializer_class = WorkingHoursSerializer
     permission_classes = (IsAdminOrReadOnly,)
     pagination_class = None
+    http_method_names = ['get']
 
 
 class ClassViewSet(viewsets.ModelViewSet):
@@ -389,6 +394,7 @@ class ClassViewSet(viewsets.ModelViewSet):
     serializer_class = ClassSerializer
     permission_classes = (IsAdminOrReadOnly,)
     pagination_class = None
+    http_method_names = ['get']
 
 
 class AgeCategoryViewSet(viewsets.ModelViewSet):
@@ -398,6 +404,7 @@ class AgeCategoryViewSet(viewsets.ModelViewSet):
     serializer_class = AgeCategorySerializer
     permission_classes = (IsAdminOrReadOnly,)
     pagination_class = None
+    http_method_names = ['get']
 
 
 class GroupSizeViewSet(viewsets.ModelViewSet):
@@ -407,6 +414,7 @@ class GroupSizeViewSet(viewsets.ModelViewSet):
     serializer_class = GroupSizeSerializer
     permission_classes = (IsAdminOrReadOnly,)
     pagination_class = None
+    http_method_names = ['get']
 
 
 class FavoriteSchoolViewSet(viewsets.ModelViewSet):
