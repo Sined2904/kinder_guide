@@ -141,7 +141,7 @@ class SchoolShortSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = School
-        fields = ['id', 'name', 'rating', 'reviews',
+        fields = ['id', 'type', 'name', 'rating', 'reviews',
                   'description', 'address', 'album',
                   'price', 'is_favorited']
 
@@ -179,7 +179,7 @@ class SchoolSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = School
-        fields = ['id', 'name', 'rating', 'reviews',
+        fields = ['id', 'type', 'name', 'rating', 'reviews',
                   'description', 'telephone', 'address',
                   'underground', 'area', 'email', 'website',
                   'album', 'price', 'price_of_year',
@@ -222,7 +222,7 @@ class KindergartensShortSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Kindergartens
-        fields = ['id', 'name', 'rating', 'reviews',
+        fields = ['id', 'type', 'name', 'rating', 'reviews',
                   'description', 'address', 'album', 'price',
                   'is_favorited']
 
@@ -261,7 +261,7 @@ class KindergartensSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Kindergartens
-        fields = ['id', 'name', 'rating', 'reviews',
+        fields = ['id', 'type', 'name', 'rating', 'reviews',
                   'album', 'description', 'telephone',
                   'address', 'price', 'price_of_year',
                   'email', 'website', 'underground', 'area',

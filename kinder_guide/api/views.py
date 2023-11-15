@@ -254,8 +254,6 @@ class SchoolViewSet(viewsets.ModelViewSet):
                 school=school
             )
             if created:
-                school.is_favorited = True
-                school.save()
                 return Response(
                     {'detail': 'Школа успешно добавлена в избранное'},
                     status=status.HTTP_201_CREATED
