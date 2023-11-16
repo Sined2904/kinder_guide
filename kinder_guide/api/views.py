@@ -525,7 +525,7 @@ class NewsViewSet(viewsets.ModelViewSet):
     http_method_names = ['get']
 
 
-class AddFavoriteSchoolViewSet(viewsets.ViewSet):
+class AddFavoriteSchoolViewSet(viewsets.ModelViewSet):
     """Вьюсет для добавления избранного школы после регистрации."""
 
     queryset = School.objects.all()
@@ -533,6 +533,17 @@ class AddFavoriteSchoolViewSet(viewsets.ViewSet):
     permission_classes = (IsAuthenticatedOrReadOnly,)
     pagination_class = PageNumberPagination
     http_method_names = ['post']
+
+    def get_serializer_class(self):
+        if list:
+            return SchoolShortSerializer
+        return SchoolAddToFavouritesSerializer
+
+    def list(self):
+        schools = FavoriteSchoolViewSet.get_queryset(self)
+        serializer = self.get_serializer
+        return Response(serializer(schools, many=True).data,
+                        status=status.HTTP_201_CREATED)
 
     def create(self, request, *args, **kwargs):
         id_schools = request.data['school']
@@ -546,8 +557,7 @@ class AddFavoriteSchoolViewSet(viewsets.ViewSet):
                 user=request.user,
                 school=get_object_or_404(School, id=i)
             )
-        return Response('Все школы добавлены в избранное',
-                        status=status.HTTP_201_CREATED)
+        return self.list()
 
 
 class AddFavoriteKindergartenViewSet(viewsets.ModelViewSet):
@@ -558,6 +568,17 @@ class AddFavoriteKindergartenViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticatedOrReadOnly,)
     pagination_class = PageNumberPagination
     http_method_names = ['post']
+
+    def get_serializer_class(self):
+        if list:
+            return KindergartensShortSerializer
+        return KindergartensAddToFavouritesSerializer
+
+    def list(self):
+        kindergartens = KindergartensViewSet.get_queryset(self)
+        serializer = self.get_serializer
+        return Response(serializer(kindergartens, many=True).data,
+                        status=status.HTTP_201_CREATED)
 
     def create(self, request, *args, **kwargs):
         id_kindergartens = request.data['kindergartens']
@@ -571,8 +592,7 @@ class AddFavoriteKindergartenViewSet(viewsets.ModelViewSet):
                 user=request.user,
                 kindergartens=get_object_or_404(Kindergartens, id=i)
             )
-        return Response('Все сады добавлены в избранное',
-                        status=status.HTTP_201_CREATED)
+        return self.list()
 
 
 def update_school_avg_rating(school_id):
