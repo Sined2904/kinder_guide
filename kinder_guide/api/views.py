@@ -1,4 +1,3 @@
-from api.utils import get_avg_rating
 from comments.models import ReviewKindergarten, ReviewSchool
 from django.db import transaction
 from django.db.models import Count, F
@@ -15,6 +14,8 @@ from rest_framework.decorators import action
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
+
+from api.utils import get_avg_rating
 
 from .filters import KindergartenFilter, SchoolFilter
 from .permissions import IsAdminOrReadOnly
@@ -265,17 +266,16 @@ class SchoolViewSet(viewsets.ModelViewSet):
                 )
 
         elif request.method == 'DELETE':
-            try:
-                favorite = Favourites_School.objects.get(
-                    user=user,
-                    school=school
-                )
-            except Favourites_School.DoesNotExist:
+            favorite = Favourites_School.objects.filter(
+                user=user,
+                school=school
+            )
+
+            if not favorite.exists():
                 return Response(
                     {'detail': 'Школа не в избранном'},
                     status=status.HTTP_400_BAD_REQUEST
                 )
-
             favorite.delete()
             return Response(
                 {'detail': 'Школа успешно удалена из избранного'},
@@ -363,17 +363,16 @@ class KindergartensViewSet(viewsets.ModelViewSet):
                 )
 
         elif request.method == 'DELETE':
-            try:
-                favorite = Favourites_Kindergartens.objects.get(
-                    user=user,
-                    kindergartens=kindergartens
-                )
-            except Favourites_Kindergartens.DoesNotExist:
+            favorite = Favourites_Kindergartens.objects.filter(
+                user=user,
+                kindergartens=kindergartens
+            )
+
+            if not favorite.exists():
                 return Response(
                     {'detail': 'Детский сад не в избранном'},
                     status=status.HTTP_400_BAD_REQUEST
                 )
-
             favorite.delete()
             return Response(
                 {'detail': 'Детский сад успешно удален из избранного'},
