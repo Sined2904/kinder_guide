@@ -277,8 +277,6 @@ class SchoolViewSet(viewsets.ModelViewSet):
                 )
 
             favorite.delete()
-            school.is_favorited = False
-            school.save()
             return Response(
                 {'detail': 'Школа успешно удалена из избранного'},
                 status=status.HTTP_204_NO_CONTENT
@@ -377,8 +375,6 @@ class KindergartensViewSet(viewsets.ModelViewSet):
                 )
 
             favorite.delete()
-            kindergartens.is_favorited = False
-            kindergartens.save()
             return Response(
                 {'detail': 'Детский сад успешно удален из избранного'},
                 status=status.HTTP_204_NO_CONTENT
