@@ -71,7 +71,7 @@ urlpatterns = [
         name="favoriteschools",
     ),
     path(
-        "v1/me/add_favoritekindegartens/",
+        "v1/me/add_favoritekindergartens/",
         AddFavoriteKindergartenViewSet.as_view({'post': 'create'}),
         name="favoritekindergartens",
     ),
