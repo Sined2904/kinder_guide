@@ -535,6 +535,11 @@ class AddFavoriteSchoolViewSet(viewsets.ViewSet):
     def create(self, request, *args, **kwargs):
         id_schools = request.data['school']
         for i in id_schools:
+            if Favourites_School.objects.filter(
+                user=request.user,
+                school=get_object_or_404(School, id=i)
+            ).exists():
+                continue
             Favourites_School.objects.create(
                 user=request.user,
                 school=get_object_or_404(School, id=i)
@@ -548,13 +553,18 @@ class AddFavoriteKindergartenViewSet(viewsets.ModelViewSet):
 
     queryset = Kindergartens.objects.all()
     serializer_class = KindergartensAddToFavouritesSerializer
-    permission_classes = (IsAdminOrReadOnly,)
+    permission_classes = (IsAuthenticatedOrReadOnly,)
     pagination_class = PageNumberPagination
     http_method_names = ['post']
 
     def create(self, request, *args, **kwargs):
         id_kindergartens = request.data['kindergartens']
         for i in id_kindergartens:
+            if Favourites_Kindergartens.objects.filter(
+                user=request.user,
+                kindergartens=get_object_or_404(Kindergartens, id=i)
+            ).exists():
+                continue
             Favourites_Kindergartens.objects.create(
                 user=request.user,
                 kindergartens=get_object_or_404(Kindergartens, id=i)
