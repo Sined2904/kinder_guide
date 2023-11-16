@@ -575,7 +575,7 @@ class AddFavoriteKindergartenViewSet(viewsets.ModelViewSet):
         return KindergartensAddToFavouritesSerializer
 
     def list(self):
-        kindergartens = KindergartensViewSet.get_queryset(self)
+        kindergartens = FavoriteKindergartenViewSet.get_queryset(self)
         serializer = self.get_serializer
         return Response(serializer(kindergartens, many=True).data,
                         status=status.HTTP_201_CREATED)
