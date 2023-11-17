@@ -277,11 +277,7 @@ class SchoolViewSet(viewsets.ModelViewSet):
                     status=status.HTTP_400_BAD_REQUEST
                 )
             favorite.delete()
-            school.save()
-            return Response(
-                {'detail': 'Школа успешно удалена из избранного'},
-                status=status.HTTP_204_NO_CONTENT
-            )
+            return Response(status=status.HTTP_204_NO_CONTENT)
 
     @action(detail=False, methods=['get'])
     def all(self, request):
