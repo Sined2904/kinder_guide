@@ -282,7 +282,7 @@ class SchoolViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'])
     def all(self, request):
         """Выводит все объекты без пагинации."""
-        schools = School.objects.all()
+        schools = self.filter_queryset(self.get_queryset())
         serializer = SchoolSerializer(
             schools,
             many=True,
@@ -380,7 +380,7 @@ class KindergartensViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'])
     def all(self, request):
         """Выводит все объекты без пагинации."""
-        kindergartens = Kindergartens.objects.all()
+        kindergartens = self.filter_queryset(self.get_queryset())
         serializer = KindergartensSerializer(
             kindergartens,
             many=True,
