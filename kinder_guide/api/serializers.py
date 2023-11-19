@@ -222,7 +222,7 @@ class KindergartensShortSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Kindergartens
-        fields = ['id', 'type' 'name', 'rating', 'reviews',
+        fields = ['id', 'type', 'name', 'rating', 'reviews',
                   'description', 'address', 'album', 'price',
                   'is_favorited']
 
