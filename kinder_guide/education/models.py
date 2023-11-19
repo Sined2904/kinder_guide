@@ -438,6 +438,12 @@ class Kindergartens(models.Model):
         'Подготовка к школе',
         default=False
     )
+    coordinates = models.CharField(
+        max_length=250,
+        verbose_name='Координаты',
+        blank=True,
+        null=True
+    )
 
     class Meta:
         ordering = ('name', )
