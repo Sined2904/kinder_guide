@@ -381,7 +381,7 @@ class KindergartensViewSet(viewsets.ModelViewSet):
     def all(self, request):
         """Выводит все объекты без пагинации."""
         kindergartens = self.filter_queryset(self.get_queryset())
-        serializer = KindergartensShortSerializer(
+        serializer = KindergartensSerializer(
             kindergartens,
             many=True,
             context={'request': request}
