@@ -15,7 +15,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
-from api.utils import get_avg_rating, get_coordinates_from_address
+from api.utils import get_avg_rating
 
 from .filters import KindergartenFilter, SchoolFilter
 from .permissions import IsAdminOrReadOnly
