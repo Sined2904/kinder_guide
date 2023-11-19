@@ -223,7 +223,6 @@ class SchoolViewSet(viewsets.ModelViewSet):
         self.coordinates = get_coordinates_from_address
         return super().create(request, *args, **kwargs)
 
-
     def get_queryset(self):
         query = super().get_queryset().annotate(
             rating=F('schoolaveragerating__average_rating')
