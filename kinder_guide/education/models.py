@@ -1,4 +1,5 @@
 
+from api.utils import get_coordinates_from_address
 from colorfield.fields import ColorField
 from django.db import models
 from user.models import MyUser
@@ -230,6 +231,12 @@ class School(models.Model):
         verbose_name='Профиль',
         blank=True
     )
+    latitude = models.FloatField(blank=True, null=True)
+    longitude = models.FloatField(blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        get_coordinates_from_address(self)
+        super().save(*args, **kwargs)
 
     class Meta:
         ordering = ('name', )
@@ -437,12 +444,6 @@ class Kindergartens(models.Model):
     preparing_for_school = models.BooleanField(
         'Подготовка к школе',
         default=False
-    )
-    coordinates = models.CharField(
-        max_length=250,
-        verbose_name='Координаты',
-        blank=True,
-        null=True
     )
 
     class Meta:

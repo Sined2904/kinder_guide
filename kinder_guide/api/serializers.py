@@ -1,4 +1,5 @@
 from comments.models import ReviewKindergarten, ReviewSchool
+from django.core.validators import MaxValueValidator, MinValueValidator
 from education.models import (AgeCategory, Area, Class,
                               Favourites_Kindergartens, Favourites_School,
                               GroupSize, KindergartenAlbum, Kindergartens,
@@ -6,9 +7,8 @@ from education.models import (AgeCategory, Area, Class,
                               Underground, WorkingHours)
 from news.models import News
 from rest_framework import serializers
-from django.core.validators import MaxValueValidator, MinValueValidator
 
-from .utils import get_avg_rating, get_coordinates_from_address
+from .utils import get_avg_rating  # , get_coordinates_from_address
 
 
 class ReviewSerializer(serializers.ModelSerializer):
@@ -175,7 +175,11 @@ class SchoolSerializer(serializers.ModelSerializer):
         return False
 
     def get_coordinates(self, obj):
-        return get_coordinates_from_address(School, obj)
+        # return get_coordinates_from_address(School, obj)
+        if obj.latitude and obj.longitude:
+            return [obj.latitude, obj.longitude]
+        else:
+            return None
 
     class Meta:
         model = School
@@ -257,7 +261,11 @@ class KindergartensSerializer(serializers.ModelSerializer):
         return False
 
     def get_coordinates(self, obj):
-        return get_coordinates_from_address(self, obj)
+        # return get_coordinates_from_address(self, obj)
+        if obj.latitude and obj.longitude:
+            return [obj.latitude, obj.longitude]
+        else:
+            return None
 
     class Meta:
         model = Kindergartens
