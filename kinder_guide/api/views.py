@@ -15,7 +15,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
-from api.utils import get_avg_rating
+from api.utils import get_avg_rating, get_coordinates_from_address
 
 from .filters import KindergartenFilter, SchoolFilter
 from .permissions import IsAdminOrReadOnly
@@ -219,6 +219,11 @@ class SchoolViewSet(viewsets.ModelViewSet):
                      'email', 'website'
                      )
 
+    def create(self, request, *args, **kwargs):
+        self.coordinates = get_coordinates_from_address
+        return super().create(request, *args, **kwargs)
+
+
     def get_queryset(self):
         query = super().get_queryset().annotate(
             rating=F('schoolaveragerating__average_rating')
@@ -282,7 +287,7 @@ class SchoolViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'])
     def all(self, request):
         """Выводит все объекты без пагинации."""
-        schools = self.filter_queryset(self.get_queryset())
+        schools = School.objects.all()
         serializer = SchoolSerializer(
             schools,
             many=True,
@@ -381,7 +386,7 @@ class KindergartensViewSet(viewsets.ModelViewSet):
     def all(self, request):
         """Выводит все объекты без пагинации."""
         kindergartens = self.filter_queryset(self.get_queryset())
-        serializer = KindergartensSerializer(
+        serializer = KindergartensShortSerializer(
             kindergartens,
             many=True,
             context={'request': request}

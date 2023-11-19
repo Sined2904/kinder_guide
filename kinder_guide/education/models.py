@@ -445,12 +445,6 @@ class Kindergartens(models.Model):
         'Подготовка к школе',
         default=False
     )
-    latitude = models.FloatField(blank=True, null=True)
-    longitude = models.FloatField(blank=True, null=True)
-
-    def save(self, *args, **kwargs):
-        get_coordinates_from_address(self)
-        super().save(*args, **kwargs)
 
     class Meta:
         ordering = ('name', )
