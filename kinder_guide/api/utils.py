@@ -10,8 +10,8 @@ def get_avg_rating(model, obj):
 
 
 def get_coordinates_from_address(self):
+    address = self.address
     geolocator = Nominatim(user_agent="Tester")
-    location = geolocator.geocode(self.address)
-    if location:
-        self.latitude = location.latitude
-        self.longitude = location.longitude
+    location = geolocator.geocode(address)
+    coordinates = [location.latitude, location.longitude]
+    return coordinates
