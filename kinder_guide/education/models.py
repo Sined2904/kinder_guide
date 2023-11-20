@@ -437,6 +437,12 @@ class Kindergartens(models.Model):
         'Подготовка к школе',
         default=False
     )
+    latitude = models.CharField(blank=True, null=True, max_length=250)
+    longitude = models.CharField(blank=True, null=True, max_length=250)
+
+    def save(self, *args, **kwargs):
+        get_coordinates_from_address(self)
+        super().save(*args, **kwargs)
 
     class Meta:
         ordering = ('name', )
