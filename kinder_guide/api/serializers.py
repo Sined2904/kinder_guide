@@ -175,7 +175,7 @@ class SchoolSerializer(serializers.ModelSerializer):
         return False
 
     def get_coordinates(self, obj):
-        return get_coordinates_from_address(School, obj)
+        return get_coordinates_from_address(self, obj)
 
     class Meta:
         model = School
@@ -222,7 +222,7 @@ class KindergartensShortSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Kindergartens
-        fields = ['id', 'type' 'name', 'rating', 'reviews',
+        fields = ['id', 'type', 'name', 'rating', 'reviews',
                   'description', 'address', 'album', 'price',
                   'is_favorited']
 
