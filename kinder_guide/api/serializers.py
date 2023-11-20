@@ -261,7 +261,7 @@ class KindergartensSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Kindergartens
-        fields = ['id', 'name', 'rating', 'reviews',
+        fields = ['id', 'name', 'type', 'rating', 'reviews',
                   'album', 'description', 'telephone',
                   'address', 'price', 'price_of_year',
                   'email', 'website', 'underground', 'area',
