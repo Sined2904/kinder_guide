@@ -1,3 +1,4 @@
+from api.utils import get_coordinates_from_address
 from colorfield.fields import ColorField
 from django.db import models
 from user.models import MyUser

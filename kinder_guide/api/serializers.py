@@ -175,7 +175,10 @@ class SchoolSerializer(serializers.ModelSerializer):
         return False
 
     def get_coordinates(self, obj):
-        return get_coordinates_from_address(self, obj)
+        if obj.latitude and obj.longitude:
+            return [obj.latitude, obj.longitude]
+        else:
+            return None
 
     class Meta:
         model = School
